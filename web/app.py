@@ -78,7 +78,9 @@ def _build_system_prompt():
     maps_list = "\n".join(f"  - {name}" for name in sorted(MAPS_DB.keys()))
 
     return f"""Jestes generatorem konfiguracji misji ARMA 3 dla klanu milsim 7BOW (7 Brygada Obrony Wybrzeza). Odpowiedz WYLACZNIE czystym JSON-em.
-Framework sam oblicza koordynaty na podstawie meta.location - NIE podawaj position.
+Framework sam oblicza koordynaty na podstawie nazw lokalizacji - NIE podawaj position.
+WAZNE: Kazda strefa OPFOR (zone) MUSI miec pole "location" z nazwa miasta/lokalizacji z mapy (np. "Le Port", "Kavala", "Agia Marina").
+Framework automatycznie rozwiaze nazwy na koordynaty. Jesli sa dwa cele w dwoch miastach, stworz dwie oddzielne zones z roznymi location.
 
 MAPY: {maps_list}
 FRAKCJE: {factions_list}
@@ -367,6 +369,7 @@ Kazdy preset nadpisuje domyslne wyposazenie dla danej roli.
     "zones": [
       {{
         "name": "OBJ_ALPHA",
+        "location": "Kavala",
         "positions": [
           {{"id":"A1","type":"garrison","size":"squad","garrison_radius":150}},
           {{"id":"A2","type":"patrol","size":"fireteam","speed":"LIMITED","formation":"WEDGE"}},
@@ -378,6 +381,7 @@ Kazdy preset nadpisuje domyslne wyposazenie dla danej roli.
       }},
       {{
         "name": "OBJ_BRAVO",
+        "location": "Agios Dionysios",
         "positions": [
           {{"id":"B1","type":"garrison","size":"fireteam"}},
           {{"id":"B2","type":"patrol","size":"fireteam"}},

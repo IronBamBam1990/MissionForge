@@ -117,9 +117,15 @@ def compute_mission_layout(mission_data: dict) -> dict:
         for zone in mission_data["opfor"].get("zones", []):
             zone_center = zone.get("center")
             if not zone_center or not _is_valid(zone_center):
-                # Try to resolve zone name as location
-                zone_name = zone.get("name", "")
-                resolved = resolve_location(map_name, zone_name) if zone_name else None
+                # Try to resolve zone location/name as map location
+                resolved = None
+                for field in ["location", "name"]:
+                    val = zone.get(field, "")
+                    if val:
+                        resolved = resolve_location(map_name, val)
+                        if resolved:
+                            print(f"[LAYOUT] Zone '{val}' resolved to {resolved}")
+                            break
                 zone["center"] = resolved or list(target_pos)
 
             center = zone["center"]

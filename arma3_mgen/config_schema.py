@@ -155,6 +155,7 @@ class EnemyPosition(FlexModel):
 
 class EnemyZone(FlexModel):
     name: str = ""
+    location: str = ""  # location name for auto-resolve (e.g. "Le Port")
     center: list[float] = Field(default_factory=lambda: [0, 0, 0])
     positions: list[EnemyPosition] = Field(default_factory=list)
     fortifications: list[dict] = Field(default_factory=list)
