@@ -99,11 +99,16 @@ def compute_mission_layout(mission_data: dict) -> dict:
     if not target_pos:
         target_pos = get_map_center(map_name)
 
-    # Compute BLUFOR start position - 600-1000m south of target
-    blufor_start = offset_pos(target_pos, random.uniform(600, 1000), random.uniform(160, 200))
+    # Compute BLUFOR start position - 600-1000m INLAND from target
+    # Direction = from target TOWARD map center (always inland, never into sea)
+    map_center = get_map_center(map_name)
+    inland_bearing = _bearing(target_pos, map_center)
+    # Add slight randomization (-20 to +20 degrees)
+    start_bearing = inland_bearing + random.uniform(-20, 20)
+    blufor_start = offset_pos(target_pos, random.uniform(600, 1000), start_bearing)
 
     # Compute ORP - 400m from target, between start and target
-    orp_pos = offset_pos(target_pos, 400, random.uniform(160, 200))
+    orp_pos = offset_pos(target_pos, 400, start_bearing + random.uniform(-10, 10))
 
     # Fix BLUFOR group positions
     if "blufor" in mission_data:
