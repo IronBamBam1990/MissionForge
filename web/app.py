@@ -129,8 +129,11 @@ POJAZDY OPFOR (dla motorized/mechanized/vehicle_patrol):
 - "O_APC_Wheeled_02_rcws_F" - APC kolowy
 - "O_APC_Tracked_02_cannon_F" - IFV gasienicowy
 - "O_MBT_02_cannon_F" - czolg T-100
-- "O_Heli_Light_02_F" - helikopter lekki (air_patrol)
-- "O_Heli_Attack_02_F" - helikopter szturmowy (air_patrol)
+- "O_Heli_Light_02_F" - helikopter lekki (air_patrol, altitude: 150-300)
+- "O_Heli_Attack_02_F" - helikopter szturmowy (air_patrol, altitude: 150-300)
+- "O_Plane_CAS_02_F" - odrzutowiec szturmowy (air_patrol, altitude: 500-1000)
+- "O_Plane_Fighter_02_F" - mysliwiec (air_patrol, altitude: 800-1500)
+UWAGA air_patrol: helikoptery min 80m, odrzutowce min 500m. Framework sam generuje trase kolista jesli brak patrol_route.
 
 ===== SYSTEM ALERTU =====
 Kontroluje swiadomosc OPFOR - od skradania do walki otwartej.

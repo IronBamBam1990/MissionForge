@@ -1232,7 +1232,16 @@ IBC_fnc_infantryPatrol = {
 IBC_fnc_aircraftPatrol = {
 	params ["_class", "_waypoints", "_side", ["_alt", 300], ["_speed", 80]];
 	private _isHeli = ("Heli" in _class) || ("heli" in _class);
-	if (_isHeli) then { _alt = _alt min 150; _speed = _speed min 50 };
+	private _isJet = !_isHeli;
+
+	// Enforce minimum safe altitude and speed per aircraft type
+	if (_isHeli) then {
+		_alt = _alt max 80;    // heli min 80m AGL
+		_speed = _speed max 40;
+	} else {
+		_alt = _alt max 500;   // jet min 500m AGL (stall prevention)
+		_speed = _speed max 200;
+	};
 
 	private _startPos = _waypoints select 0;
 	private _veh = createVehicle [_class, [_startPos select 0, _startPos select 1, _alt], [], 0, "FLY"];
@@ -1243,19 +1252,23 @@ IBC_fnc_aircraftPatrol = {
 
 	private _grp = group driver _veh;
 
+	// Waypoint completion radius — jets need wider turns
+	private _wpRadius = if (_isJet) then { 500 } else { 200 };
+
 	for "_i" from 1 to (count _waypoints - 1) do {
 		private _wpPos = _waypoints select _i;
 		private _wp = _grp addWaypoint [_wpPos, 0];
 		_wp setWaypointType "MOVE";
-		_wp setWaypointSpeed "NORMAL";
+		_wp setWaypointSpeed (if (_isJet) then {"FULL"} else {"NORMAL"});
 		_wp setWaypointBehaviour "SAFE";
-		_wp setWaypointCompletionRadius 200;
+		_wp setWaypointCompletionRadius _wpRadius;
 	};
 	private _wpC = _grp addWaypoint [_waypoints select 0, 0];
 	_wpC setWaypointType "CYCLE";
 
 	_grp setBehaviour "SAFE";
 	_grp setCombatMode "GREEN";
+	_veh flyInHeight _alt;
 	_veh
 };
 

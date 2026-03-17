@@ -693,6 +693,7 @@
         vehOpforHeavy: () => R.pick(['O_APC_Wheeled_02_rcws_F','O_APC_Tracked_02_cannon_F','O_MBT_02_cannon_F']),
         vehBlufor: () => R.pick(['B_MRAP_01_F','B_APC_Wheeled_01_cannon_F','B_MBT_01_cannon_F','B_LSV_01_unarmed_F','B_Truck_01_transport_F']),
         heliOpfor: () => R.pick(['O_Heli_Light_02_F','O_Heli_Attack_02_F']),
+        jetOpfor: () => R.pick(['O_Plane_CAS_02_F','O_Plane_Fighter_02_F']),
         mechanic: () => {
             const pool = [
                 'System alertow: STEALTH -> ALERT -> COMBAT',
@@ -707,7 +708,8 @@
                 'Punkt ewakuacji po realizacji celow',
                 'Intel do zebrania (laptop w budynku)',
                 'Cel do zniszczenia (skladowisko paliwa)',
-                'Patrol powietrzny wroga (type: air_patrol, vehicle_class: O_Heli_Light_02_F, altitude: 300)',
+                'Patrol helikoptera wroga (type: air_patrol, vehicle_class: O_Heli_Light_02_F, altitude: 200)',
+                'Patrol odrzutowca wroga (type: air_patrol, vehicle_class: O_Plane_CAS_02_F, altitude: 800)',
                 'Patrol pojazdow wroga na drodze (type: vehicle_patrol, vehicle_class: O_MRAP_02_F)',
             ];
             return R.pick(pool);

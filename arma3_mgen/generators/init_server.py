@@ -165,8 +165,17 @@ def generate_init_server(config: MissionConfig, enemy_faction_data=None) -> str:
                     L.append(f'private _vp = ["{pos.vehicle_class}", {p}, 400, "{pos.speed}"] call IBC_fnc_smartVehiclePatrol;')
                 L.append(f"{g} = group driver _vp;")
                 L.append(f"[{g}, {_r(sk_min)}, {_r(sk_range)}] call IBC_fnc_setSkills;")
-            elif pos.type == "air_patrol" and pos.vehicle_class and route:
-                L.append(f'private _ap = ["{pos.vehicle_class}", {route_sqf}, east, {_r(pos.altitude)}] call IBC_fnc_aircraftPatrol;')
+            elif pos.type == "air_patrol" and pos.vehicle_class:
+                if route:
+                    L.append(f'private _ap = ["{pos.vehicle_class}", {route_sqf}, east, {_r(pos.altitude)}] call IBC_fnc_aircraftPatrol;')
+                else:
+                    # Auto-generate circular patrol route around position
+                    alt = pos.altitude or 300
+                    radius = 1500
+                    L.append(f"// Auto air patrol route (circle r={radius}m)")
+                    L.append(f'private _apRoute = [];')
+                    L.append(f'for "_i" from 0 to 5 do {{ _apRoute pushBack [{p} getPos [1500, _i * 60]] }};')
+                    L.append(f'private _ap = ["{pos.vehicle_class}", _apRoute, east, {_r(alt)}] call IBC_fnc_aircraftPatrol;')
                 L.append(f"{g} = group driver _ap;")
                 L.append(f"[{g}, {_r(sk_min)}, {_r(sk_range)}] call IBC_fnc_setSkills;")
             elif pos.type == "sad_patrol" and route:
