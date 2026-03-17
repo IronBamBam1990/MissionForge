@@ -151,10 +151,25 @@ def compute_mission_layout(mission_data: dict) -> dict:
         mission_data["markers"] = {}
     markers = mission_data["markers"]
 
-    # Ensure objectives have valid positions
-    for obj in markers.get("objectives", []):
+    # Ensure objectives have valid positions — match to OPFOR zone centers
+    zones = mission_data.get("opfor", {}).get("zones", [])
+    for i, obj in enumerate(markers.get("objectives", [])):
         if not _has_valid_pos_dict(obj):
-            obj["position"] = list(target_pos)
+            # Try to match objective to zone by name or index
+            matched_zone = None
+            obj_name = obj.get("name", "").lower().replace("obj_", "")
+            for zone in zones:
+                zone_name = zone.get("name", "").lower().replace("obj_", "")
+                if obj_name and zone_name and (obj_name in zone_name or zone_name in obj_name):
+                    matched_zone = zone
+                    break
+            if not matched_zone and i < len(zones):
+                matched_zone = zones[i]
+            if matched_zone and _is_valid(matched_zone.get("center", [0, 0, 0])):
+                obj["position"] = list(matched_zone["center"])
+                print(f"[LAYOUT] Marker '{obj.get('name')}' matched to zone center {obj['position']}")
+            else:
+                obj["position"] = list(target_pos)
 
     # Add ORP if missing
     rp = markers.get("rally_points", [])
