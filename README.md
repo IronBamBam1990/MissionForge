@@ -4,6 +4,11 @@
 **Autor:** Kamil Padula
 **Ostatnia aktualizacja:** 2026-03-17
 
+
+<img width="1979" height="1134" alt="image" src="https://github.com/user-attachments/assets/936c68ce-84ec-4a50-a77e-701bedc18a89" />
+
+
+
 ---
 
 ## 1. WPROWADZENIE
