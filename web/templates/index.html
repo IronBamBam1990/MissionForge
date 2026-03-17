@@ -688,14 +688,17 @@
         opforFaction: () => R.pick(['CSAT','AAF','FIA (insurgenci)','Syndikat']),
         bluforFaction: () => R.pick(['NATO','CTRG','NATO Pacific']),
         year: () => R.pick([1985,1991,2001,2008,2015,2020,2024,2025,2026]),
-        vehOpfor: () => R.pick(['Ifrit MRAP','Zamak transport','MSE-3 Marid APC','BTR-K Kamysh IFV','T-100 Varsuk MBT','Qilin LSV','Tempest transport']),
-        vehBlufor: () => R.pick(['Hunter MRAP','Marshall APC','Slammer MBT','Panther IFV','Prowler LSV','HEMTT transport','AMV-7 Marshall']),
+        vehOpfor: () => R.pick(['O_MRAP_02_F','O_Truck_02_transport_F','O_APC_Wheeled_02_rcws_F','O_APC_Tracked_02_cannon_F','O_MBT_02_cannon_F','O_LSV_02_unarmed_F']),
+        vehOpforLight: () => R.pick(['O_MRAP_02_F','O_LSV_02_unarmed_F','O_Truck_02_transport_F']),
+        vehOpforHeavy: () => R.pick(['O_APC_Wheeled_02_rcws_F','O_APC_Tracked_02_cannon_F','O_MBT_02_cannon_F']),
+        vehBlufor: () => R.pick(['B_MRAP_01_F','B_APC_Wheeled_01_cannon_F','B_MBT_01_cannon_F','B_LSV_01_unarmed_F','B_Truck_01_transport_F']),
+        heliOpfor: () => R.pick(['O_Heli_Light_02_F','O_Heli_Attack_02_F']),
         mechanic: () => {
             const pool = [
                 'System alertow: STEALTH -> ALERT -> COMBAT',
                 'IED na drogach dojazdowych',
                 'Kontratak wroga po zdobyciu celu (squad + pojazd)',
-                'Konwoj wroga na drodze (3 pojazdy)',
+                'Konwoj wroga na drodze (type: convoy, 3 pojazdy O_MRAP_02_F,O_Truck_02_transport_F,O_MRAP_02_F)',
                 'Ostrzal mozdzierzowy po kontakcie',
                 'Zrzut zaopatrzenia helikopterem po 15 minutach',
                 'Fale wzmocnien wroga (2 fale co 5 minut)',
@@ -704,8 +707,8 @@
                 'Punkt ewakuacji po realizacji celow',
                 'Intel do zebrania (laptop w budynku)',
                 'Cel do zniszczenia (skladowisko paliwa)',
-                'Patrol powietrzny wroga (helikopter)',
-                'Patrol pojazdow wroga na drodze (2x Ifrit)',
+                'Patrol powietrzny wroga (type: air_patrol, vehicle_class: O_Heli_Light_02_F, altitude: 300)',
+                'Patrol pojazdow wroga na drodze (type: vehicle_patrol, vehicle_class: O_MRAP_02_F)',
             ];
             return R.pick(pool);
         },
@@ -751,16 +754,17 @@ Pluton piechoty, callsign ${cs}:
 OPFOR (${ef}):
 Cel ALPHA - ${loc1}:
 - ${R.range(2,4)}x fireteam garrison w budynkach
-- ${R.range(1,2)}x fireteam patrol
-- ${R.range(0,1) ? '1x sniper team' : '1x gniazdo MG'}
-- QRF squad zmotoryzowany w ${R.vehOpfor()} (trigger ${R.range(250,400)}m)
+- ${R.range(1,2)}x fireteam patrol (type: patrol)
+- ${R.range(0,1) ? '1x sniper team (type: sniper)' : '1x mg_nest (type: mg_nest, static_weapon: O_HMG_01_high_F)'}
+- 1x vehicle_patrol na drodze (type: vehicle_patrol, vehicle_class: ${R.vehOpforLight()})
+- QRF squad motorized (type: qrf, composition: motorized, vehicle_class: ${R.vehOpfor()}, trigger_radius: ${R.range(250,400)})
 ${R.range(0,1) ? `- IED na podejsciu
 ` : ''}
 Cel BRAVO - ${loc2}:
 - ${R.range(2,3)}x fireteam garrison
-- ${R.range(1,2)}x fireteam patrol
-- ${R.range(0,1) ? '1x checkpoint' : '1x squad statyczny'}
-- QRF fireteam w ${R.vehOpfor()} (trigger ${R.range(200,350)}m)
+- ${R.range(1,2)}x fireteam patrol (type: patrol)
+- ${R.range(0,1) ? '1x checkpoint (type: checkpoint)' : '1x squad statyczny (type: static)'}
+- QRF fireteam motorized (type: qrf, composition: motorized, vehicle_class: ${R.vehOpfor()}, trigger_radius: ${R.range(200,350)})
 
 Skill wroga: ${sk}
 
@@ -780,10 +784,11 @@ Callsign ${cs}. ${R.range(2,3)} druzyny piechoty (SL + 7 zolnierzy) + HQ.
 
 PATROL BOJOWY - ${R.range(4,6)} punktow patrolowych w rejonie.
 Wrog (${ef}) rozrzucony:
-- ${R.range(2,4)}x fireteam garrison w wioskach
-- ${R.range(1,3)}x fireteam patrol miedzy wioskami
-- ${R.range(0,2)}x checkpoint na drogach
-${R.range(0,1) ? `- 1x sniper team na wzgorzu\n` : ''}- Brak ciezkiego sprzetu
+- ${R.range(2,4)}x fireteam garrison w wioskach (type: garrison)
+- ${R.range(1,3)}x fireteam patrol miedzy wioskami (type: patrol)
+- ${R.range(0,2)}x checkpoint na drogach (type: checkpoint)
+- 1x vehicle_patrol na drodze (type: vehicle_patrol, vehicle_class: ${R.vehOpforLight()})
+${R.range(0,1) ? `- 1x sniper team na wzgorzu (type: sniper)\n` : ''}- sad_patrol szukajacy BLUFOR (type: sad_patrol)
 
 Skill wroga: ${sk}
 
@@ -801,11 +806,12 @@ SILY WLASNE (${bf}):
 Pluton ${cs} - pelny ORBAT (HQ + ${R.range(2,3)} druzyny + wsparcie).
 ${R.range(1,2)}x ${R.vehBlufor()} do dyspozycji.
 
-OBRONA - wrog (${ef}) atakuje w ${R.range(2,4)} falach:
-${Array.from({length: R.range(2,4)}, (_, i) => `Fala ${i+1}: ${R.range(1,2)}x squad piechoty${R.range(0,1) ? ` + ${R.vehOpfor()}` : ''} (od ${R.pick(['polnocy','poludnia','wschodu','zachodu'])})`).join('\n')}
+OBRONA - wrog (${ef}) atakuje w ${R.range(2,4)} falach (reinforcement_waves):
+${Array.from({length: R.range(2,4)}, (_, i) => `Fala ${i+1} (delay: ${(i+1)*300}s): ${R.range(1,2)}x squad piechoty${R.range(0,1) ? ` + pojazd ${R.vehOpfor()}` : ''} (od ${R.pick(['polnocy','poludnia','wschodu','zachodu'])})`).join('\n')}
 
-Utrzymac pozycje przez ${R.range(20,40)} minut.
-${R.range(0,1) ? 'Kontratak wroga z APC po oczyszczeniu.\n' : ''}
+Miedzy falami: vehicle_patrol wroga na flankach (type: vehicle_patrol, vehicle_class: ${R.vehOpforLight()})
+Utrzymac pozycje przez ${R.range(20,40)} minut (hold_position).
+${R.range(0,1) ? `Kontratak wroga po oczyszczeniu (counterattack z ${R.vehOpforHeavy()}).\n` : ''}
 Skill wroga: ${sk}
 
 DODATKOWE MECHANIKI:
@@ -822,12 +828,12 @@ SILY WLASNE (${bf}):
 ${R.range(1,2)} druzyny + sniper team. Callsign ${cs}.
 
 ZASADZKA na konwoj wroga (${ef}):
-- ${R.range(2,4)}x ${R.vehOpfor()} w konwoju
-- ${R.range(1,2)}x eskort ${R.vehOpfor()}
-- ${R.range(1,2)}x fireteam garrison w poblizu drogi
-- QRF ${R.range(0,1) ? 'squad' : 'fireteam'} z pobliskej bazy (trigger ${R.range(300,500)}m)
+Konwoj wroga (type: convoy, vehicle_class: ${R.vehOpforLight()},${R.vehOpfor()},${R.vehOpforLight()}, speed: NORMAL)
+- ${R.range(1,2)}x fireteam garrison w poblizu drogi (type: garrison)
+- 1x vehicle_patrol na drodze (type: vehicle_patrol, vehicle_class: ${R.vehOpforLight()})
+- QRF ${R.range(0,1) ? 'squad' : 'fireteam'} motorized (type: qrf, composition: motorized, vehicle_class: ${R.vehOpfor()}, trigger_radius: ${R.range(300,500)})
 
-${R.range(0,1) ? 'IED na drodze do spowolnienia konwoju.\n' : ''}Punkt ewakuacji ${R.range(500,1000)}m od pozycji zasadzki.
+${R.range(0,1) ? 'IED na drodze do spowolnienia konwoju.\n' : ''}Punkt ewakuacji ${R.range(500,1000)}m od pozycji zasadzki (extraction).
 Skill wroga: ${sk}
 
 DODATKOWE MECHANIKI:
@@ -840,26 +846,24 @@ Respawn wave ${R.range(10,15)} min, ${R.range(1,2)} tickety.`,
                 const convoyVehs = Array.from({length: convoySize}, () => R.vehOpfor());
                 return `OPERACJA ${opName}
 
-Mapa: ${map}
+Mapa: ${map}, lokalizacja: ${loc1} i ${loc2}
 Czas: ${yr}, ${t.h}:00, ${t.d}, ${w}
 
-KONWOJ WROGA do zniszczenia:
+KONWOJ WROGA do zniszczenia (type: convoy):
 Konwoj ${ef} jedzie z ${loc1} do ${loc2} droga.
-Sklad konwoju (${convoySize} pojazdow):
-${convoyVehs.map((v,i) => `- Pojazd ${i+1}: ${v}`).join('\n')}
-- Predkosc: ${R.pick(['LIMITED','NORMAL'])}
-- Odstep miedzy pojazdami: ${R.range(30,60)}m
-- W razie kontaktu: konwoj zatrzymuje sie, piechota wysiada, walczy
+vehicle_class: ${convoyVehs.join(',')}
+speed: ${R.pick(['LIMITED','NORMAL'])}
 
 OCHRONA KONWOJU:
-- ${R.range(1,2)}x fireteam garrison przy drodze (osadzka)
-- ${R.range(0,1) ? '1x vehicle_patrol na drodze rownoleglej\n' : ''}- QRF ${R.range(0,1) ? 'squad zmotoryzowany' : 'fireteam'} (trigger ${R.range(300,500)}m)
-${R.range(0,1) ? '- 1x sniper team na wzgorzu przy drodze\n' : ''}
+- ${R.range(1,2)}x fireteam garrison przy drodze (type: garrison)
+- 1x vehicle_patrol na drodze (type: vehicle_patrol, vehicle_class: ${R.vehOpforLight()})
+- QRF ${R.range(0,1) ? 'squad' : 'fireteam'} motorized (type: qrf, composition: motorized, vehicle_class: ${R.vehOpfor()}, trigger_radius: ${R.range(300,500)})
+${R.range(0,1) ? `- 1x sniper team (type: sniper)\n` : ''}
 SILY WLASNE (${bf}):
 ${R.range(2,3)} druzyny piechoty + ${R.range(0,1) ? 'sniper team + ' : ''}${R.range(1,2)}x ${R.vehBlufor()}. Callsign ${cs}.
 
 ZADANIE: Zniszcz konwoj wroga na trasie ${loc1} -> ${loc2}.
-${R.range(0,1) ? 'Mozliwosci:\n- Zasadzka na drodze\n- IED do spowolnienia\n- Atak z flankow\n' : ''}Punkt ewakuacji ${R.range(500,1500)}m od miejsca zasadzki.
+${R.range(0,1) ? 'Mozliwosci:\n- Zasadzka na drodze\n- IED do spowolnienia\n- Atak z flankow\n' : ''}Punkt ewakuacji po zniszczeniu konwoju (extraction).
 Skill wroga: ${sk}
 
 DODATKOWE MECHANIKI:
@@ -878,10 +882,11 @@ SILY WLASNE (${bf}):
 Pluton ${cs} - ${R.range(2,3)} druzyny + ${R.range(2,4)}x ${R.vehBlufor()} + ${R.range(1,2)}x ciezarowka.
 
 ESKORTA KONWOJU na trasie MSR ${loc1} -> ${loc2}:
-Zagrozenia (${ef}):
-- ${R.range(2,4)}x zasadzka fireteam wzdluz trasy
-- ${R.range(1,2)}x checkpoint (fireteam + ${R.vehOpfor()})
-- ${R.range(0,1) ? '1x sniper team\n' : ''}- QRF squad ${R.range(0,1) ? 'zmotoryzowany' : 'pieszy'} (trigger ${R.range(300,500)}m)
+Zagrozenia (${ef}) wzdluz trasy:
+- ${R.range(2,4)}x fireteam garrison przy drodze (type: garrison)
+- ${R.range(1,2)}x checkpoint (type: checkpoint)
+- ${R.range(1,2)}x vehicle_patrol na drodze (type: vehicle_patrol, vehicle_class: ${R.vehOpforLight()})
+${R.range(0,1) ? `- 1x sniper team (type: sniper)\n` : ''}- QRF squad motorized (type: qrf, composition: motorized, vehicle_class: ${R.vehOpfor()}, trigger_radius: ${R.range(300,500)})
 ${R.range(0,1) ? '- IED na trasie\n' : ''}
 Skill wroga: ${sk}
 
@@ -900,12 +905,13 @@ Druzyna ratunkowa ${cs} (${R.range(8,12)} ludzi: SL, ${R.range(1,2)}x medyk, rat
 ${R.range(0,1) ? `Helikopter transportowy do dyspozycji.\n` : ''}
 SEARCH & RESCUE:
 ${R.pick(['Pilot zestrzelony','Agent wywiadu schwytany','Zakladnicy porwani','Rozbitek znaleziony'])} w rejonie kontrolowanym przez ${ef}.
-- ${R.range(1,2)} zakladnikow do uratowania
-- ${R.range(2,3)}x fireteam patrol w rejonie
-- ${R.range(1,2)}x fireteam garrison w poblizu
-- QRF ${R.range(0,1) ? 'squad zmotoryzowany' : 'fireteam'} (trigger ${R.range(200,400)}m)
+- ${R.range(1,2)} zakladnikow do uratowania (hostages)
+- ${R.range(2,3)}x fireteam patrol w rejonie (type: patrol)
+- ${R.range(1,2)}x fireteam garrison w poblizu (type: garrison)
+- 1x vehicle_patrol (type: vehicle_patrol, vehicle_class: ${R.vehOpforLight()})
+- QRF ${R.range(0,1) ? 'squad' : 'fireteam'} motorized (type: qrf, composition: motorized, vehicle_class: ${R.vehOpfor()}, trigger_radius: ${R.range(200,400)})
 
-Punkt ewakuacji do wyznaczenia. Priorytet: zycie zakladnikow.
+Punkt ewakuacji (extraction) po uratowaniu. Priorytet: zycie zakladnikow.
 Skill wroga: ${sk}
 
 DODATKOWE MECHANIKI:
@@ -923,12 +929,13 @@ Zespol rozpoznawczy ${cs} (${R.range(4,6)} ludzi: TL, sniper, spotter, ratelo, $
 
 ROZPOZNANIE - misja cicha, NIE nawiazywac kontaktu:
 Baza/pozycja wroga (${ef}):
-- ${R.range(3,5)}x fireteam garrison
-- ${R.range(1,3)}x patrol (radius ${R.range(300,600)}m)
-- ${R.range(1,3)}x pojazd zaparkowany
-- ${R.range(0,1) ? '1x checkpoint na drodze\n' : ''}
-Infiltracja -> obserwacja -> raport -> eksfiltracja.
-${R.range(0,1) ? 'System alertow: wykrycie = misja nieudana.\n' : ''}
+- ${R.range(3,5)}x fireteam garrison (type: garrison)
+- ${R.range(1,3)}x fireteam patrol (type: patrol)
+- ${R.range(1,2)}x vehicle_patrol (type: vehicle_patrol, vehicle_class: ${R.vehOpforLight()})
+- ${R.range(0,1) ? `1x checkpoint na drodze (type: checkpoint)\n` : ''}
+Infiltracja -> obserwacja -> raport -> eksfiltracja (extraction).
+System alertow: STEALTH -> ALERT -> COMBAT (alert_system enabled, initial_state: STEALTH).
+${R.range(0,1) ? 'Intel do zebrania w budynku (intel_objects).\n' : ''}
 Skill wroga: ${sk}
 
 DODATKOWE MECHANIKI:
@@ -944,15 +951,16 @@ Czas: ${yr}, ${t.h}:00, ${t.d}, ${w}
 SILY WLASNE (${bf}):
 ${R.range(2,3)} druzyny szturmowe + sniper team. Callsign ${cs}.
 ${R.range(0,1) ? `${R.vehBlufor()} do dyspozycji.\n` : ''}
-RATOWANIE ZAKLADNIKOW:
+RATOWANIE ZAKLADNIKOW (hostages enabled):
 ${R.range(1,3)} zakladnikow przetrzymywanych w budynkach przez ${ef}.
-- ${R.range(2,4)}x fireteam garrison (strzegacy zakladnikow)
-- ${R.range(1,2)}x patrol
-- ${R.range(0,1) ? '1x sniper team\n' : ''}- QRF squad (trigger ${R.range(200,400)}m)
+- ${R.range(2,4)}x fireteam garrison strzegacy zakladnikow (type: garrison)
+- ${R.range(1,2)}x fireteam patrol (type: patrol)
+- 1x vehicle_patrol (type: vehicle_patrol, vehicle_class: ${R.vehOpforLight()})
+${R.range(0,1) ? `- 1x sniper team (type: sniper)\n` : ''}- QRF squad motorized (type: qrf, composition: motorized, vehicle_class: ${R.vehOpfor()}, trigger_radius: ${R.range(200,400)})
 
-UWAGA: Zaalarmowani wrogowie moga zabic zakladnikow!
-Podejscie ciche jest kluczowe.
-${R.range(0,1) ? 'IED na podejsciu.\n' : ''}Punkt ewakuacji po uratowaniu.
+Alert system: STEALTH (alert_system enabled, initial_state: STEALTH).
+UWAGA: Zaalarmowani wrogowie moga zabic zakladnikow! Podejscie ciche kluczowe.
+${R.range(0,1) ? 'IED na podejsciu.\n' : ''}Punkt ewakuacji po uratowaniu (extraction).
 Skill wroga: ${sk}
 
 DODATKOWE MECHANIKI:
@@ -982,10 +990,20 @@ ORBAT BLUFOR - Pluton CASTLE 1:
 Frakcje: vanilla_nato vs vanilla_csat
 
 OPFOR Cel UPTOWN (polnocna czesc Kavala):
-U-1..U-4: 4x fireteam garrison, U-5..U-6: 2x fireteam patrol, U-QRF: squad motorized O_MRAP_02_F trigger 300m
+U-1..U-4: 4x fireteam garrison (type: garrison)
+U-5..U-6: 2x fireteam patrol (type: patrol)
+U-VP: 1x vehicle_patrol (type: vehicle_patrol, vehicle_class: O_MRAP_02_F)
+U-QRF: squad motorized (type: qrf, composition: motorized, vehicle_class: O_MRAP_02_F, trigger_radius: 300)
 
 OPFOR Cel DOWNTOWN (poludniowa czesc Kavala):
-D-1..D-2: fireteam garrison, D-3: squad garrison, D-4,D-7: patrol, D-5,D-6: fireteam garrison, D-QRF: squad O_APC_Wheeled_02_rcws_F trigger 350m
+D-1..D-2: fireteam garrison (type: garrison)
+D-3: squad garrison (type: garrison)
+D-4,D-7: fireteam patrol (type: patrol)
+D-5,D-6: fireteam garrison (type: garrison)
+D-VP: 1x vehicle_patrol (type: vehicle_patrol, vehicle_class: O_LSV_02_unarmed_F)
+D-QRF: squad motorized (type: qrf, composition: motorized, vehicle_class: O_APC_Wheeled_02_rcws_F, trigger_radius: 350)
+
+Konwoj wroga na drodze (type: convoy, vehicle_class: O_MRAP_02_F,O_Truck_02_transport_F,O_MRAP_02_F, speed: LIMITED)
 
 Markery: 2 cele, 8 WP, 7 SBF, 5 ORP/IRP. Skill 0.4-0.7.
 Respawn wave 10min, 2 tickety, ACRE2. Start 05:30, mgla.`
