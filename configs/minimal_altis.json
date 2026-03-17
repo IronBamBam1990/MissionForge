@@ -1,0 +1,219 @@
+{
+  "meta": {
+    "mission_name": "IBC_MINIMAL_TEST",
+    "display_name": "Framework Test - All Features",
+    "author": "IBC",
+    "map": "Altis",
+    "game_type": "Coop",
+    "max_players": 30
+  },
+  "intel": {
+    "year": 2026, "month": 3, "day": 17,
+    "hour": 10, "minute": 0,
+    "weather": 0.2, "fog": 0.0, "wind": 0.1
+  },
+  "faction_preset": "vanilla_nato",
+  "enemy_faction_preset": "vanilla_csat",
+  "radio": {"system": "acre2"},
+
+  "blufor": {
+    "groups": [
+      {
+        "callsign": "HQ",
+        "type": "platoon_hq",
+        "position": [14300, 0, 16100],
+        "units": [
+          {"role": "platoon_leader", "rank": "LIEUTENANT"},
+          {"role": "platoon_sergeant", "rank": "SERGEANT"},
+          {"role": "ratelo"},
+          {"role": "combat_medic", "rank": "CORPORAL"}
+        ]
+      },
+      {
+        "callsign": "ALPHA 1",
+        "type": "rifle_squad",
+        "position": [14280, 0, 16080],
+        "units": [
+          {"role": "squad_leader", "rank": "SERGEANT"},
+          {"role": "team_leader", "rank": "CORPORAL"},
+          {"role": "rifleman"},
+          {"role": "rifleman"},
+          {"role": "autorifleman"},
+          {"role": "grenadier"},
+          {"role": "combat_medic", "rank": "CORPORAL"},
+          {"role": "rifleman"}
+        ]
+      },
+      {
+        "callsign": "BRAVO 1",
+        "type": "rifle_squad",
+        "position": [14320, 0, 16080],
+        "units": [
+          {"role": "squad_leader", "rank": "SERGEANT"},
+          {"role": "team_leader", "rank": "CORPORAL"},
+          {"role": "rifleman"},
+          {"role": "rifleman"},
+          {"role": "autorifleman"},
+          {"role": "grenadier"},
+          {"role": "combat_medic", "rank": "CORPORAL"},
+          {"role": "rifleman"}
+        ]
+      },
+      {
+        "callsign": "CHARLIE 1",
+        "type": "support_squad",
+        "position": [14300, 0, 16060],
+        "units": [
+          {"role": "squad_leader", "rank": "SERGEANT"},
+          {"role": "mg_gunner"},
+          {"role": "mg_assistant"},
+          {"role": "mg_ammo_bearer"},
+          {"role": "at_gunner"},
+          {"role": "at_assistant"},
+          {"role": "marksman"},
+          {"role": "combat_medic", "rank": "CORPORAL"}
+        ]
+      },
+      {
+        "callsign": "ECHO 1",
+        "type": "recon",
+        "position": [14300, 0, 16040],
+        "units": [
+          {"role": "sniper"},
+          {"role": "engineer"},
+          {"role": "explosive_specialist"}
+        ]
+      }
+    ]
+  },
+
+  "air_support": {
+    "enabled": true,
+    "aircraft": [
+      {
+        "callsign": "HAWK 1",
+        "vehicle_class": "B_Plane_CAS_01_dynamicLoadout_F",
+        "pilot_role": "cas_pilot",
+        "position": [13500, 0, 15500],
+        "direction": 90
+      }
+    ]
+  },
+
+  "opfor": {
+    "skill_range": [0.4, 0.7],
+    "zones": [
+      {
+        "name": "OBJ_VILLAGE",
+        "center": [14600, 0, 16400],
+        "positions": [
+          {"id": "V-GAR1", "type": "garrison", "position": [14580, 0, 16380], "size": "squad"},
+          {"id": "V-GAR2", "type": "garrison", "position": [14620, 0, 16420], "size": "fireteam"},
+          {"id": "V-PAT1", "type": "patrol", "position": [14600, 0, 16400], "size": "fireteam"},
+          {"id": "V-PAT2", "type": "patrol", "position": [14550, 0, 16350], "size": "fireteam",
+           "patrol_route": [[14550, 0, 16350], [14650, 0, 16350], [14650, 0, 16450], [14550, 0, 16450]]},
+          {"id": "V-SN1", "type": "sniper", "position": [14650, 0, 16500]},
+          {"id": "V-MG1", "type": "mg_nest", "position": [14590, 0, 16410]},
+          {"id": "V-CP1", "type": "checkpoint", "position": [14500, 0, 16300], "size": "fireteam"},
+          {"id": "V-STAT1", "type": "static", "position": [14610, 0, 16440], "size": "fireteam"}
+        ],
+        "fortifications": [
+          {"type": "sandbag", "position": [14590, 0, 16405], "direction": 180},
+          {"type": "hesco", "position": [14500, 0, 16300], "direction": 90},
+          {"type": "razorwire", "position": [14505, 0, 16305], "direction": 90}
+        ],
+        "mines": [
+          [14510, 0, 16310],
+          [14515, 0, 16305]
+        ]
+      },
+      {
+        "name": "OBJ_COMPOUND",
+        "center": [14800, 0, 16600],
+        "positions": [
+          {"id": "C-GAR1", "type": "garrison", "position": [14790, 0, 16590], "size": "fireteam"},
+          {"id": "C-PAT1", "type": "patrol", "position": [14800, 0, 16600], "size": "fireteam"},
+          {"id": "C-QRF1", "type": "qrf", "position": [14850, 0, 16650], "size": "squad",
+           "composition": "motorized", "vehicle_class": "O_MRAP_02_F", "trigger_radius": 400},
+          {"id": "C-MG1", "type": "mg_nest", "position": [14810, 0, 16610], "static_weapon": "O_HMG_01_high_F"},
+          {"id": "C-MECH1", "type": "static", "position": [14820, 0, 16580], "size": "fireteam",
+           "composition": "mechanized", "vehicle_class": "O_APC_Wheeled_02_rcws_F"}
+        ],
+        "fortifications": [
+          {"type": "bunker", "position": [14810, 0, 16605], "direction": 0},
+          {"type": "barrier", "position": [14795, 0, 16585], "direction": 45}
+        ]
+      }
+    ]
+  },
+
+  "hostages": {
+    "enabled": true,
+    "hostages": [
+      {
+        "id": "VIP_ALPHA",
+        "position": [14610, 0, 16430],
+        "count": 2,
+        "task_text": "Uratuj zakladnikow w budynku"
+      },
+      {
+        "id": "VIP_BRAVO",
+        "position": [14800, 0, 16610],
+        "count": 1,
+        "task_text": "Uratuj informatora w compound"
+      }
+    ]
+  },
+
+  "civilians": {
+    "enabled": true,
+    "density": "medium",
+    "zones": [
+      {"center": [14600, 0, 16400], "radius": 150}
+    ]
+  },
+
+  "markers": {
+    "objectives": [
+      {"name": "obj_village", "text": "OBJ VILLAGE", "position": [14600, 0, 16400], "type": "hd_objective", "color": "ColorRed"},
+      {"name": "obj_compound", "text": "OBJ COMPOUND", "position": [14800, 0, 16600], "type": "hd_objective", "color": "ColorRed"}
+    ],
+    "waypoints": [
+      {"name": "wp_1", "text": "WP1", "position": [14450, 0, 16250], "type": "mil_dot", "color": "ColorBlue"},
+      {"name": "wp_2", "text": "WP2", "position": [14550, 0, 16350], "type": "mil_dot", "color": "ColorBlue"}
+    ],
+    "sbf": [
+      {"name": "sbf_1", "text": "SBF", "position": [14350, 0, 16300], "type": "mil_triangle", "color": "ColorYellow"}
+    ],
+    "rally_points": [
+      {"name": "orp", "text": "ORP", "position": [14350, 0, 16150], "type": "mil_flag", "color": "ColorGreen"},
+      {"name": "start", "text": "Start", "position": [14300, 0, 16100], "type": "mil_start", "color": "ColorBlue"}
+    ]
+  },
+
+  "resupply": [
+    {"position": [14350, 0, 16150], "type": "ammo", "crate_class": "Box_NATO_Ammo_F"},
+    {"position": [14355, 0, 16155], "type": "medical", "crate_class": "ACE_medicalSupplyCrate"}
+  ],
+
+  "fortifications": [
+    {"type": "sandbag", "position": [14350, 0, 16145], "direction": 0}
+  ],
+
+  "respawn": {
+    "wave_interval": 300,
+    "tickets_per_player": 3,
+    "observer_mode": true
+  },
+
+  "briefing": {
+    "language": "pl",
+    "situation": "FRAMEWORK TEST: Testuje WSZYSTKIE mechaniki generatora. Przeciwnik kontroluje wioske (OBJ VILLAGE) i compound (OBJ COMPOUND). W wiosce: garrison (squad+fireteam), 2x patrol (jeden z trasa), sniper, gniazdo MG, checkpoint z zapora, fireteam statyczny. Fortyfikacje: worki z piaskiem, HESCO, drut kolczasty, miny AT. W compound: garrison, patrol, QRF zmotoryzowany (MRAP), gniazdo MG, fireteam zmechanizowany (APC), bunkier. Zakladnicy: 2 osoby w wiosce, 1 w compound. Cywile w rejonie wioski.",
+    "mission": "1. Przejac OBJ VILLAGE. 2. Przejac OBJ COMPOUND. 3. Uratowac zakladnikow (3 osoby). 4. Zniszczyc pojazdy wroga.",
+    "execution": "Faza 1: Podejscie z poludniowego zachodu przez WP1 i WP2. Faza 2: CHARLIE zajmuje SBF. Faza 3: ALPHA oczyszcza wioske, BRAVO oslanina. Faza 4: Przegrupowanie na ORP. Faza 5: Natarcie na compound. ECHO rozpoznanie i eliminacja snipera.",
+    "logistics": "Resupply: skrzynka z amunicja i medyczna na ORP. CAS: HAWK 1 na zadanie. Ewakuacja medyczna do ORP.",
+    "command_signal": "HQ 1-6 (PL). ALPHA kanal 1, BRAVO kanal 2, CHARLIE kanal 3, ECHO kanal 4, HAWK kanal 5."
+  },
+
+  "time_limit": 120
+}

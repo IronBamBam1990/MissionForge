@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7BOW Mission Generator - ARMA 3</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap');
+
+        :root {
+            --bg: #020a02;
+            --bg2: #041208;
+            --bg3: #081a0e;
+            --bg4: #0c2414;
+            --border: #0f3a1a;
+            --border2: #1a5c2e;
+            --glow: #00ff41;
+            --glow2: #00cc33;
+            --glow3: #009926;
+            --glowdim: #004d13;
+            --text: #00ff41;
+            --text2: #00bb33;
+            --muted: #006622;
+            --dark: #003311;
+            --red: #ff2020;
+            --orange: #ff8800;
+            --cyan: #00ffcc;
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family: 'Share Tech Mono', 'Consolas', monospace;
+            background: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* === SCANLINE OVERLAY === */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 255, 65, 0.03) 0px,
+                rgba(0, 255, 65, 0.03) 1px,
+                transparent 1px,
+                transparent 3px
+            );
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* === FLICKER ANIMATION === */
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            92% { opacity: 1; }
+            93% { opacity: 0.8; }
+            94% { opacity: 1; }
+            96% { opacity: 0.9; }
+            97% { opacity: 1; }
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { text-shadow: 0 0 5px var(--glow), 0 0 10px var(--glow), 0 0 20px var(--glow3); }
+            50% { text-shadow: 0 0 10px var(--glow), 0 0 20px var(--glow), 0 0 40px var(--glow3), 0 0 60px var(--glow3); }
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { border-color: var(--border); box-shadow: 0 0 5px rgba(0,255,65,0.05); }
+            50% { border-color: var(--border2); box-shadow: 0 0 10px rgba(0,255,65,0.1); }
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-10px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes matrixRain {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 1000px; }
+        }
+
+        /* === HEADER === */
+        header {
+            background: var(--bg2);
+            border-bottom: 1px solid var(--border);
+            padding: 10px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            animation: flicker 8s infinite;
+        }
+        .logo {
+            display: flex; align-items: center; gap: 14px;
+        }
+        .logo-icon {
+            width: 36px; height: 36px;
+            border: 2px solid var(--glow);
+            border-radius: 4px;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Orbitron', monospace;
+            font-weight: 900; font-size: 11px;
+            color: var(--glow);
+            text-shadow: 0 0 10px var(--glow);
+            animation: borderGlow 3s ease-in-out infinite;
+        }
+        .logo h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: 14px; font-weight: 700;
+            letter-spacing: 3px;
+            animation: glowPulse 4s ease-in-out infinite;
+        }
+        .logo h1 .sub {
+            display: block;
+            font-size: 9px;
+            letter-spacing: 5px;
+            color: var(--text2);
+            font-weight: 400;
+            margin-top: 2px;
+        }
+        .header-info {
+            display: flex; gap: 16px; align-items: center;
+            font-size: 11px; color: var(--text2);
+        }
+        .status-dot {
+            display: inline-block;
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--glow);
+            box-shadow: 0 0 6px var(--glow), 0 0 12px var(--glow3);
+            animation: blink 2s infinite;
+        }
+
+        /* === MAIN LAYOUT === */
+        .main-layout {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            overflow: hidden;
+        }
+
+        /* === SIDEBAR === */
+        .sidebar {
+            background: var(--bg2);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-track { background: var(--bg); }
+        .sidebar::-webkit-scrollbar-thumb { background: var(--border2); }
+
+        .sidebar-section {
+            padding: 14px 14px;
+            border-bottom: 1px solid var(--border);
+        }
+        .sidebar-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 9px;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--dark);
+        }
+        .sidebar-title::before {
+            content: '> ';
+            color: var(--glow);
+        }
+
+        .template-btn {
+            display: block;
+            width: 100%;
+            padding: 8px 10px;
+            margin-bottom: 2px;
+            background: none;
+            border: 1px solid transparent;
+            border-left: 2px solid transparent;
+            color: var(--text2);
+            font-size: 12px;
+            font-family: 'Share Tech Mono', monospace;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.15s;
+            animation: slideIn 0.3s ease-out backwards;
+        }
+        .template-btn:nth-child(2) { animation-delay: 0.05s; }
+        .template-btn:nth-child(3) { animation-delay: 0.1s; }
+        .template-btn:nth-child(4) { animation-delay: 0.15s; }
+        .template-btn:nth-child(5) { animation-delay: 0.2s; }
+        .template-btn:nth-child(6) { animation-delay: 0.25s; }
+        .template-btn:nth-child(7) { animation-delay: 0.3s; }
+        .template-btn:nth-child(8) { animation-delay: 0.35s; }
+        .template-btn:nth-child(9) { animation-delay: 0.4s; }
+
+        .template-btn:hover {
+            background: rgba(0, 255, 65, 0.05);
+            border-color: var(--border);
+            border-left-color: var(--glow);
+            color: var(--glow);
+            text-shadow: 0 0 5px rgba(0,255,65,0.3);
+            padding-left: 14px;
+        }
+        .template-btn .t-name { font-weight: 400; }
+        .template-btn .t-sub {
+            display: block;
+            font-size: 10px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+        .template-btn:hover .t-sub { color: var(--text2); }
+
+        .mission-item {
+            padding: 6px 10px;
+            margin-bottom: 2px;
+            background: rgba(0,255,65,0.03);
+            border: 1px solid var(--dark);
+            border-radius: 2px;
+            font-size: 10px;
+            color: var(--text2);
+            word-break: break-all;
+            transition: all 0.15s;
+        }
+        .mission-item:hover {
+            border-color: var(--border2);
+            background: rgba(0,255,65,0.06);
+        }
+        .mission-item::before {
+            content: '>> ';
+            color: var(--muted);
+        }
+
+        .tips {
+            font-size: 10px;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+        .tips ul { padding-left: 14px; }
+        .tips li::marker { color: var(--glow3); }
+        .tips p { margin-top: 6px; }
+        .tips .highlight { color: var(--text2); }
+
+        .mod-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 8px;
+            border: 1px solid var(--dark);
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-size: 11px;
+        }
+        .mod-toggle:hover { border-color: var(--border); background: rgba(0,255,65,0.03); }
+        .mod-toggle input[type="checkbox"] {
+            appearance: none;
+            width: 14px; height: 14px;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            background: var(--bg2);
+            cursor: pointer;
+            position: relative;
+        }
+        .mod-toggle input[type="checkbox"]:checked {
+            background: var(--glow3);
+            border-color: var(--glow);
+        }
+        .mod-toggle input[type="checkbox"]:checked::after {
+            content: '✓';
+            position: absolute;
+            top: -2px; left: 1px;
+            font-size: 12px;
+            color: var(--bg);
+        }
+        .mod-label { color: var(--glow); font-weight: 400; min-width: 45px; }
+        .mod-desc { color: var(--muted); font-size: 9px; }
+
+        /* === CONTENT === */
+        .content {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+        .content::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(0,255,65,0.02) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(0,255,65,0.015) 0%, transparent 40%);
+            pointer-events: none;
+        }
+
+        /* Prompt area */
+        .prompt-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 18px 24px;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+        .prompt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .prompt-label {
+            font-family: 'Orbitron', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text2);
+            letter-spacing: 2px;
+        }
+        .prompt-label::before {
+            content: '[ ';
+            color: var(--muted);
+        }
+        .prompt-label::after {
+            content: ' ]';
+            color: var(--muted);
+        }
+        .char-count {
+            font-size: 10px;
+            color: var(--muted);
+        }
+
+        #prompt {
+            flex: 1;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 14px;
+            color: var(--glow);
+            font-size: 13px;
+            font-family: 'Share Tech Mono', monospace;
+            line-height: 1.7;
+            resize: none;
+            transition: all 0.3s;
+            caret-color: var(--glow);
+        }
+        #prompt:focus {
+            outline: none;
+            border-color: var(--glow3);
+            box-shadow: 0 0 15px rgba(0,255,65,0.1), inset 0 0 30px rgba(0,255,65,0.02);
+        }
+        #prompt::placeholder { color: var(--dark); }
+        #prompt::selection { background: rgba(0,255,65,0.2); color: var(--glow); }
+
+        /* Action bar */
+        .action-bar {
+            flex-shrink: 0;
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            padding: 12px 24px;
+            background: var(--bg2);
+            border-top: 1px solid var(--border);
+            position: relative;
+            z-index: 1;
+        }
+        #btn-generate {
+            padding: 10px 30px;
+            background: transparent;
+            border: 2px solid var(--glow);
+            border-radius: 2px;
+            color: var(--glow);
+            font-family: 'Orbitron', monospace;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        #btn-generate::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; right: 100%; bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(0,255,65,0.15), transparent);
+            transition: all 0.4s;
+        }
+        #btn-generate:hover {
+            background: rgba(0,255,65,0.1);
+            box-shadow: 0 0 20px rgba(0,255,65,0.2), inset 0 0 20px rgba(0,255,65,0.05);
+            text-shadow: 0 0 10px var(--glow);
+        }
+        #btn-generate:hover::before {
+            left: 100%; right: -100%;
+        }
+        #btn-generate:active {
+            background: rgba(0,255,65,0.2);
+            transform: scale(0.98);
+        }
+        #btn-generate:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            border-color: var(--muted);
+            color: var(--muted);
+        }
+        .action-hint {
+            font-size: 10px;
+            color: var(--muted);
+        }
+        .action-hint kbd {
+            background: var(--bg4);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 1px 4px;
+            color: var(--text2);
+        }
+
+        /* === STATUS PANEL === */
+        #status-panel {
+            display: none;
+            flex-shrink: 0;
+            border-top: 1px solid var(--border);
+            background: var(--bg2);
+            max-height: 220px;
+            overflow-y: auto;
+            position: relative;
+            z-index: 1;
+        }
+        #status-panel.visible { display: block; animation: slideIn 0.3s ease-out; }
+
+        .status-inner {
+            padding: 14px 24px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+        .status-icon {
+            width: 18px; height: 18px;
+            flex-shrink: 0;
+            font-size: 14px;
+            margin-top: 1px;
+        }
+        .status-icon.loading { color: var(--orange); animation: blink 1s infinite; }
+        .status-icon.success { color: var(--glow); text-shadow: 0 0 10px var(--glow); }
+        .status-icon.error { color: var(--red); text-shadow: 0 0 10px var(--red); }
+
+        .status-content { flex: 1; }
+        .status-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+        }
+        .status-body {
+            font-size: 11px;
+            color: var(--text2);
+            line-height: 1.6;
+        }
+        .status-body code {
+            background: var(--bg);
+            border: 1px solid var(--dark);
+            padding: 1px 6px;
+            border-radius: 2px;
+            font-size: 10px;
+            color: var(--glow);
+        }
+        .status-toggle {
+            margin-top: 6px;
+            font-size: 10px;
+            color: var(--cyan);
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: 'Share Tech Mono', monospace;
+        }
+        .status-toggle:hover { text-decoration: underline; }
+        #config-preview {
+            display: none;
+            margin-top: 8px;
+            background: var(--bg);
+            border: 1px solid var(--dark);
+            border-radius: 2px;
+            padding: 10px;
+            max-height: 250px;
+            overflow-y: auto;
+            font-size: 10px;
+            color: var(--glow3);
+            white-space: pre-wrap;
+        }
+
+        /* === FOOTER === */
+        footer {
+            flex-shrink: 0;
+            background: var(--bg);
+            border-top: 1px solid var(--dark);
+            padding: 6px 24px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 9px;
+            color: var(--dark);
+            letter-spacing: 1px;
+        }
+        footer span { color: #ffffff; opacity: 0.9; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <div class="logo-icon">7BOW</div>
+            <h1>
+                MISSION GENERATOR
+                <span class="sub">ARMA 3 TACTICAL FRAMEWORK</span>
+            </h1>
+        </div>
+        <div class="header-info">
+            <span><span class="status-dot"></span> AI MODEL ONLINE</span>
+            <span id="mission-count"></span>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Mission Templates</div>
+
+                <button class="template-btn" onclick="loadTemplate('raid')">
+                    <span class="t-name">[RAID] Szturm na pozycje</span>
+                    <span class="t-sub">Natarcie na 2 cele, garnizony + QRF</span>
+                </button>
+                <button class="template-btn" onclick="loadTemplate('patrol')">
+                    <span class="t-name">[PATROL] Patrol bojowy</span>
+                    <span class="t-sub">Rejon patrolowy, kontakty spotkaniowe</span>
+                </button>
+                <button class="template-btn" onclick="loadTemplate('defense')">
+                    <span class="t-name">[DEFENSE] Obrona pozycji</span>
+                    <span class="t-sub">Obrona przed falami wroga</span>
+                </button>
+                <button class="template-btn" onclick="loadTemplate('ambush')">
+                    <span class="t-name">[AMBUSH] Zasadzka</span>
+                    <span class="t-sub">Zasadzka na kolumne pojazdow</span>
+                </button>
+                <button class="template-btn" onclick="loadTemplate('convoy_escort')">
+                    <span class="t-name">[ESCORT] Eskorta konwoju</span>
+                    <span class="t-sub">Ochrona transportu BLUFOR na MSR</span>
+                </button>
+                <button class="template-btn" onclick="loadTemplate('convoy_destroy')">
+                    <span class="t-name">[CONVOY] Zniszcz konwoj wroga</span>
+                    <span class="t-sub">Zasadzka/atak na konwoj OPFOR jadacy droga</span>
+                </button>
+                <button class="template-btn" onclick="loadTemplate('sar')">
+                    <span class="t-name">[SAR] Search & Rescue</span>
+                    <span class="t-sub">Odnalezienie i ewakuacja VIP</span>
+                </button>
+                <button class="template-btn" onclick="loadTemplate('recon')">
+                    <span class="t-name">[RECON] Rozpoznanie</span>
+                    <span class="t-sub">Infiltracja, obserwacja, raport</span>
+                </button>
+                <button class="template-btn" onclick="loadTemplate('hostage')">
+                    <span class="t-name">[HOSTAGE] Ratowanie zakladnikow</span>
+                    <span class="t-sub">Infiltracja, neutralizacja, ewakuacja VIP</span>
+                </button>
+                <button class="template-btn" onclick="loadTemplate('crimson_dawn')">
+                    <span class="t-name">[DEMO] Crimson Dawn</span>
+                    <span class="t-sub">Pelna operacja 7BOW - Sobor 1967</span>
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Generated Missions</div>
+                <div id="missions-list"></div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Mod Settings</div>
+                <div style="display:flex;flex-direction:column;gap:6px;">
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-ace3" onchange="saveModSettings()">
+                        <span class="mod-label">ACE3</span>
+                        <span class="mod-desc">microDAGR, cellphone, medical</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-acre2" checked onchange="saveModSettings()">
+                        <span class="mod-label">ACRE2</span>
+                        <span class="mod-desc">Radio system</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-tfar" onchange="saveModSettings()">
+                        <span class="mod-label">TFAR</span>
+                        <span class="mod-desc">Radio (alternatywa ACRE2)</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Quick Guide</div>
+                <div class="tips">
+                    <ul>
+                        <li>Mapa + lokalizacja celow</li>
+                        <li>ORBAT - druzyny, role, callsign</li>
+                        <li>OPFOR - sklad, pozycje, zachowanie</li>
+                        <li>Markery - WP, SBF, ORP, PL</li>
+                        <li>Respawn - wave, tickety</li>
+                        <li>Briefing - fabula, zadanie</li>
+                    </ul>
+                    <p class="highlight">Mozesz wkleic pelny briefing OPORD.</p>
+                </div>
+            </div>
+        </aside>
+
+        <div class="content">
+            <div class="prompt-area">
+                <div class="prompt-header">
+                    <span class="prompt-label">MISSION BRIEFING INPUT</span>
+                    <span class="char-count" id="char-count">0</span>
+                </div>
+                <textarea id="prompt" placeholder="> Wprowadz opis misji lub wklej briefing OPORD...
+>
+> Przyklad:
+> Misja na Altis, 2026.
+> Pluton NATO - HQ + 3 druzyny + KM + ppanc + CAS.
+> Cel ALPHA - Kavala: CSAT garrison + QRF.
+> Cel BRAVO - Agios Dionysios: garrison + patrol.
+> Respawn wave 10min, 2 tickety.
+> Start 06:00, mgla."></textarea>
+            </div>
+
+            <div class="action-bar">
+                <button id="btn-generate" onclick="generate()">EXECUTE</button>
+                <span class="action-hint"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> // AI Model &rarr; parse &rarr; generate &rarr; Eden Editor</span>
+            </div>
+
+            <div id="status-panel">
+                <div class="status-inner">
+                    <div class="status-icon" id="s-icon"></div>
+                    <div class="status-content">
+                        <div class="status-title" id="s-title"></div>
+                        <div class="status-body" id="s-body"></div>
+                        <button class="status-toggle" id="s-toggle" onclick="togglePreview()" style="display:none">> show_config.json</button>
+                        <pre id="config-preview"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <span>Author: Kamil Padula</span>
+        <span>7BOW ARMA 3 Mission Generator v0.1.0</span>
+        <span>&copy; 2026 Kamil Padula. All rights reserved.</span>
+    </footer>
+
+    <script>
+    // ── Randomization helpers ──
+    const R = {
+        pick: arr => arr[Math.floor(Math.random() * arr.length)],
+        range: (min, max) => Math.floor(Math.random() * (max - min + 1)) + min,
+        name: () => R.pick(['IRON','STEEL','CRIMSON','SHADOW','THUNDER','SILENT','BROKEN','DARK','RED','COLD','NIGHT','FALLEN','BLACK','STORM','GHOST','PHANTOM','SWIFT','DEAD','SHARP','RAPID']) + ' ' + R.pick(['DAWN','DUSK','FURY','STRIKE','SHIELD','HAMMER','ARROW','BLADE','FIST','SPEAR','LION','EAGLE','WOLF','VIPER','HAWK','STORM','TIDE','RIDGE','GATE','CREST']),
+        callsign: () => R.pick(['TITAN','VIKING','CASTLE','WARHORSE','SPARTAN','GUARDIAN','SHADOW','PHANTOM','REAPER','FALCON','BRAVO','ALPHA','CHARLIE','DELTA','ECHO','VIPER','STORM','HAMMER']),
+        locations: {
+            Altis: ['Kavala','Pyrgos','Athira','Sofia','Agios Dionysios','Paros','Selakano','Gravia','Zaros','Neochori','Lakka','Aggelochori','Dorida','Panochori','Poliakko','Frini','Kalochori','Therisa','Chalkeia','Oreokastro','Topolia','Rodopoli','Telos'],
+            Stratis: ['Agia Marina','Girna','Kamino','Air Station Mike-26','Camp Maxwell','Camp Rogain','Camp Tempest'],
+            Tanoa: ['Georgetown','Lijnhaven','Blue Pearl','Katkoula','Tanouka','Rautake','Sosovu','Balavu','Luganville','Namuvaka'],
+            Malden: ['Cancon','La Pessagne','Le Port','Lolisse','La Riviere','Vigny','Goisse','Chapoi','Dourdan','Houdan'],
+        },
+        time: () => R.pick([{h:4,d:'noc, ciemno'},{h:5,d:'swit'},{h:6,d:'wczesny ranek'},{h:8,d:'ranek'},{h:10,d:'poludnie'},{h:14,d:'popoludnie'},{h:17,d:'pozne popoludnie'},{h:19,d:'wieczor'},{h:21,d:'noc'},{h:23,d:'polnoc'}]),
+        weather: () => R.pick(['pogodnie, bez chmur','lekkie zachmurzenie','zachmurzenie, wiatr','lekka mgla','gesta mgla','deszcz','burza']),
+        skill: () => R.pick(['0.3-0.5 (rekruci)','0.4-0.6 (regularne)','0.5-0.7 (weterani)','0.6-0.8 (elita)','0.7-0.9 (specnaz)']),
+        opforFaction: () => R.pick(['CSAT','AAF','FIA (insurgenci)','Syndikat']),
+        bluforFaction: () => R.pick(['NATO','CTRG','NATO Pacific']),
+        year: () => R.pick([1985,1991,2001,2008,2015,2020,2024,2025,2026]),
+        vehOpfor: () => R.pick(['Ifrit MRAP','Zamak transport','MSE-3 Marid APC','BTR-K Kamysh IFV','T-100 Varsuk MBT','Qilin LSV','Tempest transport']),
+        vehBlufor: () => R.pick(['Hunter MRAP','Marshall APC','Slammer MBT','Panther IFV','Prowler LSV','HEMTT transport','AMV-7 Marshall']),
+        mechanic: () => {
+            const pool = [
+                'System alertow: STEALTH -> ALERT -> COMBAT',
+                'IED na drogach dojazdowych',
+                'Kontratak wroga po zdobyciu celu (squad + pojazd)',
+                'Konwoj wroga na drodze (3 pojazdy)',
+                'Ostrzal mozdzierzowy po kontakcie',
+                'Zrzut zaopatrzenia helikopterem po 15 minutach',
+                'Fale wzmocnien wroga (2 fale co 5 minut)',
+                'Zmiana pogody w trakcie misji (deszcz po 30 min)',
+                'Obrona pozycji przez 15 minut po zdobyciu',
+                'Punkt ewakuacji po realizacji celow',
+                'Intel do zebrania (laptop w budynku)',
+                'Cel do zniszczenia (skladowisko paliwa)',
+                'Patrol powietrzny wroga (helikopter)',
+                'Patrol pojazdow wroga na drodze (2x Ifrit)',
+            ];
+            return R.pick(pool);
+        },
+        mechanics: (n) => {
+            const all = [];
+            for (let i = 0; i < (n||3); i++) {
+                const m = R.mechanic();
+                if (!all.includes(m)) all.push(m);
+            }
+            return all;
+        },
+    };
+
+    function genTemplate(type) {
+        const map = R.pick(Object.keys(R.locations));
+        const locs = R.locations[map];
+        const loc1 = R.pick(locs);
+        const loc2 = R.pick(locs.filter(l => l !== loc1));
+        const opName = R.name();
+        const cs = R.callsign();
+        const t = R.time();
+        const w = R.weather();
+        const sk = R.skill();
+        const yr = R.year();
+        const ef = R.opforFaction();
+        const bf = R.bluforFaction();
+        const mechs = R.mechanics(R.range(2,4));
+        const mechsStr = mechs.map(m => '- ' + m).join('\n');
+
+        const generators = {
+            raid: () => `OPERACJA ${opName}
+
+Mapa: ${map}, lokalizacja: ${loc1} i ${loc2}
+Czas: ${yr}, godzina ${t.h}:00, ${t.d}, ${w}
+
+SILY WLASNE (${bf}):
+Pluton piechoty, callsign ${cs}:
+- Dowodzenie (PL, PS, RATELO, medyk) - 4 osoby
+- ${R.range(2,3)}x druzyna szturmowa (SL, 2xTL, 2xAR, Grenadier, Rifleman, Medyk) - 8 osob kazda
+- 1x druzyna wsparcia (2x MG, AT, amunicyjny, medyk) - 5 osob
+- ${R.range(1,2)}x ${R.vehBlufor()}
+
+OPFOR (${ef}):
+Cel ALPHA - ${loc1}:
+- ${R.range(2,4)}x fireteam garrison w budynkach
+- ${R.range(1,2)}x fireteam patrol
+- ${R.range(0,1) ? '1x sniper team' : '1x gniazdo MG'}
+- QRF squad zmotoryzowany w ${R.vehOpfor()} (trigger ${R.range(250,400)}m)
+${R.range(0,1) ? `- IED na podejsciu
+` : ''}
+Cel BRAVO - ${loc2}:
+- ${R.range(2,3)}x fireteam garrison
+- ${R.range(1,2)}x fireteam patrol
+- ${R.range(0,1) ? '1x checkpoint' : '1x squad statyczny'}
+- QRF fireteam w ${R.vehOpfor()} (trigger ${R.range(200,350)}m)
+
+Skill wroga: ${sk}
+
+DODATKOWE MECHANIKI:
+${mechsStr}
+
+Respawn wave ${R.pick([5,10,15])} min, ${R.range(1,3)} tickety.
+Limit czasu: ${R.range(90,180)} minut.`,
+
+            patrol: () => `OPERACJA ${opName}
+
+Mapa: ${map}, rejon patrolowy okolice ${loc1}
+Czas: ${yr}, ${t.h}:00, ${t.d}, ${w}
+
+SILY WLASNE (${bf}):
+Callsign ${cs}. ${R.range(2,3)} druzyny piechoty (SL + 7 zolnierzy) + HQ.
+
+PATROL BOJOWY - ${R.range(4,6)} punktow patrolowych w rejonie.
+Wrog (${ef}) rozrzucony:
+- ${R.range(2,4)}x fireteam garrison w wioskach
+- ${R.range(1,3)}x fireteam patrol miedzy wioskami
+- ${R.range(0,2)}x checkpoint na drogach
+${R.range(0,1) ? `- 1x sniper team na wzgorzu\n` : ''}- Brak ciezkiego sprzetu
+
+Skill wroga: ${sk}
+
+DODATKOWE MECHANIKI:
+${mechsStr}
+
+Respawn wave ${R.range(10,20)} min, ${R.range(2,4)} tickety.`,
+
+            defense: () => `OPERACJA ${opName}
+
+Mapa: ${map}, pozycja obronna: ${loc1}
+Czas: ${yr}, ${t.h}:00, ${t.d}, ${w}
+
+SILY WLASNE (${bf}):
+Pluton ${cs} - pelny ORBAT (HQ + ${R.range(2,3)} druzyny + wsparcie).
+${R.range(1,2)}x ${R.vehBlufor()} do dyspozycji.
+
+OBRONA - wrog (${ef}) atakuje w ${R.range(2,4)} falach:
+${Array.from({length: R.range(2,4)}, (_, i) => `Fala ${i+1}: ${R.range(1,2)}x squad piechoty${R.range(0,1) ? ` + ${R.vehOpfor()}` : ''} (od ${R.pick(['polnocy','poludnia','wschodu','zachodu'])})`).join('\n')}
+
+Utrzymac pozycje przez ${R.range(20,40)} minut.
+${R.range(0,1) ? 'Kontratak wroga z APC po oczyszczeniu.\n' : ''}
+Skill wroga: ${sk}
+
+DODATKOWE MECHANIKI:
+${mechsStr}
+
+Respawn wave ${R.range(3,8)} min, ${R.range(3,6)} ticketow.`,
+
+            ambush: () => `OPERACJA ${opName}
+
+Mapa: ${map}, zasadzka w rejonie ${loc1}
+Czas: ${yr}, ${t.h}:00, ${t.d}, ${w}
+
+SILY WLASNE (${bf}):
+${R.range(1,2)} druzyny + sniper team. Callsign ${cs}.
+
+ZASADZKA na konwoj wroga (${ef}):
+- ${R.range(2,4)}x ${R.vehOpfor()} w konwoju
+- ${R.range(1,2)}x eskort ${R.vehOpfor()}
+- ${R.range(1,2)}x fireteam garrison w poblizu drogi
+- QRF ${R.range(0,1) ? 'squad' : 'fireteam'} z pobliskej bazy (trigger ${R.range(300,500)}m)
+
+${R.range(0,1) ? 'IED na drodze do spowolnienia konwoju.\n' : ''}Punkt ewakuacji ${R.range(500,1000)}m od pozycji zasadzki.
+Skill wroga: ${sk}
+
+DODATKOWE MECHANIKI:
+${mechsStr}
+
+Respawn wave ${R.range(10,15)} min, ${R.range(1,2)} tickety.`,
+
+            convoy_destroy: () => {
+                const convoySize = R.range(3,5);
+                const convoyVehs = Array.from({length: convoySize}, () => R.vehOpfor());
+                return `OPERACJA ${opName}
+
+Mapa: ${map}
+Czas: ${yr}, ${t.h}:00, ${t.d}, ${w}
+
+KONWOJ WROGA do zniszczenia:
+Konwoj ${ef} jedzie z ${loc1} do ${loc2} droga.
+Sklad konwoju (${convoySize} pojazdow):
+${convoyVehs.map((v,i) => `- Pojazd ${i+1}: ${v}`).join('\n')}
+- Predkosc: ${R.pick(['LIMITED','NORMAL'])}
+- Odstep miedzy pojazdami: ${R.range(30,60)}m
+- W razie kontaktu: konwoj zatrzymuje sie, piechota wysiada, walczy
+
+OCHRONA KONWOJU:
+- ${R.range(1,2)}x fireteam garrison przy drodze (osadzka)
+- ${R.range(0,1) ? '1x vehicle_patrol na drodze rownoleglej\n' : ''}- QRF ${R.range(0,1) ? 'squad zmotoryzowany' : 'fireteam'} (trigger ${R.range(300,500)}m)
+${R.range(0,1) ? '- 1x sniper team na wzgorzu przy drodze\n' : ''}
+SILY WLASNE (${bf}):
+${R.range(2,3)} druzyny piechoty + ${R.range(0,1) ? 'sniper team + ' : ''}${R.range(1,2)}x ${R.vehBlufor()}. Callsign ${cs}.
+
+ZADANIE: Zniszcz konwoj wroga na trasie ${loc1} -> ${loc2}.
+${R.range(0,1) ? 'Mozliwosci:\n- Zasadzka na drodze\n- IED do spowolnienia\n- Atak z flankow\n' : ''}Punkt ewakuacji ${R.range(500,1500)}m od miejsca zasadzki.
+Skill wroga: ${sk}
+
+DODATKOWE MECHANIKI:
+${mechsStr}
+
+Respawn wave ${R.range(10,15)} min, ${R.range(1,2)} tickety.
+Limit czasu: ${R.range(60,120)} minut.`;
+            },
+
+            convoy_escort: () => `OPERACJA ${opName}
+
+Mapa: ${map}, trasa: ${loc1} -> ${loc2}
+Czas: ${yr}, ${t.h}:00, ${t.d}, ${w}
+
+SILY WLASNE (${bf}):
+Pluton ${cs} - ${R.range(2,3)} druzyny + ${R.range(2,4)}x ${R.vehBlufor()} + ${R.range(1,2)}x ciezarowka.
+
+ESKORTA KONWOJU na trasie MSR ${loc1} -> ${loc2}:
+Zagrozenia (${ef}):
+- ${R.range(2,4)}x zasadzka fireteam wzdluz trasy
+- ${R.range(1,2)}x checkpoint (fireteam + ${R.vehOpfor()})
+- ${R.range(0,1) ? '1x sniper team\n' : ''}- QRF squad ${R.range(0,1) ? 'zmotoryzowany' : 'pieszy'} (trigger ${R.range(300,500)}m)
+${R.range(0,1) ? '- IED na trasie\n' : ''}
+Skill wroga: ${sk}
+
+DODATKOWE MECHANIKI:
+${mechsStr}
+
+Respawn wave ${R.range(8,15)} min, ${R.range(2,3)} tickety.`,
+
+            sar: () => `OPERACJA ${opName}
+
+Mapa: ${map}, rejon poszukiwan: ${loc1}
+Czas: ${yr}, ${t.h}:00, ${t.d}, ${w}
+
+SILY WLASNE (${bf}):
+Druzyna ratunkowa ${cs} (${R.range(8,12)} ludzi: SL, ${R.range(1,2)}x medyk, ratelo, reszta rifleman).
+${R.range(0,1) ? `Helikopter transportowy do dyspozycji.\n` : ''}
+SEARCH & RESCUE:
+${R.pick(['Pilot zestrzelony','Agent wywiadu schwytany','Zakladnicy porwani','Rozbitek znaleziony'])} w rejonie kontrolowanym przez ${ef}.
+- ${R.range(1,2)} zakladnikow do uratowania
+- ${R.range(2,3)}x fireteam patrol w rejonie
+- ${R.range(1,2)}x fireteam garrison w poblizu
+- QRF ${R.range(0,1) ? 'squad zmotoryzowany' : 'fireteam'} (trigger ${R.range(200,400)}m)
+
+Punkt ewakuacji do wyznaczenia. Priorytet: zycie zakladnikow.
+Skill wroga: ${sk}
+
+DODATKOWE MECHANIKI:
+${mechsStr}
+
+Respawn wave ${R.range(10,15)} min, ${R.range(1,2)} tickety.`,
+
+            recon: () => `OPERACJA ${opName}
+
+Mapa: ${map}, cel rozpoznania: ${loc1}
+Czas: ${yr}, ${t.h}:00, ${t.d}, ${w}
+
+SILY WLASNE (${bf}):
+Zespol rozpoznawczy ${cs} (${R.range(4,6)} ludzi: TL, sniper, spotter, ratelo, ${R.range(0,1) ? 'saper, ' : ''}medyk).
+
+ROZPOZNANIE - misja cicha, NIE nawiazywac kontaktu:
+Baza/pozycja wroga (${ef}):
+- ${R.range(3,5)}x fireteam garrison
+- ${R.range(1,3)}x patrol (radius ${R.range(300,600)}m)
+- ${R.range(1,3)}x pojazd zaparkowany
+- ${R.range(0,1) ? '1x checkpoint na drodze\n' : ''}
+Infiltracja -> obserwacja -> raport -> eksfiltracja.
+${R.range(0,1) ? 'System alertow: wykrycie = misja nieudana.\n' : ''}
+Skill wroga: ${sk}
+
+DODATKOWE MECHANIKI:
+${mechsStr}
+
+Respawn: BRAK (1 zycie).`,
+
+            hostage: () => `OPERACJA ${opName}
+
+Mapa: ${map}, lokalizacja: ${loc1}
+Czas: ${yr}, ${t.h}:00, ${t.d}, ${w}
+
+SILY WLASNE (${bf}):
+${R.range(2,3)} druzyny szturmowe + sniper team. Callsign ${cs}.
+${R.range(0,1) ? `${R.vehBlufor()} do dyspozycji.\n` : ''}
+RATOWANIE ZAKLADNIKOW:
+${R.range(1,3)} zakladnikow przetrzymywanych w budynkach przez ${ef}.
+- ${R.range(2,4)}x fireteam garrison (strzegacy zakladnikow)
+- ${R.range(1,2)}x patrol
+- ${R.range(0,1) ? '1x sniper team\n' : ''}- QRF squad (trigger ${R.range(200,400)}m)
+
+UWAGA: Zaalarmowani wrogowie moga zabic zakladnikow!
+Podejscie ciche jest kluczowe.
+${R.range(0,1) ? 'IED na podejsciu.\n' : ''}Punkt ewakuacji po uratowaniu.
+Skill wroga: ${sk}
+
+DODATKOWE MECHANIKI:
+${mechsStr}
+
+Respawn wave ${R.range(10,15)} min, ${R.range(1,2)} tickety.`,
+        };
+
+        return generators[type] ? generators[type]() : '';
+    }
+
+    // Keep crimson_dawn as a special fixed template
+    const TEMPLATES = {
+crimson_dawn: `OPERACJA CRIMSON DAWN
+
+Mapa: Altis, lokalizacja Kavala. Rok 2026.
+
+ORBAT BLUFOR - Pluton CASTLE 1:
+- Zespol dowodzenia: Platoon Leader (CASTLE 1-6, LIEUTENANT), Platoon Sergeant (CASTLE 1-7, SERGEANT), RATELO (CASTLE 1-R), Combat Medic
+- Druzyna 1-1: SL, 2x TL, 2x AR, 2x Grenadier, Rifleman
+- Druzyna 1-2: identyczny sklad
+- Druzyna 1-3: identyczny sklad
+- KM 1-4: SL, MG Gunner, MG Assistant, MG Ammo Bearer
+- ppanc 1-5: SL, AT Gunner, AT Assistant, AT Ammo Bearer
+- CAS: helikopter szturmowy, pilot HAWK 2-1
+
+Frakcje: vanilla_nato vs vanilla_csat
+
+OPFOR Cel UPTOWN (polnocna czesc Kavala):
+U-1..U-4: 4x fireteam garrison, U-5..U-6: 2x fireteam patrol, U-QRF: squad motorized O_MRAP_02_F trigger 300m
+
+OPFOR Cel DOWNTOWN (poludniowa czesc Kavala):
+D-1..D-2: fireteam garrison, D-3: squad garrison, D-4,D-7: patrol, D-5,D-6: fireteam garrison, D-QRF: squad O_APC_Wheeled_02_rcws_F trigger 350m
+
+Markery: 2 cele, 8 WP, 7 SBF, 5 ORP/IRP. Skill 0.4-0.7.
+Respawn wave 10min, 2 tickety, ACRE2. Start 05:30, mgla.`
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('prompt').addEventListener('input', updateCharCount);
+        document.getElementById('prompt').addEventListener('keydown', e => {
+            if (e.ctrlKey && e.key === 'Enter') generate();
+        });
+        loadMissions();
+        updateCharCount();
+        loadModSettings();
+    });
+
+    function getModSettings() {
+        return {
+            ace3: document.getElementById('mod-ace3').checked,
+            acre2: document.getElementById('mod-acre2').checked,
+            tfar: document.getElementById('mod-tfar').checked,
+        };
+    }
+
+    function saveModSettings() {
+        localStorage.setItem('ibc_mods', JSON.stringify(getModSettings()));
+    }
+
+    function loadModSettings() {
+        try {
+            const saved = JSON.parse(localStorage.getItem('ibc_mods') || '{}');
+            if (saved.ace3 !== undefined) document.getElementById('mod-ace3').checked = saved.ace3;
+            if (saved.acre2 !== undefined) document.getElementById('mod-acre2').checked = saved.acre2;
+            if (saved.tfar !== undefined) document.getElementById('mod-tfar').checked = saved.tfar;
+        } catch(e) {}
+    }
+
+    function updateCharCount() {
+        document.getElementById('char-count').textContent = document.getElementById('prompt').value.length;
+    }
+
+    function loadTemplate(key) {
+        // Static templates (crimson_dawn) use TEMPLATES, everything else generates random
+        if (TEMPLATES[key]) {
+            document.getElementById('prompt').value = TEMPLATES[key];
+        } else {
+            document.getElementById('prompt').value = genTemplate(key);
+        }
+        updateCharCount();
+        document.getElementById('prompt').focus();
+    }
+
+    async function generate() {
+        const prompt = document.getElementById('prompt').value.trim();
+        if (!prompt) return;
+
+        const btn = document.getElementById('btn-generate');
+        const panel = document.getElementById('status-panel');
+
+        btn.disabled = true;
+        btn.textContent = 'PROCESSING...';
+        panel.className = 'visible';
+        setStatus('loading', 'ANALYZING MISSION BRIEFING...', 'AI Model processing // estimated time: 30-60s');
+
+        try {
+            const res = await fetch('/api/prompt', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt, mods: getModSettings() }),
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                setStatus('success',
+                    'MISSION GENERATED: ' + data.mission_name,
+                    'Path: <code>' + data.path + '</code><br>Status: Ready for Eden Editor'
+                );
+                if (data.config) {
+                    document.getElementById('s-toggle').style.display = 'block';
+                    document.getElementById('config-preview').textContent = JSON.stringify(data.config, null, 2);
+                }
+                loadMissions();
+            } else {
+                let msg = data.error || data.message || 'Unknown error';
+                if (data.raw_output) msg += '<br><br>Raw: <code>' + escHtml(data.raw_output.substring(0, 500)) + '</code>';
+                setStatus('error', 'GENERATION FAILED', msg);
+            }
+        } catch (e) {
+            setStatus('error', 'CONNECTION ERROR', e.message);
+        }
+
+        btn.disabled = false;
+        btn.textContent = 'EXECUTE';
+    }
+
+    function setStatus(type, title, body) {
+        const icon = document.getElementById('s-icon');
+        icon.className = 'status-icon ' + type;
+        icon.textContent = type === 'loading' ? '\u25F7' : type === 'success' ? '\u2713' : '\u2717';
+        document.getElementById('s-title').textContent = title;
+        document.getElementById('s-body').innerHTML = body;
+        document.getElementById('s-toggle').style.display = 'none';
+        document.getElementById('config-preview').style.display = 'none';
+    }
+
+    function togglePreview() {
+        const el = document.getElementById('config-preview');
+        el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+    async function loadMissions() {
+        try {
+            const res = await fetch('/api/missions');
+            const data = await res.json();
+            const list = document.getElementById('missions-list');
+            const count = document.getElementById('mission-count');
+            if (data.missions.length > 0) {
+                list.innerHTML = data.missions.slice(-8).reverse().map(m =>
+                    '<div class="mission-item">' + m.name + '</div>'
+                ).join('');
+                count.textContent = '[' + data.missions.length + ' missions]';
+            } else {
+                list.innerHTML = '<div style="font-size:10px;color:var(--muted)">// no missions generated yet</div>';
+            }
+        } catch(e) {}
+    }
+    </script>
+</body>
+</html>

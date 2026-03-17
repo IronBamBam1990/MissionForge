@@ -1,0 +1,216 @@
+{
+  "meta": {
+    "mission_name": "IBC_FULL_TEST",
+    "display_name": "Full Framework Test - All Mechanics",
+    "author": "IBC",
+    "map": "Altis",
+    "game_type": "Coop",
+    "max_players": 20
+  },
+  "intel": {
+    "year": 2026, "month": 3, "day": 17,
+    "hour": 19, "minute": 0,
+    "weather": 0.3, "fog": 0.1
+  },
+  "faction_preset": "vanilla_nato",
+  "enemy_faction_preset": "vanilla_csat",
+
+  "blufor": {
+    "groups": [
+      {
+        "callsign": "TITAN HQ",
+        "type": "platoon_hq",
+        "position": [10200, 0, 12400],
+        "units": [
+          {"role": "platoon_leader", "rank": "LIEUTENANT"},
+          {"role": "platoon_sergeant", "rank": "SERGEANT"},
+          {"role": "ratelo"},
+          {"role": "combat_medic", "rank": "CORPORAL"}
+        ]
+      },
+      {
+        "callsign": "ALPHA 1",
+        "type": "rifle_squad",
+        "position": [10180, 0, 12380],
+        "units": [
+          {"role": "squad_leader", "rank": "SERGEANT"},
+          {"role": "team_leader", "rank": "CORPORAL"},
+          {"role": "rifleman"},
+          {"role": "rifleman"},
+          {"role": "autorifleman"},
+          {"role": "grenadier"},
+          {"role": "combat_medic", "rank": "CORPORAL"},
+          {"role": "rifleman"}
+        ]
+      },
+      {
+        "callsign": "BRAVO 1",
+        "type": "rifle_squad",
+        "position": [10220, 0, 12380],
+        "units": [
+          {"role": "squad_leader", "rank": "SERGEANT"},
+          {"role": "team_leader", "rank": "CORPORAL"},
+          {"role": "rifleman"},
+          {"role": "rifleman"},
+          {"role": "autorifleman"},
+          {"role": "grenadier"},
+          {"role": "combat_medic", "rank": "CORPORAL"},
+          {"role": "at_gunner"}
+        ]
+      }
+    ]
+  },
+
+  "player_vehicles": [
+    {
+      "vehicle_class": "B_APC_Wheeled_01_cannon_F",
+      "callsign": "MARSHALL 1",
+      "position": [10190, 0, 12370],
+      "spawn_area": "near_infantry"
+    },
+    {
+      "vehicle_class": "B_APC_Wheeled_01_cannon_F",
+      "callsign": "MARSHALL 2",
+      "position": [10210, 0, 12370],
+      "spawn_area": "near_infantry"
+    }
+  ],
+
+  "air_support": {
+    "enabled": true,
+    "aircraft": [
+      {
+        "callsign": "EAGLE 1",
+        "vehicle_class": "B_Heli_Transport_01_F",
+        "spawn_type": "ground",
+        "spawn_location": "helipad",
+        "position": [10150, 0, 12350],
+        "direction": 90
+      }
+    ]
+  },
+
+  "opfor": {
+    "skill_range": [0.5, 0.8],
+    "zones": [
+      {
+        "name": "OBJ_VILLAGE",
+        "center": [10500, 0, 12800],
+        "positions": [
+          {"id": "V-G1", "type": "garrison", "position": [10480, 0, 12780], "size": "squad"},
+          {"id": "V-G2", "type": "garrison", "position": [10520, 0, 12820], "size": "fireteam"},
+          {"id": "V-P1", "type": "patrol", "position": [10500, 0, 12800], "size": "fireteam"},
+          {"id": "V-SN", "type": "sniper", "position": [10550, 0, 12850]},
+          {"id": "V-MG", "type": "mg_nest", "position": [10490, 0, 12810]},
+          {"id": "V-CP", "type": "checkpoint", "position": [10400, 0, 12700], "size": "fireteam"},
+          {"id": "V-QRF", "type": "qrf", "position": [10600, 0, 12900], "size": "squad",
+           "composition": "motorized", "vehicle_class": "O_MRAP_02_F", "trigger_radius": 400}
+        ],
+        "fortifications": [
+          {"type": "hesco", "position": [10400, 0, 12700], "direction": 45},
+          {"type": "sandbag", "position": [10490, 0, 12805], "direction": 180}
+        ]
+      }
+    ]
+  },
+
+  "hostages": {
+    "enabled": true,
+    "hostages": [
+      {"id": "VIP_1", "position": [10510, 0, 12810], "count": 2, "task_text": "Uratuj zakladnikow we wiosce"}
+    ]
+  },
+
+  "convoys": [
+    {
+      "vehicles": ["O_MRAP_02_F", "O_Truck_02_transport_F", "O_MRAP_02_F"],
+      "route": [[10800, 0, 12500], [10600, 0, 12700], [10400, 0, 12800], [10300, 0, 13000]],
+      "side": "east",
+      "speed": "LIMITED"
+    }
+  ],
+
+  "alert_system": {
+    "enabled": true,
+    "initial_state": "STEALTH",
+    "combat_radius": 500,
+    "alert_radius": 800
+  },
+
+  "counterattack": {
+    "enabled": true,
+    "trigger": "alert_combat",
+    "delay_seconds": 180,
+    "spawn_position": [10900, 0, 13100],
+    "target_position": [10500, 0, 12800],
+    "units": ["O_Soldier_SL_F", "O_Soldier_TL_F", "O_Soldier_F", "O_Soldier_F", "O_Soldier_AR_F", "O_Soldier_GL_F", "O_Soldier_F", "O_medic_F"],
+    "vehicle_class": "O_APC_Wheeled_02_rcws_F"
+  },
+
+  "ied": {
+    "enabled": true,
+    "positions": [[10400, 0, 12700]],
+    "count_per_zone": 2,
+    "radius": 150
+  },
+
+  "hold_position": {
+    "enabled": true,
+    "position": [10500, 0, 12800],
+    "duration_seconds": 300,
+    "radius": 100
+  },
+
+  "extraction": {
+    "enabled": true,
+    "position": [10100, 0, 12300],
+    "radius": 30,
+    "condition": "all_objectives"
+  },
+
+  "mortar": {
+    "enabled": true,
+    "target_position": [10500, 0, 12800],
+    "rounds": 6,
+    "spread": 60,
+    "delay_trigger": "alert_combat"
+  },
+
+  "resupply": [
+    {"position": [10200, 0, 12400], "type": "arsenal", "crate_class": "B_supplyCrate_F"},
+    {"position": [10205, 0, 12405], "type": "ammo", "crate_class": "Box_NATO_Ammo_F"},
+    {"position": [10210, 0, 12405], "type": "medical", "crate_class": "B_supplyCrate_F"}
+  ],
+
+  "markers": {
+    "objectives": [
+      {"name": "obj_village", "text": "OBJ VILLAGE", "position": [10500, 0, 12800], "type": "hd_objective", "color": "ColorRed"}
+    ],
+    "rally_points": [
+      {"name": "orp", "text": "ORP", "position": [10300, 0, 12600], "type": "mil_flag", "color": "ColorGreen"}
+    ]
+  },
+
+  "civilians": {
+    "enabled": true,
+    "density": "medium",
+    "zones": [{"center": [10500, 0, 12800], "radius": 200}]
+  },
+
+  "respawn": {
+    "wave_interval": 300,
+    "tickets_per_player": 2,
+    "observer_mode": true
+  },
+
+  "briefing": {
+    "language": "pl",
+    "situation": "FULL FRAMEWORK TEST. Przeciwnik kontroluje wioske. System alertow: STEALTH->ALERT->COMBAT. Konwoj OPFOR na drodze. IED na podejsciu. Po zdobyciu wioski - utrzymaj 5 minut. Kontratak OPFOR z APC po 3 minutach od kontaktu. Ostrzal mozdzierzowy po kontakcie. Ewakuacja po realizacji celow.",
+    "mission": "1. Podejdz ukradkiem (STEALTH). 2. Oczysc wioske OBJ VILLAGE. 3. Uratuj zakladnikow. 4. Utrzymaj pozycje 5 minut (HOLD). 5. Ewakuacja do EXFIL.",
+    "execution": "Faza 1: Podejscie APC od poludnia. Uwaga na IED! Faza 2: Desant i natarcie. Faza 3: Oczyszczenie i ratowanie zakladnikow. Faza 4: Obrona przed kontratakiem (APC OPFOR!). Faza 5: Ewakuacja.",
+    "logistics": "ARSENAL + skrzynka amunicji i medyczna przy spawnie. Helikopter EAGLE 1 dostepny. 2x Marshall APC.",
+    "command_signal": "TITAN 1-6 (PL). ALPHA kanal 1, BRAVO kanal 2."
+  },
+
+  "time_limit": 90
+}

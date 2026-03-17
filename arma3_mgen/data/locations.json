@@ -1,0 +1,203 @@
+{
+  "Altis": {
+    "_size": 30720,
+    "_note": "Coordinates [X, Y] where X=east, Y=north. Use as [X, 0, Y] in SQM.",
+    "cities": {
+      "Kavala": [3500, 13000],
+      "Athira": [14000, 18500],
+      "Pyrgos": [16700, 12800],
+      "Sofia": [7500, 17500],
+      "Agios Dionysios": [9000, 16000],
+      "Neochori": [12500, 18000],
+      "Dorida": [20000, 15500],
+      "Selakano": [20500, 13500],
+      "Chalkeia": [21000, 14500],
+      "Lakka": [12500, 17000]
+    },
+    "towns": {
+      "Agia Triada": [5500, 14500],
+      "Agios Konstantinos": [5500, 17500],
+      "Agios Ioannis": [5000, 16000],
+      "Abdera": [7000, 18500],
+      "Aktinarki": [2500, 14500],
+      "Aggelochori": [4000, 14200],
+      "Bomos": [11500, 15000],
+      "Charkia": [13500, 16500],
+      "Delfinaki": [8000, 19500],
+      "Ekali": [17000, 11000],
+      "Edessa": [10000, 17000],
+      "Feres": [24000, 14000],
+      "Frini": [13000, 14500],
+      "Galati": [6500, 15500],
+      "Gravia": [19000, 17000],
+      "Ifestiona": [11000, 16500],
+      "Ioannina": [10500, 17700],
+      "Kalithea": [24500, 18500],
+      "Kalochori": [10000, 15500],
+      "Katalaki": [18000, 14000],
+      "Kore": [7500, 16500],
+      "Kavala Castle": [3200, 13400],
+      "Limni": [7500, 19500],
+      "Molos": [9500, 18500],
+      "Neri": [10000, 14000],
+      "Negades": [7000, 16000],
+      "Nifi": [6000, 13500],
+      "Orino": [11000, 18000],
+      "Panochori": [5500, 15000],
+      "Panagia": [17500, 10500],
+      "Paros": [19500, 11000],
+      "Poliakko": [7000, 14500],
+      "Rodopoli": [17500, 17500],
+      "Sagonisi": [18000, 14200],
+      "Stavros": [12500, 15000],
+      "Syrta": [11500, 19000],
+      "Telos": [5000, 13500],
+      "Therisa": [9000, 19500],
+      "Topolia": [16000, 15000],
+      "Zaros": [14000, 14000]
+    },
+    "military": {
+      "AAC Airfield": [14500, 18500],
+      "Altis International Airport": [14500, 16000],
+      "Camp Maxwell": [16000, 17500],
+      "Camp Rogain": [20000, 16000],
+      "Camp Tempest": [22000, 15500],
+      "FOB Revolver": [17000, 19500],
+      "LZ Blazer": [9500, 16000],
+      "LZ Connor": [11000, 19000],
+      "Stratis Air Base": [2200, 5000],
+      "Military Base Kavala": [3800, 13200],
+      "Firing Range": [21000, 17000]
+    },
+    "landmarks": {
+      "Pythos Power Plant": [21000, 12000],
+      "Solar Power Plant": [15500, 15000],
+      "Salt Flats": [19000, 13000],
+      "Castle Ruins North": [16500, 19000],
+      "Marina Kavala": [3500, 12500],
+      "Lumber Mill": [8500, 17500],
+      "Quarry": [10000, 15500]
+    }
+  },
+
+  "Stratis": {
+    "_size": 8192,
+    "cities": {
+      "Agia Marina": [4000, 4000],
+      "Girna": [4500, 5500],
+      "Kamino": [2500, 3200]
+    },
+    "towns": {
+      "Rogain": [5500, 5500],
+      "Camp Rogain": [5000, 5700],
+      "Camp Maxwell": [2000, 5700],
+      "Tsoukalia": [3500, 5000],
+      "Nikos": [4500, 4500],
+      "Old Outpost": [5500, 4500],
+      "Mike-26": [4000, 6500]
+    },
+    "military": {
+      "Air Station Mike-26": [2200, 4800],
+      "Camp Tempest": [2200, 6500],
+      "LZ Baldy": [4000, 3500],
+      "Camp Maxwell": [2000, 5700],
+      "Stratis Airfield": [4200, 2500],
+      "Spartan Range": [5500, 5000]
+    },
+    "landmarks": {
+      "Lighthouse": [6000, 3500],
+      "Radio Tower": [2500, 5500],
+      "Ancient Ruins": [3500, 6000]
+    }
+  },
+
+  "Tanoa": {
+    "_size": 15360,
+    "cities": {
+      "Georgetown": [6500, 3500],
+      "Lijnhaven": [6000, 5500],
+      "Bua Bua": [8500, 9000],
+      "Katkoula": [5000, 8500],
+      "Tanouka": [11000, 7500],
+      "Nicolet": [6000, 6500],
+      "La Trinite": [4500, 5500],
+      "Savaka": [5000, 10500],
+      "Losi": [9000, 6000],
+      "Namuvaka": [3000, 9500],
+      "Oumere": [7000, 10500],
+      "Yanukka": [5000, 5000],
+      "Balavu": [3000, 11000],
+      "Cerebu": [5500, 11500],
+      "Doodstil": [6500, 4500],
+      "Moddergat": [6000, 4000],
+      "Tuvanaka": [11000, 11500],
+      "Koumac": [8500, 11000],
+      "Blue Pearl": [11500, 4000],
+      "Ovau": [10000, 10000],
+      "Lifou": [7500, 7000],
+      "Sosovu": [3500, 7000],
+      "Regina": [5500, 7000],
+      "Saint-Paul": [6000, 8500]
+    },
+    "military": {
+      "Airport": [6000, 3000],
+      "Comms Alpha": [5000, 7000],
+      "Comms Bravo": [9000, 8500],
+      "CSAT Airbase": [11000, 4500],
+      "Camp Vagalala": [3500, 10500]
+    }
+  },
+
+  "Malden": {
+    "_size": 8192,
+    "cities": {
+      "La Trinite": [5000, 5800],
+      "Arudy": [3500, 6500],
+      "Chapoi": [5500, 4500],
+      "Dourdan": [4000, 5200],
+      "Goisse": [6000, 6800],
+      "Houdan": [7000, 6000],
+      "La Pessagne": [5000, 7500],
+      "Le Port": [3500, 5000],
+      "Lolisse": [5500, 6200],
+      "Mont Chauve": [5000, 4000],
+      "Vigny": [6500, 7000]
+    },
+    "military": {
+      "Malden Airport": [3500, 4200],
+      "Military Base": [6000, 5200],
+      "Radar Station": [5500, 3500]
+    }
+  },
+
+  "Livonia": {
+    "_size": 12800,
+    "cities": {
+      "Topolin": [5500, 8500],
+      "Nadbor": [3700, 9800],
+      "Borek": [3000, 4000],
+      "Gliniska": [7500, 3500],
+      "Grabin": [7000, 7000],
+      "Karlin": [5000, 3500],
+      "Lukow": [9000, 8500],
+      "Muratyn": [5500, 5500],
+      "Niemcy": [8500, 6000],
+      "Olszanka": [4000, 6000],
+      "Polana": [6500, 10500],
+      "Radacz": [3500, 8000],
+      "Sitnik": [8500, 10500],
+      "Sobotka": [5000, 10000],
+      "Tarnow": [6500, 5500],
+      "Widok": [10000, 8000],
+      "Zalesie": [9500, 5500],
+      "Zimna Nowa": [8500, 3500]
+    },
+    "military": {
+      "Airfield": [9500, 9500],
+      "Camp Kladivo": [9000, 7500],
+      "Radar Station": [10500, 4500],
+      "FARP Hatchet": [6500, 7500],
+      "FARP Spear": [4500, 5000]
+    }
+  }
+}

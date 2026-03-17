@@ -1,0 +1,445 @@
+{
+  "ai_behaviors": {
+    "group_behaviour": {
+      "CARELESS": "Non-combat. Weapons lowered. Won't react to threats. Use with caution.",
+      "SAFE": "Non-combat. Weapons lowered. Vehicles follow roads, use lights. Auto-switch to AWARE on threat.",
+      "AWARE": "Default. Ready position. Vehicles prefer roads, no lights. Passengers dismount vs threats.",
+      "COMBAT": "Firefight. Break formation, take cover. Vehicles ignore roads, no lights.",
+      "STEALTH": "Cautious. Break formation, prefer cover. Minimal exposure."
+    },
+    "combat_mode": {
+      "BLUE": "Never fire under any circumstances (hold fire)",
+      "GREEN": "Hold fire, keep formation. Only fire if directly threatened.",
+      "WHITE": "Hold fire. Move to shooting positions but don't fire unless fired upon.",
+      "YELLOW": "Default. Fire at targets in range, stay in formation.",
+      "RED": "Fire at will. Leave formation to find shooting positions."
+    },
+    "speed_mode": {
+      "LIMITED": "Slow, careful movement",
+      "NORMAL": "Standard movement speed",
+      "FULL": "Maximum speed, ignore caution"
+    },
+    "formations": {
+      "COLUMN": "Single file, good for roads",
+      "STAG COLUMN": "Staggered column, both sides of road",
+      "WEDGE": "V-shape, good for open terrain",
+      "ECH LEFT": "Echelon left",
+      "ECH RIGHT": "Echelon right",
+      "VEE": "Inverted V, good for advance",
+      "LINE": "Horizontal line, maximum firepower forward",
+      "FILE": "Same as column",
+      "DIAMOND": "Diamond formation"
+    },
+    "disable_ai_features": [
+      "MOVE",
+      "PATH",
+      "TARGET",
+      "AUTOTARGET",
+      "AUTOCOMBAT",
+      "COVER",
+      "SUPPRESSION",
+      "FSM",
+      "AIMINGERROR",
+      "CHECKVISIBLE",
+      "NVG",
+      "LIGHTS",
+      "RADIOPROTOCOL"
+    ]
+  },
+  "waypoint_types": {
+    "MOVE": "Move to position. Complete when leader is near.",
+    "DESTROY": "Destroy attached target. Must be attached to object.",
+    "GETIN": "Get in attached vehicle. Must be attached.",
+    "SAD": "Seek and Destroy. Search area for enemies.",
+    "JOIN": "Join another group. Must be attached to unit.",
+    "LEADER": "Not implemented.",
+    "GETOUT": "Get out of vehicle.",
+    "CYCLE": "Return to first waypoint, repeat route.",
+    "LOAD": "Load cargo/passengers.",
+    "UNLOAD": "Unload cargo/passengers.",
+    "TR UNLOAD": "Tactical unload - unload while moving.",
+    "HOLD": "Hold position indefinitely until activated by trigger.",
+    "SENTRY": "Guard area. AI patrols between waypoint and next one.",
+    "GUARD": "Guard nearby guard points (trigger positions).",
+    "TALK": "Not implemented.",
+    "SCRIPTED": "Execute custom script.",
+    "SUPPORT": "Provide support (artillery, logistics).",
+    "GETINNEAREST": "Get in nearest vehicle.",
+    "DISMISS": "Disband group, units go to individual positions.",
+    "LOITER": "Aircraft loiter/orbit around position."
+  },
+  "task_system": {
+    "task_types": {
+      "attack": "Attack objective",
+      "defend": "Defend position",
+      "destroy": "Destroy target",
+      "interact": "Interact with object",
+      "meet": "Meet/link up",
+      "move": "Move to position",
+      "navigate": "Navigate route",
+      "search": "Search area",
+      "target": "Designate target",
+      "heal": "Provide medical aid",
+      "getIn": "Board vehicle",
+      "getOut": "Dismount vehicle",
+      "land": "Land aircraft",
+      "listen": "Listen/observe",
+      "mine": "Place/clear mines",
+      "exit": "Extract/exfiltrate",
+      "danger": "Danger/warning",
+      "scout": "Reconnaissance",
+      "Intel": "Gather intelligence",
+      "download": "Download data",
+      "upload": "Upload data",
+      "hack": "Hack system",
+      "run": "Run/sprint to position"
+    },
+    "task_states": [
+      "CREATED",
+      "ASSIGNED",
+      "AUTOASSIGNED",
+      "SUCCEEDED",
+      "FAILED",
+      "CANCELED"
+    ],
+    "sqf_create": "[owner, taskID, [description,title,marker], destination, state, priority, showNotification, type] call BIS_fnc_taskCreate",
+    "sqf_set_state": "[taskID, state] call BIS_fnc_taskSetState",
+    "sqf_set_current": "[taskID] call BIS_fnc_taskSetCurrent",
+    "sqf_completed": "taskID call BIS_fnc_taskCompleted"
+  },
+  "trigger_patterns": {
+    "area_cleared": {
+      "description": "Trigger when no OPFOR in area",
+      "activation": "EAST",
+      "activation_type": "NOT PRESENT",
+      "condition": "this",
+      "on_activation": "[taskID, 'SUCCEEDED'] call BIS_fnc_taskSetState;"
+    },
+    "unit_killed": {
+      "description": "Trigger when specific unit is killed",
+      "condition": "!alive targetUnit",
+      "on_activation": "[taskID, 'SUCCEEDED'] call BIS_fnc_taskSetState;"
+    },
+    "hostage_killed": {
+      "description": "Trigger when hostage dies - mission fail",
+      "condition": "!alive hostageUnit",
+      "on_activation": "['Lose', false] call BIS_fnc_endMission;"
+    },
+    "all_objectives_complete": {
+      "description": "Win condition - all tasks succeeded",
+      "condition": "['task1','task2'] findIf {!(_x call BIS_fnc_taskCompleted)} == -1",
+      "on_activation": "['end1', true] call BIS_fnc_endMission;"
+    },
+    "all_players_dead": {
+      "description": "Lose condition",
+      "condition": "{alive _x} count allPlayers == 0",
+      "on_activation": "['Lose', false] call BIS_fnc_endMission;"
+    },
+    "convoy_reached_destination": {
+      "description": "Convoy escort win condition",
+      "activation": "WEST",
+      "activation_type": "PRESENT",
+      "condition": "this && alive convoyVehicle"
+    },
+    "timer_expired": {
+      "description": "Time limit trigger",
+      "condition": "time > timeLimit",
+      "on_activation": "['end1', true] call BIS_fnc_endMission;"
+    }
+  },
+  "mission_patterns": {
+    "hostage_rescue": {
+      "description": "Rescue hostages from OPFOR-held building",
+      "required_elements": {
+        "hostages": "Civilian units placed inside building, setCaptive true",
+        "guards": "OPFOR garrison in same building, AWARE/RED",
+        "entry_points": "Multiple approach vectors",
+        "extraction": "LZ marker for helicopter extraction",
+        "win_condition": "All hostages alive + extracted to LZ",
+        "lose_conditions": [
+          "Hostage killed",
+          "All players dead",
+          "Time expired"
+        ]
+      },
+      "sqf_setup": {
+        "hostage_init": "this setCaptive true; this disableAI 'MOVE'; this setVariable ['isHostage', true, true];",
+        "guard_behavior": "garrison in buildings, AWARE, RED combat mode",
+        "win_trigger": "({_x getVariable ['isHostage',false]} count (allUnits select {alive _x && _x distance lzPos < 50})) >= hostageCount",
+        "lose_trigger": "({!alive _x} count hostages) > 0"
+      }
+    },
+    "assault_raid": {
+      "description": "Attack and clear enemy positions",
+      "required_elements": {
+        "objectives": "Multiple clear zones with OPFOR",
+        "approach_route": "Waypoints from start to first objective",
+        "support_positions": "SBF markers for fire support",
+        "win_condition": "All objectives cleared (no OPFOR in zone)",
+        "lose_conditions": [
+          "All players dead"
+        ]
+      },
+      "sqf_setup": {
+        "clear_trigger_per_zone": "EAST NOT PRESENT in trigger area = objective complete",
+        "all_clear": "All zone triggers activated = mission complete"
+      }
+    },
+    "convoy_ambush": {
+      "description": "Ambush enemy convoy on route",
+      "required_elements": {
+        "convoy_vehicles": "Multiple vehicles with waypoint route",
+        "convoy_route": "Series of MOVE waypoints along road",
+        "ambush_position": "Player start near kill zone",
+        "win_condition": "All convoy vehicles destroyed",
+        "lose_conditions": [
+          "Convoy escapes (reaches final WP)",
+          "All players dead"
+        ]
+      },
+      "sqf_setup": {
+        "convoy_waypoints": "MOVE waypoints along road, SAFE behavior, LIMITED speed",
+        "escape_trigger": "Convoy vehicle reaches final waypoint",
+        "destroy_trigger": "All convoy vehicles !alive"
+      }
+    },
+    "convoy_escort": {
+      "description": "Escort friendly convoy to destination",
+      "required_elements": {
+        "convoy_vehicles": "Friendly vehicles with waypoint route",
+        "enemy_ambush_positions": "OPFOR groups along route",
+        "win_condition": "Convoy reaches destination alive",
+        "lose_conditions": [
+          "Convoy destroyed",
+          "All players dead"
+        ]
+      }
+    },
+    "defense": {
+      "description": "Defend position against enemy waves",
+      "required_elements": {
+        "defense_position": "Fortified area with player start",
+        "enemy_waves": "Multiple OPFOR groups spawning at intervals",
+        "win_condition": "Survive all waves / time limit",
+        "lose_conditions": [
+          "All defenders dead",
+          "Position overrun"
+        ]
+      },
+      "sqf_setup": {
+        "wave_spawn": "sleep between waves, createGroup+createUnit, SAD waypoint toward defense",
+        "wave_trigger": "Previous wave mostly dead = spawn next wave"
+      }
+    },
+    "search_and_rescue": {
+      "description": "Find and extract VIP/pilot",
+      "required_elements": {
+        "vip": "Friendly or civilian unit at crash/hidden location",
+        "search_area": "Area marker for search zone",
+        "enemy_patrols": "OPFOR patrols in search area",
+        "extraction_lz": "Helicopter landing zone",
+        "win_condition": "VIP alive at extraction LZ",
+        "lose_conditions": [
+          "VIP killed",
+          "All players dead"
+        ]
+      }
+    },
+    "recon": {
+      "description": "Infiltrate, observe, report, exfiltrate",
+      "required_elements": {
+        "observation_targets": "Markers at locations to observe",
+        "enemy_patrols": "OPFOR patrols around targets, STEALTH behavior",
+        "exfil_point": "Extraction marker",
+        "win_condition": "All targets observed + team exfiltrated",
+        "lose_conditions": [
+          "Team detected and eliminated"
+        ]
+      }
+    }
+  },
+  "objects": {
+    "fortifications": {
+      "Land_BagFence_Short_F": "Short sandbag wall",
+      "Land_BagFence_Long_F": "Long sandbag wall",
+      "Land_BagFence_Round_F": "Round sandbag position",
+      "Land_BagFence_Corner_F": "Corner sandbag wall",
+      "Land_BagBunker_Small_F": "Small sandbag bunker",
+      "Land_BagBunker_Large_F": "Large sandbag bunker with roof",
+      "Land_BagBunker_Tower_F": "Sandbag tower",
+      "Land_HBarrier_1_F": "Single HESCO barrier",
+      "Land_HBarrier_3_F": "Triple HESCO barrier",
+      "Land_HBarrier_5_F": "Five HESCO barrier",
+      "Land_HBarrier_Big_F": "Large HESCO barrier",
+      "Land_Razorwire_F": "Razor wire",
+      "Land_CncWall4_F": "Concrete wall",
+      "Land_CncBarrier_F": "Concrete barrier",
+      "Land_CncBarrierMedium_F": "Medium concrete barrier",
+      "Land_CncBarrierMedium4_F": "4x medium concrete barrier",
+      "Land_RoadBarrier_F": "Road barrier",
+      "Land_RoadCone_01_F": "Road cone",
+      "Land_Mil_WiredFence_F": "Military wired fence"
+    },
+    "supplies": {
+      "Box_NATO_Ammo_F": "NATO ammo box",
+      "Box_NATO_Wps_F": "NATO weapons box",
+      "Box_NATO_WpsSpecial_F": "NATO special weapons box",
+      "Box_NATO_Grenades_F": "NATO grenades box",
+      "Box_NATO_Support_F": "NATO support box",
+      "Box_East_Ammo_F": "CSAT ammo box",
+      "Box_East_Wps_F": "CSAT weapons box",
+      "Box_East_WpsSpecial_F": "CSAT special weapons box",
+      "Box_East_Grenades_F": "CSAT grenades box",
+      "Box_East_Support_F": "CSAT support box",
+      "Box_IND_Ammo_F": "AAF ammo box",
+      "Box_IND_Wps_F": "AAF weapons box",
+      "Box_IND_WpsSpecial_F": "AAF special weapons box",
+      "Box_IND_Grenades_F": "AAF grenades box",
+      "Box_IND_Support_F": "AAF support box",
+      "B_supplyCrate_F": "NATO supply crate",
+      "O_supplyCrate_F": "CSAT supply crate",
+      "I_supplyCrate_F": "AAF supply crate",
+      "C_supplyCrate_F": "Civilian supply crate"
+    },
+    "helipads": {
+      "Land_HelipadSquare_F": "Square helipad",
+      "Land_HelipadCircle_F": "Circle helipad",
+      "Land_HelipadRescue_F": "Rescue helipad (red cross)",
+      "Land_HelipadEmpty_F": "Empty/invisible helipad"
+    },
+    "misc": {
+      "Land_PortableLight_single_F": "Portable light single",
+      "Land_PortableLight_double_F": "Portable light double",
+      "Land_CampingLight_F": "Camping light",
+      "Land_CampingChair_V1_F": "Camping chair",
+      "Land_CampingTable_F": "Camping table",
+      "Land_Stretcher_01_F": "Medical stretcher",
+      "Land_Bodybag_01_black_F": "Black body bag",
+      "Land_Laptop_unfolded_F": "Laptop (open)",
+      "MapBoard_altis_F": "Map board",
+      "Flag_NATO_F": "NATO flag",
+      "Flag_CSAT_F": "CSAT flag",
+      "Flag_AAF_F": "AAF flag",
+      "Flag_White_F": "White flag",
+      "Flag_Red_F": "Red flag",
+      "Land_Cargo_House_V1_F": "Cargo house",
+      "Land_Cargo_HQ_V1_F": "Cargo HQ",
+      "Land_Cargo_Patrol_V1_F": "Cargo patrol tower",
+      "Land_Cargo_Tower_V1_F": "Cargo tower"
+    }
+  },
+  "mines": {
+    "ATMine": "Anti-tank mine",
+    "APERSBoundingMine": "AP bounding mine (Betty)",
+    "APERSMine": "AP directional mine",
+    "APERSTripMine": "AP tripwire mine",
+    "SLAMDirectionalMine": "SLAM directional mine",
+    "IEDUrbanSmall_F": "Small urban IED",
+    "IEDUrbanBig_F": "Large urban IED",
+    "IEDLandSmall_F": "Small land IED",
+    "IEDLandBig_F": "Large land IED"
+  },
+  "respawn": {
+    "types": {
+      "0": "NONE - death screen",
+      "1": "BIRD - seagull",
+      "2": "INSTANT - respawn on death spot",
+      "3": "BASE - respawn at marker",
+      "4": "GROUP - respawn as another group member",
+      "5": "SIDE - respawn as another side member"
+    },
+    "templates": [
+      "None",
+      "Spectator",
+      "Instant",
+      "Base",
+      "Group",
+      "Side",
+      "Seagull",
+      "Wave",
+      "MenuPosition",
+      "MenuInventory",
+      "Counter",
+      "Tickets",
+      "EndMission"
+    ],
+    "markers": {
+      "respawn_west": "BLUFOR respawn position",
+      "respawn_east": "OPFOR respawn position",
+      "respawn_guerrila": "Independent respawn position",
+      "respawn_civilian": "Civilian respawn position"
+    }
+  },
+  "marker_types": {
+    "hd_objective": "Crosshair objective",
+    "hd_destroy": "Destroy marker",
+    "hd_end": "End marker",
+    "hd_start": "Start marker",
+    "hd_pickup": "Pickup marker",
+    "hd_join": "Join marker",
+    "hd_warning": "Warning marker",
+    "hd_flag": "Flag marker",
+    "mil_dot": "Military dot",
+    "mil_circle": "Military circle",
+    "mil_triangle": "Military triangle",
+    "mil_arrow": "Military arrow",
+    "mil_arrow2": "Military arrow 2",
+    "mil_ambush": "Ambush marker",
+    "mil_destroy": "Destroy marker",
+    "mil_start": "Start marker",
+    "mil_end": "End marker",
+    "mil_pickup": "Pickup marker",
+    "mil_join": "Join marker",
+    "mil_warning": "Warning marker",
+    "mil_unknown": "Unknown marker",
+    "mil_flag": "Flag marker",
+    "mil_marker": "Generic marker",
+    "mil_objective": "Objective marker",
+    "b_inf": "BLUFOR infantry",
+    "b_motor_inf": "BLUFOR motorized",
+    "b_mech_inf": "BLUFOR mechanized",
+    "b_armor": "BLUFOR armor",
+    "b_recon": "BLUFOR recon",
+    "b_air": "BLUFOR air",
+    "b_hq": "BLUFOR HQ",
+    "b_med": "BLUFOR medical",
+    "o_inf": "OPFOR infantry",
+    "o_motor_inf": "OPFOR motorized",
+    "o_mech_inf": "OPFOR mechanized",
+    "o_armor": "OPFOR armor",
+    "o_recon": "OPFOR recon",
+    "o_air": "OPFOR air",
+    "o_hq": "OPFOR HQ"
+  },
+  "marker_colors": [
+    "Default",
+    "ColorBlack",
+    "ColorGrey",
+    "ColorRed",
+    "ColorBrown",
+    "ColorOrange",
+    "ColorYellow",
+    "ColorKhaki",
+    "ColorGreen",
+    "ColorBlue",
+    "ColorPink",
+    "ColorWhite",
+    "colorBLUFOR",
+    "colorOPFOR",
+    "colorIndependent",
+    "colorCivilian"
+  ],
+  "marker_brushes": [
+    "Solid",
+    "SolidFull",
+    "Horizontal",
+    "Vertical",
+    "Grid",
+    "FDiagonal",
+    "BDiagonal",
+    "DiagGrid",
+    "Cross",
+    "Border",
+    "SolidBorder"
+  ]
+}

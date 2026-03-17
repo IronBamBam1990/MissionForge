@@ -1,0 +1,91 @@
+{
+  "marker_types": {
+    "objectives": {
+      "hd_objective": "Objective (crosshair)",
+      "hd_destroy": "Destroy",
+      "hd_end": "End",
+      "hd_start": "Start",
+      "hd_pickup": "Pickup",
+      "hd_join": "Join",
+      "hd_warning": "Warning",
+      "hd_unknown": "Unknown",
+      "hd_flag": "Flag"
+    },
+    "military": {
+      "mil_dot": "Dot",
+      "mil_circle": "Circle",
+      "mil_triangle": "Triangle",
+      "mil_arrow": "Arrow",
+      "mil_arrow2": "Arrow 2",
+      "mil_ambush": "Ambush",
+      "mil_destroy": "Destroy",
+      "mil_start": "Start",
+      "mil_end": "End",
+      "mil_pickup": "Pickup",
+      "mil_join": "Join",
+      "mil_warning": "Warning",
+      "mil_unknown": "Unknown",
+      "mil_flag": "Flag",
+      "mil_marker": "Marker",
+      "mil_objective": "Objective"
+    },
+    "nato_blufor": {
+      "b_inf": "Infantry",
+      "b_motor_inf": "Motorized Infantry",
+      "b_mech_inf": "Mechanized Infantry",
+      "b_armor": "Armor",
+      "b_recon": "Recon",
+      "b_air": "Air",
+      "b_plane": "Fixed Wing",
+      "b_uav": "UAV",
+      "b_med": "Medical",
+      "b_art": "Artillery",
+      "b_mortar": "Mortar",
+      "b_hq": "HQ",
+      "b_support": "Support",
+      "b_maint": "Maintenance",
+      "b_service": "Service",
+      "b_installation": "Installation",
+      "b_unknown": "Unknown"
+    },
+    "nato_opfor": {
+      "o_inf": "Infantry",
+      "o_motor_inf": "Motorized Infantry",
+      "o_mech_inf": "Mechanized Infantry",
+      "o_armor": "Armor",
+      "o_recon": "Recon",
+      "o_air": "Air",
+      "o_plane": "Fixed Wing",
+      "o_uav": "UAV",
+      "o_med": "Medical",
+      "o_art": "Artillery",
+      "o_mortar": "Mortar",
+      "o_hq": "HQ",
+      "o_support": "Support",
+      "o_maint": "Maintenance",
+      "o_service": "Service",
+      "o_installation": "Installation",
+      "o_unknown": "Unknown"
+    },
+    "nato_independent": {
+      "n_inf": "Infantry",
+      "n_motor_inf": "Motorized Infantry",
+      "n_mech_inf": "Mechanized Infantry",
+      "n_armor": "Armor",
+      "n_recon": "Recon",
+      "n_air": "Air",
+      "n_hq": "HQ",
+      "n_unknown": "Unknown"
+    }
+  },
+  "colors": [
+    "Default", "ColorBlack", "ColorGrey", "ColorRed", "ColorBrown",
+    "ColorOrange", "ColorYellow", "ColorKhaki", "ColorGreen",
+    "ColorBlue", "ColorPink", "ColorWhite",
+    "ColorWEST", "ColorEAST", "ColorGUER", "ColorCIV",
+    "Color1_FD_F", "Color2_FD_F", "Color3_FD_F", "Color4_FD_F",
+    "Color5_FD_F", "Color6_FD_F",
+    "colorBLUFOR", "colorOPFOR", "colorIndependent", "colorCivilian"
+  ],
+  "shapes": ["ICON", "RECTANGLE", "ELLIPSE"]
+}

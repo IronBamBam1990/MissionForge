@@ -1,0 +1,10 @@
+{
+  "maps": {
+    "Altis": {"classname": "Altis", "size": 30720},
+    "Stratis": {"classname": "Stratis", "size": 8192},
+    "Tanoa": {"classname": "Tanoa", "size": 15360},
+    "Malden": {"classname": "Malden", "size": 8192},
+    "Livonia": {"classname": "Enoch", "size": 12800},
+    "VR": {"classname": "VR", "size": 2048}
+  }
+}

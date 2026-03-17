@@ -1,0 +1,431 @@
+{
+  "unit_classnames": {
+    "blufor_nato": {
+      "officer": "B_officer_F",
+      "squad_leader": "B_Soldier_SL_F",
+      "team_leader": "B_Soldier_TL_F",
+      "autorifleman": "B_Soldier_AR_F",
+      "grenadier": "B_Soldier_GL_F",
+      "rifleman": "B_Soldier_F",
+      "rifleman_light": "B_Soldier_lite_F",
+      "medic": "B_medic_F",
+      "engineer": "B_engineer_F",
+      "explosives": "B_soldier_exp_F",
+      "marksman": "B_soldier_M_F",
+      "sniper": "B_sniper_F",
+      "spotter": "B_spotter_F",
+      "ammo_bearer": "B_Soldier_A_F",
+      "lat": "B_soldier_LAT_F",
+      "at": "B_soldier_AT_F",
+      "aa": "B_soldier_AA_F",
+      "repair": "B_soldier_repair_F",
+      "uav_operator": "B_soldier_UAV_F",
+      "pilot": "B_Pilot_F",
+      "heli_pilot": "B_Helipilot_F",
+      "crew": "B_crew_F",
+      "diver": "B_diver_F",
+      "survivor": "B_Survivor_F",
+      "vr_soldier": "B_Soldier_VR_F"
+    },
+    "opfor_csat": {
+      "officer": "O_officer_F",
+      "squad_leader": "O_Soldier_SL_F",
+      "team_leader": "O_Soldier_TL_F",
+      "autorifleman": "O_Soldier_AR_F",
+      "grenadier": "O_Soldier_GL_F",
+      "rifleman": "O_Soldier_F",
+      "rifleman_light": "O_Soldier_lite_F",
+      "medic": "O_medic_F",
+      "engineer": "O_engineer_F",
+      "explosives": "O_soldier_exp_F",
+      "marksman": "O_soldier_M_F",
+      "sniper": "O_sniper_F",
+      "spotter": "O_spotter_F",
+      "ammo_bearer": "O_Soldier_A_F",
+      "lat": "O_Soldier_LAT_F",
+      "at": "O_Soldier_AT_F",
+      "aa": "O_Soldier_AA_F",
+      "repair": "O_soldier_repair_F",
+      "uav_operator": "O_soldier_UAV_F",
+      "pilot": "O_Pilot_F",
+      "heli_pilot": "O_helipilot_F",
+      "crew": "O_crew_F"
+    },
+    "opfor_fia": {
+      "squad_leader": "O_G_Soldier_SL_F",
+      "team_leader": "O_G_Soldier_TL_F",
+      "autorifleman": "O_G_Soldier_AR_F",
+      "grenadier": "O_G_Soldier_GL_F",
+      "rifleman": "O_G_Soldier_F",
+      "medic": "O_G_medic_F",
+      "engineer": "O_G_engineer_F",
+      "marksman": "O_G_Soldier_M_F",
+      "sniper": "O_G_Sharpshooter_F",
+      "lat": "O_G_Soldier_LAT_F",
+      "officer": "O_G_officer_F"
+    },
+    "independent_aaf": {
+      "officer": "I_officer_F",
+      "squad_leader": "I_Soldier_SL_F",
+      "team_leader": "I_Soldier_TL_F",
+      "autorifleman": "I_Soldier_AR_F",
+      "grenadier": "I_Soldier_GL_F",
+      "rifleman": "I_Soldier_F",
+      "medic": "I_medic_F",
+      "engineer": "I_engineer_F",
+      "marksman": "I_Soldier_M_F",
+      "sniper": "I_Sniper_F",
+      "lat": "I_Soldier_LAT_F",
+      "at": "I_Soldier_AT_F",
+      "aa": "I_Soldier_AA_F",
+      "pilot": "I_pilot_F",
+      "crew": "I_crew_F"
+    },
+    "civilian": {
+      "man_1": "C_man_1",
+      "man_polo_1": "C_man_polo_1_F",
+      "man_polo_2": "C_man_polo_2_F",
+      "man_polo_3": "C_man_polo_3_F",
+      "man_polo_4": "C_man_polo_4_F",
+      "man_polo_5": "C_man_polo_5_F",
+      "man_polo_6": "C_man_polo_6_F",
+      "man_shorts_1": "C_man_shorts_1_F",
+      "journalist": "C_journalist_F",
+      "scientist": "C_scientist_F",
+      "worker": "C_man_w_worker_F"
+    }
+  },
+
+  "vehicle_classnames": {
+    "blufor": {
+      "cars": {
+        "offroad": "B_G_Offroad_01_F",
+        "offroad_armed": "B_G_Offroad_01_armed_F",
+        "quadbike": "B_Quadbike_01_F",
+        "mrap_hunter": "B_MRAP_01_F",
+        "mrap_hunter_hmg": "B_MRAP_01_hmg_F",
+        "mrap_hunter_gmg": "B_MRAP_01_gmg_F"
+      },
+      "apcs": {
+        "apc_wheeled": "B_APC_Wheeled_01_cannon_F",
+        "apc_tracked": "B_APC_Tracked_01_rcws_F",
+        "apc_tracked_aa": "B_APC_Tracked_01_AA_F"
+      },
+      "tanks": {
+        "mbt_slammer": "B_MBT_01_cannon_F",
+        "mbt_slammer_up": "B_MBT_01_TUSK_F"
+      },
+      "trucks": {
+        "truck_transport": "B_Truck_01_transport_F",
+        "truck_covered": "B_Truck_01_covered_F",
+        "truck_ammo": "B_Truck_01_ammo_F",
+        "truck_fuel": "B_Truck_01_fuel_F",
+        "truck_medical": "B_Truck_01_medical_F",
+        "truck_repair": "B_Truck_01_Repair_F"
+      },
+      "helicopters": {
+        "ghost_hawk": "B_Heli_Transport_01_F",
+        "black_foot": "B_Heli_Attack_01_dynamicLoadout_F",
+        "mohawk": "B_Heli_Transport_03_F",
+        "pawnee": "B_Heli_Light_01_dynamicLoadout_F"
+      },
+      "planes": {
+        "wipeout": "B_Plane_CAS_01_dynamicLoadout_F",
+        "buzzard_aa": "I_Plane_Fighter_03_AA_F",
+        "buzzard_cas": "I_Plane_Fighter_03_CAS_F"
+      },
+      "boats": {
+        "speedboat": "B_Boat_Transport_01_F",
+        "assault_boat": "B_Boat_Armed_01_minigun_F"
+      },
+      "uav": {
+        "greyhawk": "B_UAV_02_dynamicLoadout_F",
+        "darter": "B_UAV_01_F"
+      },
+      "static": {
+        "hmg_high": "B_HMG_01_high_F",
+        "hmg_low": "B_HMG_01_F",
+        "gmg_high": "B_GMG_01_high_F",
+        "gmg_low": "B_GMG_01_F",
+        "at": "B_static_AT_F",
+        "aa": "B_static_AA_F",
+        "mortar": "B_Mortar_01_F"
+      }
+    },
+    "opfor": {
+      "cars": {
+        "offroad": "O_G_Offroad_01_F",
+        "offroad_armed": "O_G_Offroad_01_armed_F",
+        "quadbike": "O_Quadbike_01_F",
+        "ifrit": "O_MRAP_02_F",
+        "ifrit_hmg": "O_MRAP_02_hmg_F",
+        "ifrit_gmg": "O_MRAP_02_gmg_F"
+      },
+      "apcs": {
+        "apc_wheeled": "O_APC_Wheeled_02_rcws_v2_F",
+        "apc_tracked": "O_APC_Tracked_02_cannon_F",
+        "apc_tracked_aa": "O_APC_Tracked_02_AA_F"
+      },
+      "tanks": {
+        "mbt_varsuk": "O_MBT_02_cannon_F",
+        "mbt_angara": "O_MBT_04_cannon_F"
+      },
+      "trucks": {
+        "truck_transport": "O_Truck_02_transport_F",
+        "truck_covered": "O_Truck_02_covered_F",
+        "truck_ammo": "O_Truck_02_Ammo_F",
+        "truck_fuel": "O_Truck_02_fuel_F",
+        "truck_medical": "O_Truck_02_medical_F",
+        "truck_repair": "O_Truck_02_repair_F"
+      },
+      "helicopters": {
+        "orca": "O_Heli_Light_02_dynamicLoadout_F",
+        "taru": "O_Heli_Transport_04_F",
+        "mi48_kajman": "O_Heli_Attack_02_dynamicLoadout_F"
+      },
+      "planes": {
+        "neophron": "O_Plane_CAS_02_dynamicLoadout_F",
+        "shikra": "O_Plane_Fighter_02_F"
+      },
+      "static": {
+        "hmg_high": "O_HMG_01_high_F",
+        "hmg_low": "O_HMG_01_F",
+        "gmg_high": "O_GMG_01_high_F",
+        "at": "O_static_AT_F",
+        "aa": "O_static_AA_F",
+        "mortar": "O_Mortar_01_F"
+      }
+    }
+  },
+
+  "objects_structures": {
+    "fortifications": {
+      "sandbag_short": "Land_BagFence_Short_F",
+      "sandbag_long": "Land_BagFence_Long_F",
+      "sandbag_round": "Land_BagFence_Round_F",
+      "sandbag_corner": "Land_BagFence_Corner_F",
+      "hbarrier_1": "Land_HBarrier_1_F",
+      "hbarrier_3": "Land_HBarrier_3_F",
+      "hbarrier_5": "Land_HBarrier_5_F",
+      "hbarrier_big": "Land_HBarrier_Big_F",
+      "bunker_small": "Land_BagBunker_Small_F",
+      "bunker_large": "Land_BagBunker_Large_F",
+      "bunker_tower": "Land_BagBunker_Tower_F",
+      "razorwire": "Land_Razorwire_F",
+      "concrete_wall": "Land_CncWall4_F",
+      "concrete_barrier": "Land_CncBarrier_F",
+      "road_barrier": "Land_RoadBarrier_F",
+      "road_cone": "Land_RoadCone_01_F"
+    },
+    "supplies": {
+      "ammo_box_nato": "Box_NATO_Ammo_F",
+      "ammo_box_csat": "Box_East_Ammo_F",
+      "ammo_box_ind": "Box_IND_Ammo_F",
+      "supply_box_nato": "B_supplyCrate_F",
+      "weapons_box_nato": "Box_NATO_Wps_F",
+      "weapons_box_csat": "Box_East_Wps_F",
+      "medical_crate": "ACE_medicalSupplyCrate",
+      "medical_crate_adv": "ACE_medicalSupplyCrate_advanced"
+    },
+    "helipads": {
+      "helipad_square": "Land_HelipadSquare_F",
+      "helipad_circle": "Land_HelipadCircle_F",
+      "helipad_rescue": "Land_HelipadRescue_F",
+      "helipad_empty": "Land_HelipadEmpty_F"
+    },
+    "lights": {
+      "portable_light": "Land_PortableLight_single_F",
+      "portable_light_double": "Land_PortableLight_double_F",
+      "camping_light": "Land_CampingLight_F"
+    },
+    "misc": {
+      "map_board": "MapBoard_altis_F",
+      "laptop": "Land_Laptop_unfolded_F",
+      "flag_nato": "Flag_NATO_F",
+      "flag_csat": "Flag_CSAT_F",
+      "camp_chair": "Land_CampingChair_V1_F",
+      "camp_table": "Land_CampingTable_F",
+      "stretcher": "Land_Stretcher_01_F",
+      "body_bag": "Land_Bodybag_01_black_F"
+    }
+  },
+
+  "mines": {
+    "at_mine": "ATMine",
+    "ap_mine_bounding": "APERSBoundingMine",
+    "ap_mine_directional": "APERSMine",
+    "ap_mine_tripwire": "APERSTripMine",
+    "slam_mine": "SLAMDirectionalMine",
+    "ied_urban_small": "IEDUrbanSmall_F",
+    "ied_urban_big": "IEDUrbanBig_F",
+    "ied_land_small": "IEDLandSmall_F",
+    "ied_land_big": "IEDLandBig_F"
+  },
+
+  "marker_types": {
+    "objectives": ["hd_objective", "hd_destroy", "hd_end", "hd_start", "hd_pickup", "hd_join", "hd_warning", "hd_unknown", "hd_flag"],
+    "military": ["mil_dot", "mil_circle", "mil_triangle", "mil_arrow", "mil_arrow2", "mil_ambush", "mil_destroy", "mil_start", "mil_end", "mil_pickup", "mil_join", "mil_warning", "mil_unknown", "mil_flag", "mil_marker", "mil_objective"],
+    "nato_blufor": ["b_inf", "b_motor_inf", "b_mech_inf", "b_armor", "b_recon", "b_air", "b_plane", "b_uav", "b_med", "b_art", "b_mortar", "b_hq", "b_support", "b_maint", "b_unknown"],
+    "nato_opfor": ["o_inf", "o_motor_inf", "o_mech_inf", "o_armor", "o_recon", "o_air", "o_plane", "o_uav", "o_med", "o_art", "o_mortar", "o_hq", "o_support", "o_maint", "o_unknown"]
+  },
+  "marker_colors": ["Default", "ColorBlack", "ColorGrey", "ColorRed", "ColorBrown", "ColorOrange", "ColorYellow", "ColorKhaki", "ColorGreen", "ColorBlue", "ColorPink", "ColorWhite", "colorBLUFOR", "colorOPFOR", "colorIndependent", "colorCivilian"],
+  "marker_shapes": ["ICON", "RECTANGLE", "ELLIPSE"],
+
+  "waypoint_types": ["MOVE", "DESTROY", "GETIN", "SAD", "JOIN", "LEADER", "GETOUT", "CYCLE", "LOAD", "UNLOAD", "TR UNLOAD", "HOLD", "SENTRY", "GUARD", "TALK", "SCRIPTED", "SUPPORT", "GETINNEAREST", "DISMISS", "LOITER"],
+  "waypoint_behaviours": ["UNCHANGED", "CARELESS", "SAFE", "AWARE", "COMBAT", "STEALTH"],
+  "waypoint_combat_modes": ["NO CHANGE", "BLUE", "GREEN", "WHITE", "YELLOW", "RED"],
+  "waypoint_speeds": ["UNCHANGED", "LIMITED", "NORMAL", "FULL"],
+  "waypoint_formations": ["NO CHANGE", "COLUMN", "STAG COLUMN", "WEDGE", "ECH LEFT", "ECH RIGHT", "VEE", "LINE", "FILE", "DIAMOND"],
+
+  "ranks": ["PRIVATE", "CORPORAL", "SERGEANT", "LIEUTENANT", "CAPTAIN", "MAJOR", "COLONEL"],
+
+  "task_types": ["attack", "defend", "destroy", "interact", "meet", "move", "navigate", "rearm", "refuel", "repair", "search", "target", "use", "wait", "getIn", "getOut", "land", "listen", "mine", "exit", "heal", "danger", "scout", "Intel", "download", "upload", "hack", "talk", "run"],
+  "task_states": ["CREATED", "ASSIGNED", "AUTOASSIGNED", "SUCCEEDED", "FAILED", "CANCELED"],
+
+  "respawn": {
+    "types": {"NONE": 0, "BIRD": 1, "INSTANT": 2, "BASE": 3, "GROUP": 4, "SIDE": 5},
+    "templates": ["None", "Spectator", "Instant", "Base", "Group", "Side", "Seagull", "Wave", "MenuPosition", "MenuInventory", "Counter", "Tickets", "EndMission"],
+    "markers": {
+      "unit_respawn": ["respawn", "respawn_west", "respawn_east", "respawn_guerrila", "respawn_civilian"],
+      "vehicle_respawn": ["respawn_vehicle_west", "respawn_vehicle_east", "respawn_vehicle_guerrila"]
+    }
+  },
+
+  "sqf_commands": {
+    "unit_creation": {
+      "createGroup": "createGroup [side, deleteWhenEmpty]",
+      "createUnit_syntax1": "group createUnit [type, position, markers, placement, special]",
+      "createUnit_syntax2": "type createUnit [position, group, init, skill, rank]",
+      "special_values": ["NONE", "FORM", "CAN_COLLIDE", "CARGO"],
+      "deleteGroupWhenEmpty": "deleteGroupWhenEmpty group"
+    },
+    "vehicle_creation": {
+      "createVehicle": "createVehicle [type, position, markers, placement, special]",
+      "createVehicleCrew": "createVehicleCrew vehicle",
+      "setVehiclePosition": "vehicle setVehiclePosition [position, markers, radius, special]"
+    },
+    "position": {
+      "getPos": "getPos object",
+      "setPos": "object setPos position",
+      "getPosATL": "getPosATL object",
+      "setPosATL": "object setPosATL position",
+      "findSafePos": "[center, minDist, maxDist, objDist, waterMode, maxGrad, shoreMode, blacklist, default] call BIS_fnc_findSafePos",
+      "isFlatEmpty": "position isFlatEmpty [minDistance, mode, maxGradient, maxGradientRadius, overLandOrWater, shoreLine, ignoreObject]",
+      "nearRoads": "position nearRoads radius",
+      "nearestObjects": "nearestObjects [position, types, radius]",
+      "nearestBuilding": "nearestBuilding posOrObj",
+      "buildingPos": "building buildingPos index"
+    },
+    "waypoints": {
+      "addWaypoint": "group addWaypoint [position, radius, index, name]",
+      "setWaypointType": "waypoint setWaypointType type",
+      "setWaypointBehaviour": "waypoint setWaypointBehaviour behaviour",
+      "setWaypointCombatMode": "waypoint setWaypointCombatMode mode",
+      "setWaypointSpeed": "waypoint setWaypointSpeed speed",
+      "setWaypointFormation": "waypoint setWaypointFormation formation"
+    },
+    "behaviour": {
+      "setBehaviour": "group setBehaviour behaviour",
+      "setCombatMode": "group setCombatMode mode",
+      "setSpeedMode": "group setSpeedMode speed",
+      "disableAI": "unit disableAI feature",
+      "enableAI": "unit enableAI feature",
+      "doStop": "doStop unit",
+      "doMove": "unit doMove position",
+      "commandMove": "unit commandMove position"
+    },
+    "tasks": {
+      "taskCreate": "[owner, taskID, description, destination, state, priority, showNotification, type, visibleIn3D] call BIS_fnc_taskCreate",
+      "taskSetState": "[taskID, state] call BIS_fnc_taskSetState",
+      "taskSetCurrent": "[taskID] call BIS_fnc_taskSetCurrent",
+      "taskSetDestination": "[taskID, [target, precision]] call BIS_fnc_taskSetDestination",
+      "taskSetType": "[taskID, type] call BIS_fnc_taskSetType",
+      "taskCompleted": "taskID call BIS_fnc_taskCompleted"
+    },
+    "triggers": {
+      "createTrigger": "createTrigger [type, position, local]",
+      "setTriggerArea": "trigger setTriggerArea [sizeX, sizeY, angle, isRectangle, sizeZ]",
+      "setTriggerActivation": "trigger setTriggerActivation [side, activation, repeating]",
+      "setTriggerStatements": "trigger setTriggerStatements [condition, onActivation, onDeactivation]",
+      "activation_sides": ["WEST", "EAST", "GUER", "CIV", "LOGIC", "ANY", "NONE"],
+      "activation_types": ["PRESENT", "NOT PRESENT", "DETECTED BY WEST", "DETECTED BY EAST"]
+    },
+    "markers": {
+      "createMarker": "createMarker [name, position]",
+      "setMarkerType": "marker setMarkerType type",
+      "setMarkerColor": "marker setMarkerColor color",
+      "setMarkerText": "marker setMarkerText text",
+      "setMarkerShape": "marker setMarkerShape shape",
+      "setMarkerSize": "marker setMarkerSize [sizeX, sizeY]",
+      "setMarkerDir": "marker setMarkerDir angle",
+      "setMarkerAlpha": "marker setMarkerAlpha alpha",
+      "setMarkerBrush": "marker setMarkerBrush brush"
+    },
+    "mines": {
+      "createMine": "createMine [type, position, markers, placement]"
+    },
+    "misc": {
+      "sleep": "sleep seconds",
+      "waitUntil": "waitUntil {condition}",
+      "spawn": "args spawn code",
+      "call": "args call code",
+      "execVM": "execVM filename",
+      "remoteExec": "[params, target, functionName] remoteExec [functionName, target, JIP]",
+      "diag_log": "diag_log text",
+      "systemChat": "systemChat text",
+      "hint": "hint text",
+      "isServer": "isServer",
+      "isDedicated": "isDedicated",
+      "hasInterface": "hasInterface"
+    }
+  },
+
+  "description_ext": {
+    "respawn_settings": {
+      "respawn": "3 = BASE",
+      "respawnDelay": "seconds",
+      "respawnTemplates": "array of template names",
+      "respawnOnStart": "-1 = no respawn on start",
+      "respawnDialog": "0 = no dialog"
+    },
+    "corpse_settings": {
+      "corpseManagerMode": "0=disabled, 1=all, 2=MP only, 3=SP only",
+      "corpseLimit": "max corpses",
+      "corpseRemovalMinTime": "seconds",
+      "corpseRemovalMaxTime": "seconds",
+      "wreckManagerMode": "same as corpse",
+      "wreckLimit": "max wrecks"
+    },
+    "other": {
+      "enableDebugConsole": "0=editor only, 1=host/admin, 2=everyone",
+      "disabledAI": "1 = disable AI in empty playable slots",
+      "aiKills": "0 = AI kills don't count",
+      "briefing": "1 = show briefing",
+      "debriefing": "1 = show debriefing"
+    }
+  },
+
+  "sqm_format": {
+    "version": 53,
+    "unit_flags": {
+      "leader_playable": 6,
+      "member_playable": 4,
+      "leader_ai": 2,
+      "member_ai": 0
+    },
+    "sides": ["West", "East", "Guer", "Civ"],
+    "position_format": "[X_eastwest, height_ASL, Y_northsouth]",
+    "required_structure": [
+      "version=53",
+      "class EditorData { ItemIDProvider, MarkerIDProvider, Camera }",
+      "binarizationWanted=0",
+      "addons[]",
+      "class AddonsMetaData",
+      "randomSeed",
+      "class ScenarioData { author, Header }",
+      "class Mission { Intel, Entities }"
+    ],
+    "marker_format_in_sqm": "position[] directly (NO PositionInfo class wrapper)",
+    "unit_format_in_sqm": "position inside class PositionInfo { position[], angles[] }"
+  }
+}
