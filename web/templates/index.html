@@ -1076,8 +1076,8 @@ Respawn wave 10min, 2 tickety, ACRE2. Start 05:30, mgla.`
         setStatus('loading', 'ANALYZING MISSION BRIEFING...', 'AI Model processing // estimated time: 30-60s');
 
         try {
-            console.log("fetch starting NOW to http://127.0.0.1:8000/api/prompt");
-            const res = await fetch('http://127.0.0.1:8000/api/prompt', {
+            console.log("fetch starting NOW");
+            const res = await fetch('/api/prompt', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ prompt, mods }),

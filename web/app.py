@@ -11,6 +11,7 @@ import tempfile
 from pathlib import Path
 
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -23,6 +24,7 @@ from arma3_mgen.generators.mission_folder import generate_mission
 from arma3_mgen.mission_builder import compute_mission_layout
 
 app = FastAPI(title="IBC ARMA 3 Mission Generator")
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 static_dir = Path(__file__).parent / "static"
 templates_dir = Path(__file__).parent / "templates"
@@ -554,7 +556,7 @@ async def _call_claude_cli(system_prompt: str, user_prompt: str) -> str:
         "claude",
         "-p",
         "--output-format", "text",
-        "--model", "sonnet",
+        "--model", "opus",
         "--max-turns", "10",
         "--no-session-persistence",
         "--tools", "",
