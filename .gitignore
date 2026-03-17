@@ -17,3 +17,6 @@ Thumbs.db
 
 # Generated missions (user output)
 output/
+
+# Local history
+.history/
