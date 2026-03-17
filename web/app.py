@@ -550,8 +550,7 @@ async def _call_claude_cli(system_prompt: str, user_prompt: str) -> str:
         "claude",
         "-p",
         "--output-format", "text",
-        "--model", "opus",
-        "--effort", "max",
+        "--model", "sonnet",
         "--max-turns", "10",
         "--no-session-persistence",
         "--tools", "",
@@ -562,18 +561,20 @@ async def _call_claude_cli(system_prompt: str, user_prompt: str) -> str:
     try:
         stdout, stderr = await asyncio.wait_for(
             proc.communicate(input=full_prompt.encode('utf-8')),
-            timeout=300
+            timeout=600
         )
     except asyncio.TimeoutError:
         proc.kill()
-        raise RuntimeError("Timeout - AI nie odpowiedzial w 300 sekund")
+        raise RuntimeError("Timeout - AI nie odpowiedzial w 600 sekund")
 
     output = stdout.decode("utf-8", errors="replace").strip()
     err_output = stderr.decode("utf-8", errors="replace").strip()
 
     print(f"[CLAUDE] returncode={proc.returncode} stdout_len={len(output)} stderr_len={len(err_output)}")
     if err_output:
-        print(f"[CLAUDE STDERR] {err_output[:300]}")
+        print(f"[CLAUDE STDERR] {err_output[:500]}")
+    if output:
+        print(f"[CLAUDE STDOUT] {output[:500]}")
 
     if proc.returncode != 0:
         raise RuntimeError(f"exit code {proc.returncode}: {err_output[:500]}")
