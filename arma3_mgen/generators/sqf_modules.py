@@ -18,12 +18,58 @@ def helpers() -> str:
 // ================================================================
 
 // ────────────────────────────────────────────
+// 0. WATER SAFETY — prevents spawning in water
+// ────────────────────────────────────────────
+
+// Check if position is in water (deep OR shallow)
+// surfaceIsWater misses shallow water — terrain height below 0 catches it
+// Usage: [_pos] call IBC_fnc_isWater
+IBC_fnc_isWater = {
+	private _pos = _this select 0;
+	if (surfaceIsWater _pos) exitWith { true };
+	private _h = getTerrainHeightASL [_pos select 0, _pos select 1];
+	(_h < 0)
+};
+
+// Find safe land position — if given pos is in water, search outward for land
+// Returns original position if already on land
+// Usage: [_pos] call IBC_fnc_findSafePos
+IBC_fnc_findSafePos = {
+	private _pos = _this select 0;
+	if (typeName _pos != "ARRAY" || {count _pos < 2}) exitWith {
+		diag_log format ["IBC: findSafePos got invalid pos: %1", _pos];
+		[0, 0, 0]
+	};
+	if !([_pos] call IBC_fnc_isWater) exitWith { _pos };
+	diag_log format ["IBC: Position %1 is in water (h=%2), searching for land...", _pos, getTerrainHeightASL [_pos select 0, _pos select 1]];
+	private _safePos = _pos;
+	private _found = false;
+	for "_r" from 25 to 1500 step 25 do {
+		if (_found) exitWith {};
+		for "_a" from 0 to 345 step 15 do {
+			private _testPos = [(_pos select 0) + _r * sin _a, (_pos select 1) + _r * cos _a, 0];
+			if !([_testPos] call IBC_fnc_isWater) exitWith {
+				_safePos = _testPos;
+				_found = true;
+			};
+		};
+	};
+	if (_found) then {
+		diag_log format ["IBC: Safe land found at %1 (%2m from original)", _safePos, round (_pos distance _safePos)];
+	} else {
+		diag_log format ["IBC: WARNING - no land found within 1500m of %1!", _pos];
+	};
+	_safePos
+};
+
+// ────────────────────────────────────────────
 // 1. SPAWN FUNCTIONS
 // ────────────────────────────────────────────
 
-// Spawn infantry group with terrain snap
+// Spawn infantry group with terrain snap (water-safe)
 IBC_fnc_spawnGroup = {
 	params ["_pos", "_side", "_classes"];
+	_pos = [_pos] call IBC_fnc_findSafePos;
 	private _grp = createGroup [_side, true];
 	{
 		private _u = _grp createUnit [_x, _pos, [], 3, "NONE"];
@@ -35,6 +81,7 @@ IBC_fnc_spawnGroup = {
 // Spawn group INSIDE a building (e.g. hostages, garrison indoors)
 IBC_fnc_spawnGroupInBuilding = {
 	params ["_pos", "_side", "_classes", ["_radius", 100]];
+	_pos = [_pos] call IBC_fnc_findSafePos;
 	private _grp = createGroup [_side, true];
 	private _buildings = nearestObjects [_pos, ["House", "Building"], _radius];
 	private _bpos = [];
@@ -49,10 +96,11 @@ IBC_fnc_spawnGroupInBuilding = {
 	_grp
 };
 
-// Spawn vehicle with terrain snap
+// Spawn vehicle with terrain snap (water-safe)
 // Params: classname, position, direction, crewed
 IBC_fnc_spawnVehicle = {
 	params ["_class", "_pos", ["_dir", 0], ["_crewed", true]];
+	_pos = [_pos] call IBC_fnc_findSafePos;
 	private _veh = createVehicle [_class, _pos, [], 0, "NONE"];
 	_veh setPosATL [getPosATL _veh select 0, getPosATL _veh select 1, 0.3];
 	_veh setDir _dir;
@@ -94,9 +142,10 @@ IBC_fnc_spawnAircraft = {
 	_veh
 };
 
-// Spawn static object with terrain snap (fortifications, barriers, crates)
+// Spawn static object with terrain snap (fortifications, barriers, crates) (water-safe)
 IBC_fnc_spawnObject = {
 	params ["_class", "_pos", ["_dir", 0]];
+	_pos = [_pos] call IBC_fnc_findSafePos;
 	private _obj = createVehicle [_class, _pos, [], 0, "NONE"];
 	_obj setPosATL [getPosATL _obj select 0, getPosATL _obj select 1, 0];
 	_obj setDir _dir;

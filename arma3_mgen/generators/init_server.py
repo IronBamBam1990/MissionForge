@@ -66,14 +66,15 @@ def generate_init_server(config: MissionConfig, enemy_faction_data=None) -> str:
     L.append("sleep 3;")
     L.append("")
 
-    # ── 1. TERRAIN SNAP (all units from SQM) ──
-    L.append("// Terrain snap all SQM units")
-    L.append("{ _x setPosATL [getPosATL _x select 0, getPosATL _x select 1, 0] } forEach allUnits;")
-    L.append('diag_log format ["IBC: %1 units snapped", count allUnits];')
+    # ── 1. HELPER FUNCTIONS (must be first — other code depends on them) ──
+    L.append(sqf_helpers())
     L.append("")
 
-    # ── 2. HELPER FUNCTIONS ──
-    L.append(sqf_helpers())
+    # ── 2. TERRAIN SNAP + WATER SAFETY (all units from SQM) ──
+    L.append("// Terrain snap all SQM units + move out of water")
+    L.append("private _snappedCount = 0; private _waterCount = 0;")
+    L.append("{ private _safePos = [getPosATL _x] call IBC_fnc_findSafePos; _x setPosATL [_safePos select 0, _safePos select 1, 0]; _snappedCount = _snappedCount + 1; if !(_safePos isEqualTo (getPosATL _x)) then { _waterCount = _waterCount + 1 }; } forEach allUnits;")
+    L.append('diag_log format ["IBC: %1 units snapped, %2 moved from water", _snappedCount, _waterCount];')
     L.append("")
 
     # ── 3. RADIO SYSTEM ──
@@ -173,8 +174,9 @@ def generate_init_server(config: MissionConfig, enemy_faction_data=None) -> str:
                     alt = pos.altitude or 300
                     radius = 1500
                     L.append(f"// Auto air patrol route (circle r={radius}m)")
+                    cx, cy = round(pos.position[0], 1), round(pos.position[2], 1)
                     L.append(f'private _apRoute = [];')
-                    L.append(f'for "_i" from 0 to 5 do {{ _apRoute pushBack [{p} getPos [1500, _i * 60]] }};')
+                    L.append(f'for "_i" from 0 to 5 do {{ _apRoute pushBack [{cx} + {radius} * sin (_i * 60), {cy} + {radius} * cos (_i * 60), 0] }};')
                     L.append(f'private _ap = ["{pos.vehicle_class}", _apRoute, east, {_r(alt)}] call IBC_fnc_aircraftPatrol;')
                 L.append(f"{g} = group driver _ap;")
                 L.append(f"[{g}, {_r(sk_min)}, {_r(sk_range)}] call IBC_fnc_setSkills;")
