@@ -1,0 +1,36 @@
+{
+  "faction_name": "Russian MSV (RHS)",
+  "mod": "rhs",
+  "side": "East",
+  "roles": {
+    "platoon_leader": {"unit_class": "rhs_msv_emr_officer"},
+    "squad_leader": {"unit_class": "rhs_msv_emr_sergeant"},
+    "team_leader": {"unit_class": "rhs_msv_emr_sergeant"},
+    "rifleman": {"unit_class": "rhs_msv_emr_rifleman"},
+    "autorifleman": {"unit_class": "rhs_msv_emr_arifleman"},
+    "grenadier": {"unit_class": "rhs_msv_emr_grenadier"},
+    "medic": {"unit_class": "rhs_msv_emr_medic"},
+    "marksman": {"unit_class": "rhs_msv_emr_marksman"},
+    "engineer": {"unit_class": "rhs_msv_emr_engineer"},
+    "at_gunner": {"unit_class": "rhs_msv_emr_at"},
+    "mg_gunner": {"unit_class": "rhs_msv_emr_arifleman"},
+    "mg_assistant": {"unit_class": "rhs_msv_emr_rifleman"},
+    "mg_ammo_bearer": {"unit_class": "rhs_msv_emr_rifleman"}
+  },
+  "compositions": {
+    "infantry": {
+      "fireteam": ["rhs_msv_emr_sergeant", "rhs_msv_emr_rifleman", "rhs_msv_emr_arifleman", "rhs_msv_emr_grenadier"],
+      "squad": ["rhs_msv_emr_sergeant", "rhs_msv_emr_sergeant", "rhs_msv_emr_rifleman", "rhs_msv_emr_arifleman", "rhs_msv_emr_grenadier", "rhs_msv_emr_rifleman", "rhs_msv_emr_at", "rhs_msv_emr_medic"],
+      "section": ["rhs_msv_emr_sergeant", "rhs_msv_emr_sergeant", "rhs_msv_emr_rifleman", "rhs_msv_emr_rifleman", "rhs_msv_emr_arifleman", "rhs_msv_emr_grenadier", "rhs_msv_emr_sergeant", "rhs_msv_emr_rifleman", "rhs_msv_emr_rifleman", "rhs_msv_emr_arifleman", "rhs_msv_emr_marksman", "rhs_msv_emr_medic"]
+    }
+  },
+  "vehicles": {
+    "transport": "rhs_kamaz5350",
+    "mrap": "rhs_tigr_m",
+    "apc": "rhs_btr80a",
+    "ifv": "rhs_bmp2d",
+    "mbt": "rhs_t72bd_tv",
+    "helicopter_transport": "rhs_ka60_grey",
+    "helicopter_attack": "rhs_mi28n"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "faction_name": "US Marines (RHS)",
+  "mod": "rhs",
+  "side": "West",
+  "roles": {
+    "platoon_leader": {"unit_class": "rhsusf_usmc_marpat_wd_officer"},
+    "squad_leader": {"unit_class": "rhsusf_usmc_marpat_wd_squadleader"},
+    "team_leader": {"unit_class": "rhsusf_usmc_marpat_wd_teamleader"},
+    "rifleman": {"unit_class": "rhsusf_usmc_marpat_wd_rifleman"},
+    "autorifleman": {"unit_class": "rhsusf_usmc_marpat_wd_autorifleman"},
+    "grenadier": {"unit_class": "rhsusf_usmc_marpat_wd_grenadier"},
+    "medic": {"unit_class": "rhsusf_usmc_marpat_wd_medic"},
+    "marksman": {"unit_class": "rhsusf_usmc_marpat_wd_marksman"},
+    "sniper": {"unit_class": "rhsusf_usmc_marpat_wd_sniper"},
+    "engineer": {"unit_class": "rhsusf_usmc_marpat_wd_engineer"},
+    "at_gunner": {"unit_class": "rhsusf_usmc_marpat_wd_javelin"},
+    "mg_gunner": {"unit_class": "rhsusf_usmc_marpat_wd_machinegunner"},
+    "mg_assistant": {"unit_class": "rhsusf_usmc_marpat_wd_rifleman"},
+    "mg_ammo_bearer": {"unit_class": "rhsusf_usmc_marpat_wd_rifleman"}
+  },
+  "compositions": {
+    "infantry": {
+      "fireteam": ["rhsusf_usmc_marpat_wd_teamleader", "rhsusf_usmc_marpat_wd_rifleman", "rhsusf_usmc_marpat_wd_autorifleman", "rhsusf_usmc_marpat_wd_grenadier"],
+      "squad": ["rhsusf_usmc_marpat_wd_squadleader", "rhsusf_usmc_marpat_wd_teamleader", "rhsusf_usmc_marpat_wd_rifleman", "rhsusf_usmc_marpat_wd_autorifleman", "rhsusf_usmc_marpat_wd_grenadier", "rhsusf_usmc_marpat_wd_teamleader", "rhsusf_usmc_marpat_wd_rifleman", "rhsusf_usmc_marpat_wd_medic"],
+      "section": ["rhsusf_usmc_marpat_wd_squadleader", "rhsusf_usmc_marpat_wd_teamleader", "rhsusf_usmc_marpat_wd_rifleman", "rhsusf_usmc_marpat_wd_rifleman", "rhsusf_usmc_marpat_wd_autorifleman", "rhsusf_usmc_marpat_wd_grenadier", "rhsusf_usmc_marpat_wd_teamleader", "rhsusf_usmc_marpat_wd_rifleman", "rhsusf_usmc_marpat_wd_rifleman", "rhsusf_usmc_marpat_wd_autorifleman", "rhsusf_usmc_marpat_wd_marksman", "rhsusf_usmc_marpat_wd_medic"]
+    }
+  },
+  "vehicles": {
+    "transport": "rhsusf_M1078A1P2_B_M2_d_fmtv_usarmy",
+    "mrap": "rhsusf_m1025_w_m2",
+    "apc": "rhsusf_stryker_m1126_m2_wd",
+    "ifv": "RHS_M2A3_BUSKIII_wd",
+    "mbt": "rhsusf_m1a2sep1tuskiid_usarmy"
+  }
+}

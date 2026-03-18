@@ -1,5 +1,6 @@
 {
   "faction_name": "CSAT (Vanilla)",
+  "mod": "vanilla",
   "side": "East",
   "roles": {
     "squad_leader": {"unit_class": "O_Soldier_SL_F"},

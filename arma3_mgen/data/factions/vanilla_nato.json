@@ -1,5 +1,6 @@
 {
   "faction_name": "NATO (Vanilla)",
+  "mod": "vanilla",
   "side": "West",
   "roles": {
     "platoon_leader": {"unit_class": "B_officer_F"},

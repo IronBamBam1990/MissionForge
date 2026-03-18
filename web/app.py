@@ -38,7 +38,7 @@ DEFAULT_OUTPUT = Path.home() / "Documents" / "Arma 3" / "missions"
 # Load schema example for Claude prompt
 SCHEMA_EXAMPLE = json.dumps(MissionConfig().model_dump(), indent=2)
 
-# Load available factions
+# Load available factions (with mod and side info for filtering)
 def _load_factions_summary():
     factions_dir = data_dir / "factions"
     result = {}
@@ -46,7 +46,11 @@ def _load_factions_summary():
         for f in factions_dir.glob("*.json"):
             with open(f, "r", encoding="utf-8") as fp:
                 d = json.load(fp)
-                result[f.stem] = d.get("faction_name", f.stem)
+                result[f.stem] = {
+                    "name": d.get("faction_name", f.stem),
+                    "mod": d.get("mod", "vanilla"),
+                    "side": d.get("side", "Unknown"),
+                }
     return result
 
 FACTIONS_SUMMARY = _load_factions_summary()
@@ -77,7 +81,7 @@ def _build_locations_prompt():
 
 def _build_system_prompt():
     """Build the system prompt for Claude CLI - detailed, framework handles coordinates."""
-    factions_list = "\n".join(f"  - {k}: {v}" for k, v in FACTIONS_SUMMARY.items())
+    factions_list = "\n".join(f"  - {k}: {v['name']} ({v['side']}, mod: {v['mod']})" for k, v in FACTIONS_SUMMARY.items())
     maps_list = "\n".join(f"  - {name}" for name in sorted(MAPS_DB.keys()))
 
     return f"""Jestes generatorem konfiguracji misji ARMA 3 dla klanu milsim 7BOW (7 Brygada Obrony Wybrzeza). Odpowiedz WYLACZNIE czystym JSON-em.
@@ -509,15 +513,25 @@ async def handle_prompt(request: Request):
         prompt = user_prompt
         mod_info = []
         if mods.get("ace3"): mod_info.append("ACE3 WLACZONY (microDAGR, cellphone, medical)")
+        if mods.get("kat_medical"): mod_info.append("KAT Advanced Medical WLACZONY (rozszerza ACE3)")
         if mods.get("acre2"): mod_info.append("ACRE2 WLACZONY (radio: acre2)")
         if mods.get("tfar"): mod_info.append("TFAR WLACZONY (radio: tfar)")
+        has_content_mods = mods.get("rhs") or mods.get("cup") or mods.get("cfp")
+        if mods.get("rhs"): mod_info.append("RHS WLACZONY (rhsusf_, rhs_ classnames)")
+        if mods.get("cup"): mod_info.append("CUP WLACZONY (CUP_ classnames)")
+        if mods.get("cfp"): mod_info.append("CFP WLACZONY (CFP_ classnames)")
         if mod_info:
             prompt += "\n\nAKTYWNE MODY: " + ", ".join(mod_info)
             mods_str = ", ".join(mod_info)
             yield _log_sse(f"Mody: {mods_str}")
         if not mods.get("ace3"):
             prompt += "\n\nACE3 WYLACZONY - NIE uzywaj ACE3 classnames."
-        prompt += "\n\nWAZNE: Uzywaj TYLKO vanilla ARMA 3 classnames (B_Soldier_F, B_officer_F, O_Soldier_F, itp). NIE uzywaj classnames z modow (rhsusf_, rhs_, CUP_)."
+        if not has_content_mods:
+            prompt += "\n\nWAZNE: Uzywaj TYLKO vanilla ARMA 3 classnames (B_Soldier_F, B_officer_F, O_Soldier_F, itp). NIE uzywaj classnames z modow (rhsusf_, rhs_, CUP_)."
+        # Apply faction presets from UI dropdowns
+        faction_preset = body.get("faction_preset", "vanilla_nato")
+        enemy_faction_preset = body.get("enemy_faction_preset", "vanilla_csat")
+        prompt += f"\n\nFRAKCJA BLUFOR: {faction_preset}\nFRAKCJA OPFOR: {enemy_faction_preset}\nUZYWAJ faction_preset=\"{faction_preset}\" i enemy_faction_preset=\"{enemy_faction_preset}\" w JSON."
 
         # Step 1: Call Claude CLI
         system_prompt = _build_system_prompt()
@@ -573,8 +587,11 @@ async def handle_prompt(request: Request):
             print(f"[WARN] Layout computation: {e}")
             yield _log_sse(f"WARN: Layout - {e}")
 
-        # Step 3b: Apply mod settings
+        # Step 3b: Apply mod settings and faction presets from UI
         config_data["ace3_enabled"] = mods.get("ace3", False)
+        config_data["kat_medical"] = mods.get("kat_medical", False)
+        config_data["faction_preset"] = faction_preset
+        config_data["enemy_faction_preset"] = enemy_faction_preset
         if mods.get("acre2"):
             config_data.setdefault("radio", {})["system"] = "acre2"
         elif mods.get("tfar"):

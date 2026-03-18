@@ -1,0 +1,38 @@
+{
+  "faction_name": "US Army (RHS)",
+  "mod": "rhs",
+  "side": "West",
+  "roles": {
+    "platoon_leader": {"unit_class": "rhsusf_army_ocp_officer"},
+    "squad_leader": {"unit_class": "rhsusf_army_ocp_squadleader"},
+    "team_leader": {"unit_class": "rhsusf_army_ocp_teamleader"},
+    "rifleman": {"unit_class": "rhsusf_army_ocp_rifleman"},
+    "autorifleman": {"unit_class": "rhsusf_army_ocp_autorifleman"},
+    "grenadier": {"unit_class": "rhsusf_army_ocp_grenadier"},
+    "medic": {"unit_class": "rhsusf_army_ocp_medic"},
+    "marksman": {"unit_class": "rhsusf_army_ocp_marksman"},
+    "sniper": {"unit_class": "rhsusf_army_ocp_sniper"},
+    "engineer": {"unit_class": "rhsusf_army_ocp_engineer"},
+    "at_gunner": {"unit_class": "rhsusf_army_ocp_javelin"},
+    "mg_gunner": {"unit_class": "rhsusf_army_ocp_machinegunner"},
+    "mg_assistant": {"unit_class": "rhsusf_army_ocp_rifleman"},
+    "mg_ammo_bearer": {"unit_class": "rhsusf_army_ocp_rifleman"}
+  },
+  "compositions": {
+    "infantry": {
+      "fireteam": ["rhsusf_army_ocp_teamleader", "rhsusf_army_ocp_rifleman", "rhsusf_army_ocp_autorifleman", "rhsusf_army_ocp_grenadier"],
+      "squad": ["rhsusf_army_ocp_squadleader", "rhsusf_army_ocp_teamleader", "rhsusf_army_ocp_rifleman", "rhsusf_army_ocp_autorifleman", "rhsusf_army_ocp_grenadier", "rhsusf_army_ocp_teamleader", "rhsusf_army_ocp_rifleman", "rhsusf_army_ocp_medic"],
+      "section": ["rhsusf_army_ocp_squadleader", "rhsusf_army_ocp_teamleader", "rhsusf_army_ocp_rifleman", "rhsusf_army_ocp_rifleman", "rhsusf_army_ocp_autorifleman", "rhsusf_army_ocp_grenadier", "rhsusf_army_ocp_teamleader", "rhsusf_army_ocp_rifleman", "rhsusf_army_ocp_rifleman", "rhsusf_army_ocp_autorifleman", "rhsusf_army_ocp_marksman", "rhsusf_army_ocp_medic"]
+    }
+  },
+  "vehicles": {
+    "transport": "rhsusf_M1083A1P2_B_M2_d_fmtv_usarmy",
+    "mrap": "rhsusf_m998_w_2dr",
+    "apc": "rhsusf_stryker_m1126_m2_wd",
+    "ifv": "RHS_M2A3_BUSKIII_wd",
+    "mbt": "rhsusf_m1a2sep1tuskiid_usarmy",
+    "helicopter_transport": "RHS_UH60M",
+    "helicopter_attack": "RHS_AH64D_wd",
+    "cas": "RHS_A10"
+  }
+}
