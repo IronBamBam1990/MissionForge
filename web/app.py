@@ -8,11 +8,12 @@ import asyncio
 import json
 import sys
 import tempfile
+import time
 from pathlib import Path
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -470,7 +471,11 @@ async def index(request: Request):
 
 @app.post("/api/prompt")
 async def handle_prompt(request: Request):
-    """Main endpoint: takes natural language prompt, calls Claude CLI, generates mission."""
+    """Main endpoint: takes natural language prompt, calls Claude CLI, generates mission.
+
+    Returns Server-Sent Events (SSE) stream with real-time log updates.
+    Events: 'log' for status messages, 'result' for final JSON result.
+    """
     body = await request.json()
     user_prompt = body.get("prompt", "").strip()
     mods = body.get("mods", {})
@@ -478,118 +483,199 @@ async def handle_prompt(request: Request):
     if not user_prompt:
         return JSONResponse(status_code=400, content={"error": "Pusty prompt"})
 
-    # Append mod info to prompt so AI knows what's available
-    mod_info = []
-    if mods.get("ace3"): mod_info.append("ACE3 WLACZONY (microDAGR, cellphone, medical)")
-    if mods.get("acre2"): mod_info.append("ACRE2 WLACZONY (radio: acre2)")
-    if mods.get("tfar"): mod_info.append("TFAR WLACZONY (radio: tfar)")
-    if mod_info:
-        user_prompt += "\n\nAKTYWNE MODY: " + ", ".join(mod_info)
-    if not mods.get("ace3"):
-        user_prompt += "\n\nACE3 WYLACZONY - NIE uzywaj ACE3 classnames."
-    user_prompt += "\n\nWAZNE: Uzywaj TYLKO vanilla ARMA 3 classnames (B_Soldier_F, B_officer_F, O_Soldier_F, itp). NIE uzywaj classnames z modow (rhsusf_, rhs_, CUP_)."
+    async def event_stream():
+        def _ts():
+            return time.strftime("%H:%M:%S")
 
-    # Step 1: Call Claude CLI to parse prompt into config JSON
-    system_prompt = _build_system_prompt()
+        def _sse(msg_type, **kwargs):
+            return f"data: {json.dumps({'type': msg_type, **kwargs})}\n\n"
 
-    try:
-        config_json = await _call_claude_cli(system_prompt, user_prompt)
-    except Exception as e:
-        import traceback
-        tb = traceback.format_exc()
-        print(f"[ERROR] Claude CLI failed: {e}\n{tb}")
-        return JSONResponse(status_code=200, content={
-            "success": False,
-            "error": f"Claude CLI error: {str(e)}",
-            "step": "parsing"
-        })
+        def _log_sse(msg):
+            line = f"[{_ts()}] {msg}"
+            print(f"[SSE] {line}")
+            return _sse('log', message=line)
 
-    # Step 2: Parse the JSON config
-    try:
-        config_data = json.loads(config_json)
-    except json.JSONDecodeError as e:
-        print(f"[ERROR] JSON parse failed: {e}")
-        print(f"[ERROR] Raw output: {config_json[:500]}")
-        return {"success": False, "error": f"AI zwrocil niepoprawny JSON: {str(e)}", "raw_output": config_json[:2000]}
+        log_queue = asyncio.Queue()
 
-    # Step 3: Compute layout (fix coordinates, add missing elements)
-    try:
-        config_data = compute_mission_layout(config_data)
-    except Exception as e:
-        print(f"[WARN] Layout computation: {e}")
+        async def log_fn(msg):
+            line = f"[{_ts()}] {msg}"
+            print(f"[SSE] {line}")
+            await log_queue.put(line)
 
-    # Step 3b: Apply mod settings from UI
-    config_data["ace3_enabled"] = mods.get("ace3", False)
-    # Radio system — UI toggle ALWAYS overrides AI output
-    if mods.get("acre2"):
-        config_data.setdefault("radio", {})["system"] = "acre2"
-    elif mods.get("tfar"):
-        config_data.setdefault("radio", {})["system"] = "tfar"
+        # Send initial log
+        yield _log_sse(f"Request przyjety, przetwarzam prompt ({len(user_prompt)} znakow)...")
 
-    # Step 4: Validate and generate
-    try:
-        config = load_config_from_dict(config_data)
-        mission_path = generate_mission(config, str(DEFAULT_OUTPUT))
+        # Append mod info
+        prompt = user_prompt
+        mod_info = []
+        if mods.get("ace3"): mod_info.append("ACE3 WLACZONY (microDAGR, cellphone, medical)")
+        if mods.get("acre2"): mod_info.append("ACRE2 WLACZONY (radio: acre2)")
+        if mods.get("tfar"): mod_info.append("TFAR WLACZONY (radio: tfar)")
+        if mod_info:
+            prompt += "\n\nAKTYWNE MODY: " + ", ".join(mod_info)
+            mods_str = ", ".join(mod_info)
+            yield _log_sse(f"Mody: {mods_str}")
+        if not mods.get("ace3"):
+            prompt += "\n\nACE3 WYLACZONY - NIE uzywaj ACE3 classnames."
+        prompt += "\n\nWAZNE: Uzywaj TYLKO vanilla ARMA 3 classnames (B_Soldier_F, B_officer_F, O_Soldier_F, itp). NIE uzywaj classnames z modow (rhsusf_, rhs_, CUP_)."
 
-        return {
-            "success": True,
-            "mission_name": mission_path.name,
-            "path": str(mission_path),
-            "config": config_data,
-        }
-    except Exception as e:
-        import traceback
-        print(f"[ERROR] Generation failed: {e}\n{traceback.format_exc()}")
-        return {"success": False, "error": f"Blad generowania: {str(e)}", "config": config_data}
+        # Step 1: Call Claude CLI
+        system_prompt = _build_system_prompt()
+        yield _log_sse("Wywoluje Claude CLI (model: opus)...")
+
+        # Run Claude CLI in a task so we can stream log messages from the queue
+        async def run_claude():
+            return await _call_claude_cli(system_prompt, prompt, log_fn=log_fn)
+
+        claude_task = asyncio.create_task(run_claude())
+
+        # Stream log messages while Claude is running
+        while not claude_task.done():
+            try:
+                msg = await asyncio.wait_for(log_queue.get(), timeout=1.0)
+                yield _sse('log', message=msg)
+            except asyncio.TimeoutError:
+                pass
+
+        # Drain remaining messages from queue
+        while not log_queue.empty():
+            msg = await log_queue.get()
+            yield _sse('log', message=msg)
+
+        # Get result
+        try:
+            config_json = claude_task.result()
+        except Exception as e:
+            import traceback
+            print(f"[ERROR] Claude CLI failed: {e}\n{traceback.format_exc()}")
+            err_msg = str(e)
+            yield _log_sse(f"BLAD: {err_msg}")
+            yield _sse('result', data={'success': False, 'error': f'Claude CLI error: {err_msg}', 'step': 'parsing'})
+            return
+
+        # Step 2: Parse JSON
+        yield _log_sse("Parsuje odpowiedz JSON...")
+        try:
+            config_data = json.loads(config_json)
+        except json.JSONDecodeError as e:
+            print(f"[ERROR] JSON parse failed: {e}")
+            yield _log_sse(f"BLAD: Niepoprawny JSON - {e}")
+            yield _sse('result', data={'success': False, 'error': f'AI zwrocil niepoprawny JSON: {e}', 'raw_output': config_json[:2000]})
+            return
+
+        yield _log_sse("JSON OK - obliczam layout misji...")
+
+        # Step 3: Compute layout
+        try:
+            config_data = compute_mission_layout(config_data)
+            yield _log_sse("Layout obliczony")
+        except Exception as e:
+            print(f"[WARN] Layout computation: {e}")
+            yield _log_sse(f"WARN: Layout - {e}")
+
+        # Step 3b: Apply mod settings
+        config_data["ace3_enabled"] = mods.get("ace3", False)
+        if mods.get("acre2"):
+            config_data.setdefault("radio", {})["system"] = "acre2"
+        elif mods.get("tfar"):
+            config_data.setdefault("radio", {})["system"] = "tfar"
+
+        # Step 4: Generate
+        yield _log_sse("Generuje pliki misji...")
+        try:
+            config = load_config_from_dict(config_data)
+            mission_path = generate_mission(config, str(DEFAULT_OUTPUT))
+
+            yield _log_sse(f"SUKCES: {mission_path.name}")
+            yield _sse('result', data={'success': True, 'mission_name': mission_path.name, 'path': str(mission_path), 'config': config_data})
+        except Exception as e:
+            import traceback
+            print(f"[ERROR] Generation failed: {e}\n{traceback.format_exc()}")
+            yield _log_sse(f"BLAD generowania: {e}")
+            yield _sse('result', data={'success': False, 'error': f'Blad generowania: {e}', 'config': config_data})
+
+    return StreamingResponse(event_stream(), media_type="text/event-stream")
 
 
-async def _call_claude_cli(system_prompt: str, user_prompt: str) -> str:
+async def _call_claude_cli(system_prompt: str, user_prompt: str, log_fn=None) -> str:
     """Call Claude CLI as subprocess and return its output.
 
     Uses pipe for user prompt and --append-system-prompt for system prompt.
-    System prompt is kept short; full schema is included in user prompt.
+    Retries up to 3 times on 529 Overloaded errors with 30s backoff.
+    log_fn(msg) is called for real-time status updates if provided.
     """
-    # Combine system instructions with user prompt into one piped message
     full_prompt = system_prompt + "\n\n---\n\nOPIS MISJI OD UZYTKOWNIKA:\n\n" + user_prompt
 
-    proc = await asyncio.create_subprocess_exec(
-        "claude",
-        "-p",
-        "--output-format", "text",
-        "--model", "opus",
-        "--max-turns", "10",
-        "--no-session-persistence",
-        "--tools", "",
-        stdin=asyncio.subprocess.PIPE,
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE,
-    )
-    try:
-        stdout, stderr = await asyncio.wait_for(
-            proc.communicate(input=full_prompt.encode('utf-8')),
-            timeout=600
+    max_retries = 3
+    retry_delay = 30  # seconds
+
+    for attempt in range(1, max_retries + 1):
+        if log_fn:
+            await log_fn(f"Uruchamiam Claude CLI (proba {attempt}/{max_retries})...")
+
+        proc = await asyncio.create_subprocess_exec(
+            "claude",
+            "-p",
+            "--output-format", "text",
+            "--model", "opus",
+            "--max-turns", "10",
+            "--no-session-persistence",
+            "--tools", "",
+            stdin=asyncio.subprocess.PIPE,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
         )
-    except asyncio.TimeoutError:
-        proc.kill()
-        raise RuntimeError("Timeout - AI nie odpowiedzial w 600 sekund")
+        try:
+            stdout, stderr = await asyncio.wait_for(
+                proc.communicate(input=full_prompt.encode('utf-8')),
+                timeout=600
+            )
+        except asyncio.TimeoutError:
+            proc.kill()
+            if log_fn:
+                await log_fn("TIMEOUT - Claude nie odpowiedzial w 600s")
+            raise RuntimeError("Timeout - AI nie odpowiedzial w 600 sekund")
 
-    output = stdout.decode("utf-8", errors="replace").strip()
-    err_output = stderr.decode("utf-8", errors="replace").strip()
+        output = stdout.decode("utf-8", errors="replace").strip()
+        err_output = stderr.decode("utf-8", errors="replace").strip()
 
-    print(f"[CLAUDE] returncode={proc.returncode} stdout_len={len(output)} stderr_len={len(err_output)}")
-    if err_output:
-        print(f"[CLAUDE STDERR] {err_output[:500]}")
-    if output:
-        print(f"[CLAUDE STDOUT] {output[:500]}")
+        print(f"[CLAUDE] returncode={proc.returncode} stdout_len={len(output)} stderr_len={len(err_output)}")
+        if err_output:
+            print(f"[CLAUDE STDERR] {err_output[:500]}")
+        if output:
+            print(f"[CLAUDE STDOUT] {output[:500]}")
 
-    if proc.returncode != 0:
-        raise RuntimeError(f"exit code {proc.returncode}: {err_output[:500]}")
+        # Check for 529 Overloaded
+        is_overloaded = "529" in output or "Overloaded" in output or "529" in err_output or "Overloaded" in err_output
 
-    if not output:
-        raise RuntimeError(f"AI zwrocil pusty output. Stderr: {err_output[:300]}")
+        if proc.returncode != 0 and is_overloaded:
+            if attempt < max_retries:
+                if log_fn:
+                    await log_fn(f"API przeciazone (529). Czekam {retry_delay}s przed ponowna proba...")
+                await asyncio.sleep(retry_delay)
+                continue
+            else:
+                if log_fn:
+                    await log_fn("API przeciazone - wyczerpano limity prob. Sprobuj ponownie za kilka minut.")
+                raise RuntimeError("API przeciazone (529) - wyczerpano 3 proby")
 
-    output = _extract_json(output)
-    return output
+        if proc.returncode != 0:
+            if log_fn:
+                await log_fn(f"Claude CLI blad (exit code {proc.returncode})")
+            raise RuntimeError(f"exit code {proc.returncode}: {err_output[:500]}")
+
+        if not output:
+            if log_fn:
+                await log_fn("Claude zwrocil pusty output")
+            raise RuntimeError(f"AI zwrocil pusty output. Stderr: {err_output[:300]}")
+
+        if log_fn:
+            await log_fn(f"Claude odpowiedzial ({len(output)} znakow)")
+
+        output = _extract_json(output)
+        return output
+
+    raise RuntimeError("Nieoczekiwany koniec petli retry")
 
 
 def _extract_json(text: str) -> str:
