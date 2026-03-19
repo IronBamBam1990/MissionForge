@@ -487,6 +487,9 @@ async def handle_prompt(request: Request):
     if not user_prompt:
         return JSONResponse(status_code=400, content={"error": "Pusty prompt"})
 
+    if len(user_prompt) > 50000:
+        return JSONResponse(status_code=400, content={"error": "Prompt za dlugi (max 50000 znakow)"})
+
     async def event_stream():
         def _ts():
             return time.strftime("%H:%M:%S")

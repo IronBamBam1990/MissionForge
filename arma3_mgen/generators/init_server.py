@@ -333,7 +333,9 @@ def generate_init_server(config: MissionConfig, enemy_faction_data=None) -> str:
     if config.hostages.enabled:
         L.append("// === Hostage Rescue Monitor ===")
         L.append("[] spawn { while {true} do { sleep 5;")
-        L.append('\t{ if (_x getVariable ["ibc_hostage",false] && !(_x getVariable ["ibc_rescued",false])) then {')
+        L.append('\tprivate _remaining = allUnits select {_x getVariable ["ibc_hostage",false] && alive _x && !(_x getVariable ["ibc_rescued",false])};')
+        L.append('\tif (count _remaining == 0) exitWith { diag_log "IBC: All hostages resolved, monitor stopped"; };')
+        L.append("\t{")
         L.append('\t\tprivate _hp = getPos _x;')
         L.append('\t\tprivate _friendlies = _hp nearEntities ["SoldierWB", 10];')
         L.append('\t\tprivate _enemies = (_hp nearEntities ["Man", 50]) select {side _x == east && alive _x};')
@@ -342,7 +344,7 @@ def generate_init_server(config: MissionConfig, enemy_faction_data=None) -> str:
         L.append('\t\t\t[format ["rescue_%1", _x getVariable ["ibc_hostage_id",""]], "SUCCEEDED"] call BIS_fnc_taskSetState;')
         L.append('\t\t\thint format ["Zakladnik %1 uratowany!", _x getVariable ["ibc_hostage_id",""]];')
         L.append("\t\t};")
-        L.append("\t}} forEach allUnits;")
+        L.append("\t} forEach _remaining;")
         L.append("}; };")
         L.append("")
 

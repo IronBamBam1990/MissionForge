@@ -102,24 +102,28 @@ def _fix_coordinates(config: MissionConfig) -> None:
                 print(f"[FIX] Aircraft {aircraft.callsign} moved to {aircraft.position}")
 
     # Fix markers with invalid positions
+    marker_idx = 0
     for marker_list in [config.markers.objectives, config.markers.waypoints,
                         config.markers.sbf, config.markers.rally_points, config.markers.custom]:
         for m in marker_list:
             if _is_invalid_pos(m.position):
-                # Snap to ref_pos with small offset
-                m.position = [ref_pos[0] + (hash(m.name) % 200 - 100), 0,
-                              ref_pos[2] + (hash(m.name) % 200 - 100)]
+                # Deterministic offset based on index (hash() is non-deterministic across sessions)
+                offset = (marker_idx * 73) % 200 - 100
+                m.position = [ref_pos[0] + offset, 0,
+                              ref_pos[2] + offset]
                 print(f"[FIX] Marker {m.name} moved to {m.position}")
+            marker_idx += 1
 
     # Fix OPFOR positions
     for zone in config.opfor.zones:
         if _is_invalid_pos(zone.center):
             if ref_pos:
                 zone.center = list(ref_pos)
-        for pos in zone.positions:
+        for pi, pos in enumerate(zone.positions):
             if _is_invalid_pos(pos.position):
-                pos.position = [zone.center[0] + (hash(pos.id) % 100 - 50), 0,
-                                zone.center[2] + (hash(pos.id) % 100 - 50)]
+                offset = (pi * 47) % 100 - 50
+                pos.position = [zone.center[0] + offset, 0,
+                                zone.center[2] + offset]
                 print(f"[FIX] OPFOR {pos.id} moved to {pos.position}")
 
 

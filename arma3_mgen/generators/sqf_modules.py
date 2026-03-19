@@ -46,7 +46,7 @@ IBC_fnc_findSafePos = {
 	private _found = false;
 	for "_r" from 25 to 1500 step 25 do {
 		if (_found) exitWith {};
-		for "_a" from 0 to 345 step 15 do {
+		for "_a" from 0 to 359 step 15 do {
 			private _testPos = [(_pos select 0) + _r * sin _a, (_pos select 1) + _r * cos _a, 0];
 			if !([_testPos] call IBC_fnc_isWater) exitWith {
 				_safePos = _testPos;
@@ -450,7 +450,8 @@ IBC_fnc_startAlertMonitor = {
 			};
 		}];
 
-		while {true} do {
+		// Proximity detection loop (kills handled by EntityKilled handler above)
+		while {IBC_alertState != "COMBAT"} do {
 			sleep 5;
 			if (IBC_alertState == "STEALTH") then {
 				{
@@ -463,21 +464,17 @@ IBC_fnc_startAlertMonitor = {
 					};
 				} forEach IBC_allEnemyGroups;
 			};
-			if (IBC_alertState == "ALERT") then {
-				private _casualties = _initialEastCount - ({side _x == east && alive _x} count allUnits);
-				if (_casualties > 2) then {
-					["COMBAT"] call IBC_fnc_setAlertState;
-				};
-			};
 		};
+		diag_log "IBC: Alert monitor stopped (COMBAT reached)";
 	};
 };
 
 // Counterattack — spawn reinforcements from direction after delay
 IBC_fnc_counterattack = {
 	params ["_targetPos", "_spawnPos", "_units", "_delay", ["_vehicleClass", ""]];
-	[_targetPos, _spawnPos, _units, _vehicleClass] spawn {
-		params ["_targetPos", "_spawnPos", "_units", "_vehicleClass"];
+	[_targetPos, _spawnPos, _units, _delay, _vehicleClass] spawn {
+		params ["_targetPos", "_spawnPos", "_units", "_delay", "_vehicleClass"];
+		sleep _delay;
 		private _grp = [_spawnPos, east, _units] call IBC_fnc_spawnGroup;
 		[_grp, 0.5, 0.3] call IBC_fnc_setSkills;
 		_grp setBehaviour "COMBAT";
@@ -627,7 +624,7 @@ IBC_fnc_mortarBarrage = {
 				(_targetPos select 1) + (random _spread) - (_spread / 2),
 				0
 			];
-			private _shell = createVehicle ["Sh_82mm_AMOS", _impactPos, [], 0, "NONE"];
+			"Sh_82mm_AMOS" createVehicle _impactPos;
 			sleep (_delay + random 2);
 		};
 		diag_log format ["IBC: Mortar barrage complete at %1", _targetPos];
@@ -679,15 +676,18 @@ IBC_fnc_setupACRE2 = {
 	diag_log format ["IBC: ACRE2 radios assigned to %1 players", count allPlayers];
 };
 
-// ACRE2 channel preset — set channels for squads
+// ACRE2 channel preset — configure radio frequencies
 IBC_fnc_setACRE2Channels = {
 	params ["_channels"];
-	// _channels = [["ALPHA", 1], ["BRAVO", 2], ["CHARLIE", 3], ["CMD", 5]]
-	// Channel config is done per-radio, typically:
-	// PRC-343: channel = squad internal
-	// PRC-152: channel 1 = squad net, channel 2 = platoon net
-	// PRC-117F: channel 1 = platoon net, channel 2 = battalion/CAS
-	diag_log format ["IBC: ACRE2 channels configured: %1", _channels];
+	// _channels = [["ALPHA", 50.0], ["BRAVO", 51.0], ["CMD", 55.0]]
+	{
+		_x params ["_name", "_freq"];
+		private _idx = _forEachIndex + 1;
+		["acre_prc152", "default", _idx, "label", _name] call acre_api_fnc_setPresetChannelField;
+		["acre_prc152", "default", _idx, "frequencyTX", _freq * 1e6] call acre_api_fnc_setPresetChannelField;
+		["acre_prc152", "default", _idx, "frequencyRX", _freq * 1e6] call acre_api_fnc_setPresetChannelField;
+	} forEach _channels;
+	diag_log format ["IBC: ACRE2 %1 channels configured", count _channels];
 };
 
 // TFAR radio setup
@@ -737,7 +737,8 @@ IBC_fnc_flareIllum = {
 				(_pos select 1) + (random 100) - 50,
 				_height
 			];
-			private _flare = createVehicle ["F_40mm_White", _flarePos, [], 0, "NONE"];
+			private _flare = "F_40mm_White" createVehicle _flarePos;
+			_flare setVelocity [0, 0, -1];
 			sleep _interval;
 		};
 	};

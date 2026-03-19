@@ -102,7 +102,50 @@ def load_config(path: str | Path) -> MissionConfig:
 def load_config_from_dict(data: dict) -> MissionConfig:
     """Load mission config from a dict (e.g. from API request)."""
     data = _normalize(data)
+    _validate_structure(data)
     return MissionConfig(**data)
+
+
+def _validate_structure(data: dict) -> None:
+    """Validate basic structure of AI-generated JSON before Pydantic parsing.
+
+    Fixes type errors that would crash Pydantic (e.g. string where list expected).
+    """
+    # BLUFOR groups must be a list
+    if "blufor" in data and isinstance(data["blufor"], dict):
+        groups = data["blufor"].get("groups")
+        if groups is not None and not isinstance(groups, list):
+            print(f"[WARN] blufor.groups is {type(groups).__name__}, replacing with []")
+            data["blufor"]["groups"] = []
+        else:
+            for i, g in enumerate(data["blufor"].get("groups", [])):
+                if isinstance(g, dict):
+                    units = g.get("units")
+                    if units is not None and not isinstance(units, list):
+                        print(f"[WARN] group[{i}].units is {type(units).__name__}, replacing with []")
+                        g["units"] = []
+
+    # OPFOR zones must be a list
+    if "opfor" in data and isinstance(data["opfor"], dict):
+        zones = data["opfor"].get("zones")
+        if zones is not None and not isinstance(zones, list):
+            print(f"[WARN] opfor.zones is {type(zones).__name__}, replacing with []")
+            data["opfor"]["zones"] = []
+        else:
+            for i, z in enumerate(data["opfor"].get("zones", [])):
+                if isinstance(z, dict):
+                    positions = z.get("positions")
+                    if positions is not None and not isinstance(positions, list):
+                        print(f"[WARN] zone[{i}].positions is {type(positions).__name__}, replacing with []")
+                        z["positions"] = []
+
+    # Markers categories must be lists
+    if "markers" in data and isinstance(data["markers"], dict):
+        for cat in ["objectives", "waypoints", "phase_lines", "sbf", "rally_points", "custom"]:
+            val = data["markers"].get(cat)
+            if val is not None and not isinstance(val, list):
+                print(f"[WARN] markers.{cat} is {type(val).__name__}, replacing with []")
+                data["markers"][cat] = []
 
 
 def resolve_map_classname(config: MissionConfig) -> str:
