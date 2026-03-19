@@ -663,12 +663,12 @@
 
             <div class="sidebar-section">
                 <div class="sidebar-title">Mod Settings</div>
-                <div style="display:flex;flex-direction:column;gap:6px;">
+                <div style="display:flex;flex-direction:column;gap:6px;max-height:400px;overflow-y:auto;padding-right:4px;">
                     <div class="mod-category">FRAMEWORK</div>
                     <label class="mod-toggle">
                         <input type="checkbox" id="mod-ace3" onchange="saveModSettings()">
                         <span class="mod-label">ACE3</span>
-                        <span class="mod-desc">microDAGR, medical</span>
+                        <span class="mod-desc">Medical, ballistics</span>
                     </label>
                     <label class="mod-toggle">
                         <input type="checkbox" id="mod-acre2" checked onchange="onRadioToggle('acre2')">
@@ -682,25 +682,341 @@
                     </label>
                     <label class="mod-toggle">
                         <input type="checkbox" id="mod-kat" onchange="onKatToggle()">
-                        <span class="mod-label">KAT</span>
-                        <span class="mod-desc">Extended ACE3 Medical</span>
+                        <span class="mod-label">KAT Medical</span>
+                        <span class="mod-desc">Extended ACE3 med</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-cba" checked disabled>
+                        <span class="mod-label">CBA_A3</span>
+                        <span class="mod-desc">Dependency, auto-on</span>
                     </label>
 
                     <div class="mod-category">CONTENT PACKS</div>
                     <label class="mod-toggle">
-                        <input type="checkbox" id="mod-rhs" onchange="onContentModChange()">
-                        <span class="mod-label">RHS</span>
-                        <span class="mod-desc">US/Russia/Guerilla</span>
+                        <input type="checkbox" id="mod-rhs-usaf" onchange="onRhsToggle()">
+                        <span class="mod-label">RHS USAF</span>
+                        <span class="mod-desc">US Armed Forces</span>
                     </label>
                     <label class="mod-toggle">
-                        <input type="checkbox" id="mod-cup" onchange="onContentModChange()">
-                        <span class="mod-label">CUP</span>
-                        <span class="mod-desc">Weapons/Units/Vehicles</span>
+                        <input type="checkbox" id="mod-rhs-afrf" onchange="onRhsToggle()">
+                        <span class="mod-label">RHS AFRF</span>
+                        <span class="mod-desc">Russian Forces</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-rhs-saf" onchange="onRhsToggle()">
+                        <span class="mod-label">RHS SAF</span>
+                        <span class="mod-desc">Serbian Forces</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-rhs-gref" onchange="onRhsToggle()">
+                        <span class="mod-label">RHS GREF</span>
+                        <span class="mod-desc">Guerilla factions</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-cup-weapons" onchange="onCupToggle()">
+                        <span class="mod-label">CUP Weapons</span>
+                        <span class="mod-desc">Weapons pack</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-cup-units" onchange="onCupToggle()">
+                        <span class="mod-label">CUP Units</span>
+                        <span class="mod-desc">Units pack</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-cup-vehicles" onchange="onCupToggle()">
+                        <span class="mod-label">CUP Vehicles</span>
+                        <span class="mod-desc">Vehicles pack</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-cup-terrains" onchange="onCupToggle()">
+                        <span class="mod-label">CUP Terrains</span>
+                        <span class="mod-desc">Terrain pack</span>
                     </label>
                     <label class="mod-toggle">
                         <input type="checkbox" id="mod-cfp" onchange="onCfpToggle()">
                         <span class="mod-label">CFP</span>
                         <span class="mod-desc">Community Factions</span>
+                    </label>
+
+                    <div class="mod-category">GAMEPLAY</div>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-enh-movement" onchange="saveModSettings()">
+                        <span class="mod-label">Enh Movement</span>
+                        <span class="mod-desc">Climb, jump</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-enh-movement-rework" onchange="saveModSettings()">
+                        <span class="mod-label">Enh Move Rework</span>
+                        <span class="mod-desc">Updated movement</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-immerse" onchange="saveModSettings()">
+                        <span class="mod-label">Immerse</span>
+                        <span class="mod-desc">Immersion effects</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-suppress" onchange="saveModSettings()">
+                        <span class="mod-label">Suppress</span>
+                        <span class="mod-desc">Suppression FX</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-limited-gun" onchange="saveModSettings()">
+                        <span class="mod-label">Limited Gun</span>
+                        <span class="mod-desc">Weapon sway limit</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-ai-prone" onchange="saveModSettings()">
+                        <span class="mod-label">AI No Prone</span>
+                        <span class="mod-desc">AI avoids prone</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-cfbai" onchange="saveModSettings()">
+                        <span class="mod-label">CF_BAI</span>
+                        <span class="mod-desc">AI behavior tweak</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-ga-trenches" onchange="saveModSettings()">
+                        <span class="mod-label">GA Trenches</span>
+                        <span class="mod-desc">Diggable trenches</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-dui" onchange="saveModSettings()">
+                        <span class="mod-label">DUI Radar</span>
+                        <span class="mod-desc">Squad radar HUD</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-two-primary" onchange="saveModSettings()">
+                        <span class="mod-label">Two Primary</span>
+                        <span class="mod-desc">Dual primary wpns</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-vet-unflip" onchange="saveModSettings()">
+                        <span class="mod-label">VET Unflip</span>
+                        <span class="mod-desc">Unflip vehicles</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-no-bounce" onchange="saveModSettings()">
+                        <span class="mod-label">No Bounce</span>
+                        <span class="mod-desc">No aircraft bounce</span>
+                    </label>
+
+                    <div class="mod-category">VISUAL / AUDIO</div>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-blastcore" onchange="saveModSettings()">
+                        <span class="mod-label">Blastcore</span>
+                        <span class="mod-desc">Explosion effects</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-blast-effects" onchange="saveModSettings()">
+                        <span class="mod-label">Aaren Blast FX</span>
+                        <span class="mod-desc">Blast effects</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-sfx-remastered" onchange="saveModSettings()">
+                        <span class="mod-label">SFX Remastered</span>
+                        <span class="mod-desc">Sound overhaul</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-sfx-footsteps" onchange="saveModSettings()">
+                        <span class="mod-label">SFX Footsteps</span>
+                        <span class="mod-desc">Footstep sounds</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-amz-sounds" onchange="saveModSettings()">
+                        <span class="mod-label">AMZ Sounds</span>
+                        <span class="mod-desc">Improved sounds</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-flashlights" onchange="saveModSettings()">
+                        <span class="mod-label">Real Flashlights</span>
+                        <span class="mod-desc">Realistic lights</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-bettir" onchange="saveModSettings()">
+                        <span class="mod-label">BettIR</span>
+                        <span class="mod-desc">IR laser/light</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-lens-flare" onchange="saveModSettings()">
+                        <span class="mod-label">Lens Flare</span>
+                        <span class="mod-desc">Cinematic flare</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-env-ducking" onchange="saveModSettings()">
+                        <span class="mod-label">Env Ducking</span>
+                        <span class="mod-desc">Audio ducking</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-bce" onchange="saveModSettings()">
+                        <span class="mod-label">Better CAS Env</span>
+                        <span class="mod-desc">CAS environment</span>
+                    </label>
+
+                    <div class="mod-category">ACE EXTENSIONS</div>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-ace-ext" onchange="saveModSettings()">
+                        <span class="mod-label">ACE Ext Anims</span>
+                        <span class="mod-desc">Extra animations</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-ace-interact" onchange="saveModSettings()">
+                        <span class="mod-label">ACE Interact+</span>
+                        <span class="mod-desc">Menu expansion</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-ace-window" onchange="saveModSettings()">
+                        <span class="mod-label">ACE Window</span>
+                        <span class="mod-desc">Window breaking</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-ace-map" onchange="saveModSettings()">
+                        <span class="mod-label">ACE Map+</span>
+                        <span class="mod-desc">Enhanced map</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-iedd" onchange="saveModSettings()">
+                        <span class="mod-label">IEDD Notebook</span>
+                        <span class="mod-desc">IED disposal notes</span>
+                    </label>
+
+                    <div class="mod-category">UI / TOOLS</div>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-ch-vd" onchange="saveModSettings()">
+                        <span class="mod-label">CH View Dist</span>
+                        <span class="mod-desc">View distance ctrl</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-enh-gps" onchange="saveModSettings()">
+                        <span class="mod-label">Enhanced GPS</span>
+                        <span class="mod-desc">GPS improvements</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-ctab" onchange="saveModSettings()">
+                        <span class="mod-label">cTab</span>
+                        <span class="mod-desc">Commander tablet</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-better-inv" onchange="saveModSettings()">
+                        <span class="mod-label">Better Inv</span>
+                        <span class="mod-desc">Inventory upgrade</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-align" onchange="saveModSettings()">
+                        <span class="mod-label">Align</span>
+                        <span class="mod-desc">Object alignment</span>
+                    </label>
+
+                    <div class="mod-category">ANIMATION</div>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-animate" onchange="saveModSettings()">
+                        <span class="mod-label">Animate Rework</span>
+                        <span class="mod-desc">Animation system</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-animate-radio" onchange="saveModSettings()">
+                        <span class="mod-label">Animate Radio</span>
+                        <span class="mod-desc">Radio animations</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-breach" onchange="saveModSettings()">
+                        <span class="mod-label">Breach Rework</span>
+                        <span class="mod-desc">Door breaching</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-ragdoll" onchange="saveModSettings()">
+                        <span class="mod-label">Ragdoll+</span>
+                        <span class="mod-desc">Ragdoll physics</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-speshal" onchange="saveModSettings()">
+                        <span class="mod-label">Speshal Core</span>
+                        <span class="mod-desc">Animation core</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-alegro" onchange="saveModSettings()">
+                        <span class="mod-label">Alegro AIO</span>
+                        <span class="mod-desc">Additional anims</span>
+                    </label>
+
+                    <div class="mod-category">ZEUS / EDEN</div>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-zeus-enh" onchange="saveModSettings()">
+                        <span class="mod-label">Zeus Enhanced</span>
+                        <span class="mod-desc">Zeus tools</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-3den-enh" onchange="saveModSettings()">
+                        <span class="mod-label">3DEN Enhanced</span>
+                        <span class="mod-desc">Editor tools</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-3den-inv" onchange="saveModSettings()">
+                        <span class="mod-label">3DEN Better Inv</span>
+                        <span class="mod-desc">Editor inventory</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-3den-fast" onchange="saveModSettings()">
+                        <span class="mod-label">3DEN Fast Load</span>
+                        <span class="mod-desc">Faster loading</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-crows-zeus" onchange="saveModSettings()">
+                        <span class="mod-label">Crows Zeus</span>
+                        <span class="mod-desc">Zeus additions</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-zeus-fps" onchange="saveModSettings()">
+                        <span class="mod-label">Zeus FPS Mon</span>
+                        <span class="mod-desc">FPS monitor</span>
+                    </label>
+
+                    <div class="mod-category">7BOW</div>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-7bow-core" onchange="saveModSettings()">
+                        <span class="mod-label">7BOW Core</span>
+                        <span class="mod-desc">Core framework</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-7bow-markers" onchange="saveModSettings()">
+                        <span class="mod-label">7BOW Markers</span>
+                        <span class="mod-desc">Custom markers</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-7bow-equip" onchange="saveModSettings()">
+                        <span class="mod-label">7BOW Equipment</span>
+                        <span class="mod-desc">Gear presets</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-7bow-sounds" onchange="saveModSettings()">
+                        <span class="mod-label">7BOW Sounds</span>
+                        <span class="mod-desc">Sound pack</span>
+                    </label>
+
+                    <div class="mod-category">COMPATIBILITY</div>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-amz-rhs" onchange="saveModSettings()">
+                        <span class="mod-label">AMZ-RHS</span>
+                        <span class="mod-desc">AMZ RHS compat</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-amz-cup" onchange="saveModSettings()">
+                        <span class="mod-label">AMZ-CUP</span>
+                        <span class="mod-desc">AMZ CUP compat</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-cup-interiors" onchange="saveModSettings()">
+                        <span class="mod-label">CUP Interiors</span>
+                        <span class="mod-desc">Building interiors</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-warn-supp" onchange="saveModSettings()">
+                        <span class="mod-label">Warn Suppress</span>
+                        <span class="mod-desc">Hide warnings</span>
+                    </label>
+                    <label class="mod-toggle">
+                        <input type="checkbox" id="mod-ga-admin" onchange="saveModSettings()">
+                        <span class="mod-label">GA Admin Msg</span>
+                        <span class="mod-desc">Admin messages</span>
                     </label>
 
                     <div class="mod-category">FACTIONS</div>
@@ -1127,18 +1443,41 @@ Respawn wave 10min, 2 tickety, ACRE2. Start 05:30, mgla.`
         loadModSettings();
     });
 
+    const ALL_MOD_IDS = [
+        'mod-ace3','mod-acre2','mod-tfar','mod-kat','mod-cba',
+        'mod-rhs-usaf','mod-rhs-afrf','mod-rhs-saf','mod-rhs-gref',
+        'mod-cup-weapons','mod-cup-units','mod-cup-vehicles','mod-cup-terrains','mod-cfp',
+        'mod-enh-movement','mod-enh-movement-rework','mod-immerse','mod-suppress',
+        'mod-limited-gun','mod-ai-prone','mod-cfbai','mod-ga-trenches','mod-dui',
+        'mod-two-primary','mod-vet-unflip','mod-no-bounce',
+        'mod-blastcore','mod-blast-effects','mod-sfx-remastered','mod-sfx-footsteps',
+        'mod-amz-sounds','mod-flashlights','mod-bettir','mod-lens-flare','mod-env-ducking','mod-bce',
+        'mod-ace-ext','mod-ace-interact','mod-ace-window','mod-ace-map','mod-iedd',
+        'mod-ch-vd','mod-enh-gps','mod-ctab','mod-better-inv','mod-align',
+        'mod-animate','mod-animate-radio','mod-breach','mod-ragdoll','mod-speshal','mod-alegro',
+        'mod-zeus-enh','mod-3den-enh','mod-3den-inv','mod-3den-fast','mod-crows-zeus','mod-zeus-fps',
+        'mod-7bow-core','mod-7bow-markers','mod-7bow-equip','mod-7bow-sounds',
+        'mod-amz-rhs','mod-amz-cup','mod-cup-interiors','mod-warn-supp','mod-ga-admin',
+    ];
+
     function getModSettings() {
-        return {
-            ace3: document.getElementById('mod-ace3').checked,
-            acre2: document.getElementById('mod-acre2').checked,
-            tfar: document.getElementById('mod-tfar').checked,
-            kat_medical: document.getElementById('mod-kat').checked,
-            rhs: document.getElementById('mod-rhs').checked,
-            cup: document.getElementById('mod-cup').checked,
-            cfp: document.getElementById('mod-cfp').checked,
-            faction_preset: document.getElementById('faction-blufor').value,
-            enemy_faction_preset: document.getElementById('faction-opfor').value,
-        };
+        const settings = {};
+        ALL_MOD_IDS.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) settings[id] = el.checked;
+        });
+        // Aggregate flags for backward compat
+        settings.rhs = ['mod-rhs-usaf','mod-rhs-afrf','mod-rhs-saf','mod-rhs-gref'].some(id => document.getElementById(id)?.checked);
+        settings.cup = ['mod-cup-weapons','mod-cup-units','mod-cup-vehicles','mod-cup-terrains'].some(id => document.getElementById(id)?.checked);
+        // Legacy keys
+        settings.ace3 = document.getElementById('mod-ace3').checked;
+        settings.acre2 = document.getElementById('mod-acre2').checked;
+        settings.tfar = document.getElementById('mod-tfar').checked;
+        settings.kat_medical = document.getElementById('mod-kat').checked;
+        settings.cfp = document.getElementById('mod-cfp').checked;
+        settings.faction_preset = document.getElementById('faction-blufor').value;
+        settings.enemy_faction_preset = document.getElementById('faction-opfor').value;
+        return settings;
     }
 
     function saveModSettings() {
@@ -1148,13 +1487,23 @@ Respawn wave 10min, 2 tickety, ACRE2. Start 05:30, mgla.`
     function loadModSettings() {
         try {
             const saved = JSON.parse(localStorage.getItem('ibc_mods') || '{}');
-            if (saved.ace3 !== undefined) document.getElementById('mod-ace3').checked = saved.ace3;
-            if (saved.acre2 !== undefined) document.getElementById('mod-acre2').checked = saved.acre2;
-            if (saved.tfar !== undefined) document.getElementById('mod-tfar').checked = saved.tfar;
-            if (saved.kat_medical !== undefined) document.getElementById('mod-kat').checked = saved.kat_medical;
-            if (saved.rhs !== undefined) document.getElementById('mod-rhs').checked = saved.rhs;
-            if (saved.cup !== undefined) document.getElementById('mod-cup').checked = saved.cup;
-            if (saved.cfp !== undefined) document.getElementById('mod-cfp').checked = saved.cfp;
+            ALL_MOD_IDS.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && !el.disabled && saved[id] !== undefined) el.checked = saved[id];
+            });
+            // Legacy: migrate old single rhs/cup flags to sub-mods
+            if (saved.rhs === true && saved['mod-rhs-usaf'] === undefined) {
+                ['mod-rhs-usaf','mod-rhs-afrf','mod-rhs-saf','mod-rhs-gref'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.checked = true;
+                });
+            }
+            if (saved.cup === true && saved['mod-cup-weapons'] === undefined) {
+                ['mod-cup-weapons','mod-cup-units','mod-cup-vehicles','mod-cup-terrains'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.checked = true;
+                });
+            }
             updateFactionDropdowns().then(() => {
                 if (saved.faction_preset) document.getElementById('faction-blufor').value = saved.faction_preset;
                 if (saved.enemy_faction_preset) document.getElementById('faction-opfor').value = saved.enemy_faction_preset;
@@ -1178,11 +1527,23 @@ Respawn wave 10min, 2 tickety, ACRE2. Start 05:30, mgla.`
         saveModSettings();
     }
 
+    function onRhsToggle() {
+        saveModSettings();
+        updateFactionDropdowns();
+    }
+
+    function onCupToggle() {
+        saveModSettings();
+        updateFactionDropdowns();
+    }
+
     function onCfpToggle() {
         if (document.getElementById('mod-cfp').checked) {
-            document.getElementById('mod-cup').checked = true;
+            // Enable at least CUP Units when CFP is on
+            document.getElementById('mod-cup-units').checked = true;
         }
-        onContentModChange();
+        saveModSettings();
+        updateFactionDropdowns();
     }
 
     function onContentModChange() {
@@ -1196,8 +1557,10 @@ Respawn wave 10min, 2 tickety, ACRE2. Start 05:30, mgla.`
             const data = await res.json();
             const factions = data.factions || {};
             const enabledMods = [];
-            if (document.getElementById('mod-rhs').checked) enabledMods.push('rhs');
-            if (document.getElementById('mod-cup').checked) enabledMods.push('cup');
+            const anyRhs = ['mod-rhs-usaf','mod-rhs-afrf','mod-rhs-saf','mod-rhs-gref'].some(id => document.getElementById(id)?.checked);
+            const anyCup = ['mod-cup-weapons','mod-cup-units','mod-cup-vehicles','mod-cup-terrains'].some(id => document.getElementById(id)?.checked);
+            if (anyRhs) enabledMods.push('rhs');
+            if (anyCup) enabledMods.push('cup');
             if (document.getElementById('mod-cfp').checked) enabledMods.push('cfp');
 
             const bluforSelect = document.getElementById('faction-blufor');
