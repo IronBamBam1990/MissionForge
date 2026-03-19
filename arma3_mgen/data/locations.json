@@ -243,5 +243,148 @@
       "FARP Hatchet": [6500, 7500],
       "FARP Spear": [4500, 5000]
     }
+  },
+
+  "Chernarus": {
+    "_size": 15360,
+    "cities": {
+      "Chernogorsk": [6731, 2524],
+      "Elektrozavodsk": [10364, 2073],
+      "Berezino": [12126, 9178],
+      "Zelenogorsk": [2535, 5200],
+      "Svetlojarsk": [13983, 13224]
+    },
+    "towns": {
+      "Kamenka": [1860, 2248],
+      "Balota": [4508, 2337],
+      "Solnichniy": [13406, 6210],
+      "Staroye": [10076, 5586],
+      "Novy Sobor": [7082, 7124],
+      "Stary Sobor": [6166, 7802],
+      "Gorka": [9554, 8867],
+      "Polana": [10471, 8131],
+      "Mogilevka": [7634, 5118],
+      "Pusta": [9278, 3854],
+      "Dolina": [11224, 6640],
+      "Orlovets": [12075, 7258],
+      "Msta": [11303, 7765],
+      "Nadezhdino": [5873, 4724],
+      "Kozlovka": [4453, 4664],
+      "Vyshnoye": [6581, 6131],
+      "Guglovo": [8685, 6731],
+      "Shakovka": [9700, 6441],
+      "Dubrovka": [10414, 9919],
+      "Grishino": [6023, 10225],
+      "Lopatino": [2752, 10000],
+      "Vybor": [3825, 8850],
+      "Kabanino": [5284, 8577],
+      "Pustoshka": [3075, 7937],
+      "Rogovo": [4704, 6717],
+      "Pogorevka": [4399, 6541],
+      "Sosnovka": [2522, 6326],
+      "Drozhino": [3382, 4955],
+      "Bor": [3340, 3962],
+      "Myshkino": [1946, 7271],
+      "Pavlovo": [1673, 3505],
+      "Prigorodky": [8051, 3418]
+    },
+    "military": {
+      "NW Airfield": [4500, 10300],
+      "Balota Airstrip": [4700, 2400],
+      "NE Airfield": [12000, 12500],
+      "Zelenogorsk Base": [2700, 5300]
+    }
+  },
+
+  "Takistan": {
+    "_size": 12800,
+    "cities": {
+      "Zargabad": [3826, 3671],
+      "Anar": [5241, 2176],
+      "Feruz Abad": [5635, 5045],
+      "Nagara": [4127, 7009],
+      "Rasman": [2835, 6004],
+      "Nur": [7153, 4519],
+      "Bastam": [6723, 6382],
+      "Chak Chak": [5400, 4159],
+      "Imam Sahib": [4559, 3183],
+      "Garmarud": [3413, 4590],
+      "Shahtarak": [7350, 2750],
+      "Zavarak": [2150, 3450],
+      "Loy Manara": [4978, 5880]
+    },
+    "military": {
+      "Takistan Airfield": [3800, 8200],
+      "Rasman FOB": [2900, 6100]
+    }
+  },
+
+  "Sahrani": {
+    "_size": 20480,
+    "cities": {
+      "Paraiso": [4190, 3953],
+      "Corazol": [13753, 8847],
+      "Bagango": [12008, 8410],
+      "Cayo": [4752, 6052],
+      "Eponia": [11362, 4917],
+      "Dolores": [7847, 6614],
+      "Mercalillo": [11098, 6507],
+      "Somato": [3636, 6671],
+      "Iguana": [3009, 4800],
+      "Ortego": [6023, 3927],
+      "Modesta": [4390, 7100],
+      "Carmona": [3253, 7750]
+    },
+    "military": {
+      "Sahrani Airport": [11300, 5200],
+      "Camp Dorado": [6000, 5000]
+    }
+  },
+
+  "Utes": {
+    "_size": 5120,
+    "towns": {
+      "Strelka": [3660, 3780],
+      "Kamenyy": [4400, 4580],
+      "Rybatskaya": [3380, 4680]
+    },
+    "military": {
+      "Utes Airstrip": [3500, 4200]
+    }
+  },
+
+  "Zargabad": {
+    "_size": 8192,
+    "cities": {
+      "Zargabad Center": [3980, 3950],
+      "North District": [4100, 4600],
+      "South District": [3750, 3300],
+      "East District": [4600, 3900],
+      "Market": [4050, 4100],
+      "Old Town": [3600, 3800]
+    },
+    "military": {
+      "Zargabad Airfield": [4200, 5000]
+    }
+  },
+
+  "Shapur": {
+    "_size": 2048,
+    "towns": {
+      "Shapur": [1024, 1024],
+      "North Village": [1100, 1500],
+      "South Camp": [900, 600]
+    },
+    "military": {}
+  },
+
+  "ProvingGrounds_PMC": {
+    "_size": 4096,
+    "towns": {
+      "North Range": [2000, 3000],
+      "South Range": [2000, 1000],
+      "Central": [2048, 2048]
+    },
+    "military": {}
   }
 }

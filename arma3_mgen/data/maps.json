@@ -5,6 +5,13 @@
     "Tanoa": {"classname": "Tanoa", "size": 15360},
     "Malden": {"classname": "Malden", "size": 8192},
     "Livonia": {"classname": "Enoch", "size": 12800},
-    "VR": {"classname": "VR", "size": 2048}
+    "VR": {"classname": "VR", "size": 2048},
+    "Chernarus": {"classname": "CUP_Chernarus_A3", "size": 15360},
+    "Takistan": {"classname": "CUP_Takistan", "size": 12800},
+    "Sahrani": {"classname": "CUP_Sahrani", "size": 20480},
+    "Utes": {"classname": "CUP_Utes", "size": 5120},
+    "Zargabad": {"classname": "CUP_Zargabad", "size": 8192},
+    "Shapur": {"classname": "CUP_Shapur", "size": 2048},
+    "ProvingGrounds_PMC": {"classname": "ProvingGrounds_PMC", "size": 4096}
   }
 }
