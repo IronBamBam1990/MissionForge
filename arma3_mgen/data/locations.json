@@ -1,7 +1,7 @@
 {
   "Altis": {
     "_size": 30720,
-    "_note": "Coordinates [X, Y] where X=east, Y=north. Use as [X, 0, Y] in SQM.",
+    "_note": "Coordinates [X, Y] where X=east, Y=north. Use as [X, 0, Y] in SQM. Source: atlas.plan-ops.fr",
     "cities": {
       "Kavala": [3458.95, 12966.4],
       "Athira": [13993, 18709.4],
@@ -63,18 +63,8 @@
       "FOB Revolver": [17000, 19500],
       "LZ Blazer": [9500, 16000],
       "LZ Connor": [11000, 19000],
-      "Stratis Air Base": [2200, 5000],
       "Military Base Kavala": [3800, 13200],
       "Firing Range": [21000, 17000]
-    },
-    "landmarks": {
-      "Pythos Power Plant": [21000, 12000],
-      "Solar Power Plant": [15500, 15000],
-      "Salt Flats": [19000, 13000],
-      "Castle Ruins North": [16500, 19000],
-      "Marina Kavala": [3500, 12500],
-      "Lumber Mill": [8500, 17500],
-      "Quarry": [10000, 15500]
     }
   },
 
@@ -93,11 +83,6 @@
       "Camp Tempest": [1941.68, 3556.72],
       "Stratis Airfield": [1987.31, 5625.9],
       "Kamino Firing Range": [6401.97, 5427.13]
-    },
-    "landmarks": {
-      "Lighthouse": [6000, 3500],
-      "Radio Tower": [2500, 5500],
-      "Ancient Ruins": [3500, 6000]
     }
   },
 
@@ -179,26 +164,25 @@
   "Malden": {
     "_size": 12800,
     "cities": {
-      "La Trinite": [7264, 7931],
-      "Arudy": [5537, 6983],
-      "Chapoi": [5836, 3530],
-      "Dourdan": [7036, 7108],
-      "Goisse": [3585, 8520],
-      "Houdan": [7121, 6075],
-      "La Pessagne": [3116, 6331],
-      "Le Port": [8193, 3117],
-      "Lolisse": [5567, 11188],
-      "Sainte Marie": [5547, 4233],
-      "Cancon": [5404, 2796],
-      "La Riviere": [3731, 3258],
-      "Larche": [6013, 8627],
-      "Moray": [883, 11988],
-      "Saint-Louis": [7143, 8968],
-      "Vigny": [3069, 6835]
+      "La Trinite": [7263.75, 7931.26],
+      "Arudy": [5537.25, 6983.24],
+      "Chapoi": [5835.55, 3529.72],
+      "Dourdan": [7035.72, 7108.35],
+      "Goisse": [3584.88, 8520.04],
+      "Houdan": [7121.48, 6074.55],
+      "La Pessagne": [3115.53, 6330.82],
+      "Le Port": [8192.56, 3117.11],
+      "Lolisse": [5567.41, 11187.5],
+      "Sainte Marie": [5546.52, 4232.86],
+      "Cancon": [5404.27, 2796.07],
+      "La Riviere": [3731.48, 3257.96],
+      "Larche": [6012.54, 8627.26],
+      "Moray": [883.14, 11987.7],
+      "Saint-Louis": [7143.06, 8968.49],
+      "Vigny": [3068.5, 6835.06]
     },
     "military": {
-      "Malden Airport": [8173, 10114],
-      "Military Base": [6000, 5200]
+      "Aeroport": [8172.59, 10113.5]
     }
   },
 
@@ -248,70 +232,98 @@
   "Chernarus": {
     "_size": 15360,
     "cities": {
-      "Chernogorsk": [6731, 2524],
-      "Elektrozavodsk": [10364, 2073],
-      "Berezino": [12126, 9178],
-      "Zelenogorsk": [2535, 5200],
+      "Chernogorsk": [6731.21, 2554.13],
+      "Elektrozavodsk": [10313.7, 2159.41],
+      "Berezino": [12014, 9090.84],
+      "Zelenogorsk": [2774.26, 5380.38],
       "Svetlojarsk": [13983, 13224]
     },
     "towns": {
-      "Kamenka": [1860, 2248],
-      "Balota": [4508, 2337],
-      "Solnichniy": [13406, 6210],
-      "Staroye": [10076, 5586],
-      "Novy Sobor": [7082, 7124],
-      "Stary Sobor": [6166, 7802],
-      "Gorka": [9554, 8867],
-      "Polana": [10471, 8131],
-      "Mogilevka": [7634, 5118],
-      "Pusta": [9278, 3854],
-      "Dolina": [11224, 6640],
-      "Orlovets": [12075, 7258],
-      "Msta": [11303, 7765],
-      "Nadezhdino": [5873, 4724],
-      "Kozlovka": [4453, 4664],
-      "Vyshnoye": [6581, 6131],
-      "Guglovo": [8685, 6731],
-      "Shakovka": [9700, 6441],
-      "Dubrovka": [10414, 9919],
-      "Grishino": [6023, 10225],
-      "Lopatino": [2752, 10000],
-      "Vybor": [3825, 8850],
-      "Kabanino": [5284, 8577],
-      "Pustoshka": [3075, 7937],
-      "Rogovo": [4704, 6717],
-      "Pogorevka": [4399, 6541],
-      "Sosnovka": [2522, 6326],
-      "Drozhino": [3382, 4955],
-      "Bor": [3340, 3962],
-      "Myshkino": [1946, 7271],
-      "Pavlovo": [1673, 3505],
-      "Prigorodky": [8051, 3418]
+      "Kamenka": [1853.09, 2249.85],
+      "Balota": [4527.58, 2465.32],
+      "Solnichniy": [13397.4, 6336.84],
+      "Staroye": [10212.5, 5385.04],
+      "Novy Sobor": [7123.63, 7774.63],
+      "Stary Sobor": [6169.01, 7793.67],
+      "Gorka": [9616.06, 8914.38],
+      "Polana": [10707.1, 8053.29],
+      "Mogilevka": [7650.41, 5096.46],
+      "Pusta": [9127.18, 3954.47],
+      "Dolina": [11285.2, 6633.58],
+      "Orlovets": [12131, 7189.79],
+      "Msta": [11333.8, 5421.4],
+      "Nadezhdino": [5876.66, 4696.93],
+      "Kozlovka": [4477.57, 4597.79],
+      "Vyshnoye": [6561.91, 6078.77],
+      "Guglovo": [8431.08, 6703.19],
+      "Shakovka": [9728.64, 6567.3],
+      "Dubrovka": [10382.1, 9938.35],
+      "Grishino": [5959.94, 10335.7],
+      "Lopatino": [2750, 10005],
+      "Vybor": [3833.17, 8918.92],
+      "Kabanino": [5300.71, 8645.9],
+      "Pustoshka": [3070.23, 7940.48],
+      "Rogovo": [4770.96, 6835.26],
+      "Pogorevka": [4435.36, 6425.58],
+      "Sosnovka": [2539.26, 6358.71],
+      "Drozhino": [3382.02, 4925.88],
+      "Bor": [3326.74, 3886.73],
+      "Myshkino": [1998.18, 7355.13],
+      "Pavlovo": [1693.98, 3858.65],
+      "Prigorodky": [8015.58, 3419.26],
+      "Kamyshovo": [12063.1, 3515.58],
+      "Komarovo": [3664.31, 2499],
+      "Pulkovo": [4950.82, 5627.1],
+      "Tulga": [12802.5, 4369.49],
+      "Nizhnoye": [12824.9, 8097.7],
+      "Khelm": [12329.3, 10771],
+      "Krasnostav": [11224.3, 12274.5],
+      "Olsha": [13331, 12900],
+      "Gvozdno": [8614.62, 11890.3],
+      "Petrovka": [5016.45, 12490.8]
     },
     "military": {
       "NW Airfield": [4500, 10300],
       "Balota Airstrip": [4700, 2400],
-      "NE Airfield": [12000, 12500],
-      "Zelenogorsk Base": [2700, 5300]
+      "NE Airfield": [12000, 12500]
     }
   },
 
   "Takistan": {
     "_size": 12800,
     "cities": {
-      "Zargabad": [3826, 3671],
-      "Anar": [5241, 2176],
-      "Feruz Abad": [5635, 5045],
-      "Nagara": [4127, 7009],
-      "Rasman": [2835, 6004],
-      "Nur": [7153, 4519],
-      "Bastam": [6723, 6382],
-      "Chak Chak": [5400, 4159],
-      "Imam Sahib": [4559, 3183],
-      "Garmarud": [3413, 4590],
-      "Shahtarak": [7350, 2750],
-      "Zavarak": [2150, 3450],
-      "Loy Manara": [4978, 5880]
+      "Anar": [6030.72, 5659.43],
+      "Bastam": [5989.99, 8977.47],
+      "Feruz Abad": [5072.71, 6158.22],
+      "Nagara": [3057.78, 9808.44],
+      "Rasman": [6092.15, 11018.7],
+      "Nur": [1890.7, 11867.5]
+    },
+    "towns": {
+      "Chak Chak": [4375.92, 754.72],
+      "Chaman": [571.8, 2810.97],
+      "Chardarakht": [10528.8, 2429.22],
+      "Falar": [6063.8, 7256.97],
+      "Garmarud": [9128.25, 6864.95],
+      "Garmsar": [10603.6, 6410.72],
+      "Gospandi": [3626.58, 8510.97],
+      "Huzrutimam": [5932.74, 1245.22],
+      "Imarat": [8238.39, 7847.22],
+      "Jaza": [9009.33, 1871.97],
+      "Jilavur": [2537.21, 5026.47],
+      "Kakaru": [5313.46, 4740.72],
+      "Karachinar": [12243.5, 10420.3],
+      "Khushab": [1444.14, 5732.22],
+      "Landay": [1950.86, 349.72],
+      "Loy Manara": [8622.05, 2454.22],
+      "Mulladost": [2009.21, 7675.97],
+      "Ravanay": [11539.2, 8318.97],
+      "Sakhe": [3588.99, 4284.47],
+      "Shamali": [4078.33, 11844.2],
+      "Shukurkalay": [1529.11, 3582.72],
+      "Sultansafe": [6578.67, 1955.22],
+      "Timurkalay": [8888.11, 5181.47],
+      "Zavarak": [9951.81, 11651.3]
     },
     "military": {
       "Takistan Airfield": [3800, 8200],
@@ -356,12 +368,14 @@
   "Zargabad": {
     "_size": 8192,
     "cities": {
-      "Zargabad Center": [3980, 3950],
-      "North District": [4100, 4600],
-      "South District": [3750, 3300],
-      "East District": [4600, 3900],
-      "Market": [4050, 4100],
-      "Old Town": [3600, 3800]
+      "Zargabad": [4071.37, 4183.32],
+      "Hazar Bagh": [3943.51, 5957.63],
+      "Shahbaz": [3528.11, 1932.74],
+      "Yarum": [4154.24, 3592.65]
+    },
+    "towns": {
+      "Azizayt": [1929.89, 4652.94],
+      "Nango": [2823.53, 5022.13]
     },
     "military": {
       "Zargabad Airfield": [4200, 5000]
@@ -374,8 +388,7 @@
       "Shapur": [1024, 1024],
       "North Village": [1100, 1500],
       "South Camp": [900, 600]
-    },
-    "military": {}
+    }
   },
 
   "ProvingGrounds_PMC": {
@@ -384,7 +397,6 @@
       "North Range": [2000, 3000],
       "South Range": [2000, 1000],
       "Central": [2048, 2048]
-    },
-    "military": {}
+    }
   }
 }
