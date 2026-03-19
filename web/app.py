@@ -546,13 +546,18 @@ async def handle_prompt(request: Request):
 
         claude_task = asyncio.create_task(run_claude())
 
-        # Stream log messages while Claude is running
+        # Stream log messages while Claude is running (keepalive every 30s)
+        keepalive_counter = 0
         while not claude_task.done():
             try:
                 msg = await asyncio.wait_for(log_queue.get(), timeout=1.0)
                 yield _sse('log', message=msg)
+                keepalive_counter = 0
             except asyncio.TimeoutError:
-                pass
+                keepalive_counter += 1
+                if keepalive_counter >= 30:
+                    yield _log_sse("Claude CLI nadal przetwarza...")
+                    keepalive_counter = 0
 
         # Drain remaining messages from queue
         while not log_queue.empty():

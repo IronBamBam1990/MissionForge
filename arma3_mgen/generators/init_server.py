@@ -91,6 +91,27 @@ def generate_init_server(config: MissionConfig, enemy_faction_data=None) -> str:
         L.append("[] spawn { sleep 5; [] call IBC_fnc_setupTFAR; };")
         L.append("")
 
+    # ── 3b. ACE3 MEDICAL SETTINGS ──
+    if config.ace3_enabled:
+        L.append("// === ACE3 Medical Settings ===")
+        L.append('if (isClass (configFile >> "CfgPatches" >> "ace_medical")) then {')
+        L.append('\t// Standard ACE3 medical settings for milsim')
+        L.append('\t[true] call ace_common_fnc_setSettingFromConfig;')
+        L.append('\tdiag_log "IBC: ACE3 medical detected and configured";')
+        L.append("} else {")
+        L.append('\tdiag_log "IBC: ACE3 medical not loaded, skipping";')
+        L.append("};")
+        if getattr(config, 'kat_medical', False):
+            L.append('if (isClass (configFile >> "CfgPatches" >> "kat_aceAdvancedMedical")) then {')
+            L.append('\tdiag_log "IBC: KAT Advanced Medical detected";')
+            L.append("};")
+        L.append("")
+
+    # ── 3c. OPFOR SANITY CHECK ──
+    total_opfor = sum(len(z.positions) for z in config.opfor.zones)
+    if total_opfor > 50:
+        print(f"[WARN] Large OPFOR count: {total_opfor} positions across {len(config.opfor.zones)} zones")
+
     sk_min, sk_max = config.opfor.skill_range
     sk_range = round(sk_max - sk_min, 2)
 
@@ -561,7 +582,14 @@ def generate_init_server(config: MissionConfig, enemy_faction_data=None) -> str:
 
     # ── 28. TIME LIMIT ──
     if config.time_limit > 0:
-        L.append(f'[] spawn {{ sleep {config.time_limit * 60}; hint "Czas misji uplynal!"; sleep 5; ["end1",true] call BIS_fnc_endMission }};')
+        total_sec = config.time_limit * 60
+        warn_sec = max(0, total_sec - 300)  # 5 min warning
+        L.append(f'[] spawn {{')
+        L.append(f'\tsleep {warn_sec}; hint "UWAGA: Pozostalo 5 minut!";')
+        L.append(f'\tsleep 240; hint "UWAGA: Pozostala 1 minuta!";')
+        L.append(f'\tsleep 60; hint "Czas misji uplynal!";')
+        L.append(f'\tsleep 5; ["TimeLimitEnd",false] call BIS_fnc_endMission;')
+        L.append(f'}};')
         L.append("")
 
     # ── 29. PLAYER TRANSPORT ──

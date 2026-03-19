@@ -56,6 +56,16 @@ def get_map_center(map_name: str) -> list[float]:
         "Tanoa": [6500, 0, 6500],
         "Malden": [5000, 0, 5500],
         "Livonia": [6000, 0, 7000],
+        # CUP terrains
+        "Chernarus": [7000, 0, 7000],
+        "Takistan": [6000, 0, 6000],
+        "Sahrani": [10000, 0, 10000],
+        "Celle": [10000, 0, 10000],
+        "Bystrica": [5000, 0, 5000],
+        "Utes": [3500, 0, 3500],
+        "Zargabad": [4000, 0, 4000],
+        "Shapur": [1000, 0, 1000],
+        "ProvingGrounds": [3000, 0, 3000],
     }
     for key, pos in defaults.items():
         if key.lower() in map_name.lower():
