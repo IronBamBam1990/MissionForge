@@ -3,23 +3,81 @@
   "mod": "cup",
   "side": "East",
   "roles": {
-    "platoon_leader": {"unit_class": "CUP_O_TK_Officer"},
-    "squad_leader": {"unit_class": "CUP_O_TK_Soldier_SL"},
-    "team_leader": {"unit_class": "CUP_O_TK_Soldier_SL"},
-    "rifleman": {"unit_class": "CUP_O_TK_Soldier"},
-    "autorifleman": {"unit_class": "CUP_O_TK_Soldier_AR"},
-    "grenadier": {"unit_class": "CUP_O_TK_Soldier_GL"},
-    "medic": {"unit_class": "CUP_O_TK_Medic"},
-    "at_gunner": {"unit_class": "CUP_O_TK_Soldier_LAT"},
-    "mg_gunner": {"unit_class": "CUP_O_TK_Soldier_AR"},
-    "mg_assistant": {"unit_class": "CUP_O_TK_Soldier"},
-    "mg_ammo_bearer": {"unit_class": "CUP_O_TK_Soldier"}
+    "platoon_leader": {
+      "unit_class": "CUP_O_TK_Officer"
+    },
+    "squad_leader": {
+      "unit_class": "CUP_O_TK_Soldier_SL"
+    },
+    "team_leader": {
+      "unit_class": "CUP_O_TK_Soldier_SL"
+    },
+    "rifleman": {
+      "unit_class": "CUP_O_TK_Soldier"
+    },
+    "autorifleman": {
+      "unit_class": "CUP_O_TK_Soldier_AR"
+    },
+    "grenadier": {
+      "unit_class": "CUP_O_TK_Soldier_GL"
+    },
+    "medic": {
+      "unit_class": "CUP_O_TK_Medic"
+    },
+    "at_gunner": {
+      "unit_class": "CUP_O_TK_Soldier_LAT"
+    },
+    "mg_gunner": {
+      "unit_class": "CUP_O_TK_Soldier_AR"
+    },
+    "mg_assistant": {
+      "unit_class": "CUP_O_TK_Soldier"
+    },
+    "mg_ammo_bearer": {
+      "unit_class": "CUP_O_TK_Soldier"
+    },
+    "sniper": {
+      "unit_class": "CUP_O_TK_Sniper"
+    },
+    "marksman": {
+      "unit_class": "CUP_O_TK_Soldier"
+    },
+    "engineer": {
+      "unit_class": "CUP_O_TK_Soldier"
+    }
   },
   "compositions": {
     "infantry": {
-      "fireteam": ["CUP_O_TK_Soldier_SL", "CUP_O_TK_Soldier", "CUP_O_TK_Soldier_AR", "CUP_O_TK_Soldier_GL"],
-      "squad": ["CUP_O_TK_Soldier_SL", "CUP_O_TK_Soldier", "CUP_O_TK_Soldier", "CUP_O_TK_Soldier_AR", "CUP_O_TK_Soldier_GL", "CUP_O_TK_Soldier", "CUP_O_TK_Soldier_LAT", "CUP_O_TK_Medic"],
-      "section": ["CUP_O_TK_Soldier_SL", "CUP_O_TK_Soldier_SL", "CUP_O_TK_Soldier", "CUP_O_TK_Soldier", "CUP_O_TK_Soldier_AR", "CUP_O_TK_Soldier_GL", "CUP_O_TK_Soldier", "CUP_O_TK_Soldier", "CUP_O_TK_Soldier", "CUP_O_TK_Soldier_AR", "CUP_O_TK_Soldier_LAT", "CUP_O_TK_Medic"]
+      "fireteam": [
+        "CUP_O_TK_Soldier_SL",
+        "CUP_O_TK_Soldier",
+        "CUP_O_TK_Soldier_AR",
+        "CUP_O_TK_Soldier_GL"
+      ],
+      "squad": [
+        "CUP_O_TK_Soldier_SL",
+        "CUP_O_TK_Soldier",
+        "CUP_O_TK_Soldier",
+        "CUP_O_TK_Soldier_AR",
+        "CUP_O_TK_Soldier_GL",
+        "CUP_O_TK_Soldier",
+        "CUP_O_TK_Soldier_LAT",
+        "CUP_O_TK_Medic"
+      ],
+      "section": [
+        "CUP_O_TK_Soldier_SL",
+        "CUP_O_TK_Soldier_SL",
+        "CUP_O_TK_Soldier",
+        "CUP_O_TK_Soldier",
+        "CUP_O_TK_Soldier_AR",
+        "CUP_O_TK_Soldier_GL",
+        "CUP_O_TK_Soldier",
+        "CUP_O_TK_Soldier",
+        "CUP_O_TK_Soldier",
+        "CUP_O_TK_Soldier_AR",
+        "CUP_O_TK_Soldier_LAT",
+        "CUP_O_TK_Medic"
+      ]
     }
   },
   "vehicles": {

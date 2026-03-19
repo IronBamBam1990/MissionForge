@@ -45,8 +45,19 @@ def _sv(name):
 
 def _get_units(pos: EnemyPosition, fd) -> list[str]:
     if pos.custom_units: return pos.custom_units
-    if pos.type == "sniper": return ["O_sniper_F", "O_spotter_F"]
-    if pos.type == "mg_nest": return ["O_Soldier_F", "O_Soldier_F"]
+    # Sniper/MG - use faction roles if available, fallback to vanilla
+    if pos.type == "sniper":
+        if fd and "roles" in fd:
+            sniper = fd["roles"].get("sniper", {}).get("unit_class", "O_sniper_F")
+            spotter = fd["roles"].get("marksman", {}).get("unit_class", "O_spotter_F")
+            return [sniper, spotter]
+        return ["O_sniper_F", "O_spotter_F"]
+    if pos.type == "mg_nest":
+        if fd and "roles" in fd:
+            mg = fd["roles"].get("mg_gunner", fd["roles"].get("autorifleman", {})).get("unit_class", "O_Soldier_F")
+            asst = fd["roles"].get("rifleman", {}).get("unit_class", "O_Soldier_F")
+            return [mg, asst]
+        return ["O_Soldier_F", "O_Soldier_F"]
     if fd:
         comps = fd.get("compositions", {}).get(pos.composition, {})
         if pos.size in comps:
@@ -238,7 +249,10 @@ def generate_init_server(config: MissionConfig, enemy_faction_data=None) -> str:
             elif pos.type == "mg_nest":
                 L.append(f"{g} = [{p}, east, {_arr(units)}] call IBC_fnc_spawnGroup;")
                 L.append(f"[{g}, {_r(sk_min)}, {_r(sk_range)}] call IBC_fnc_setSkills;")
-                sw = pos.static_weapon or "O_HMG_01_high_F"
+                default_hmg = "O_HMG_01_high_F"
+                if enemy_faction_data and "vehicles" in enemy_faction_data:
+                    default_hmg = enemy_faction_data["vehicles"].get("static_hmg", default_hmg)
+                sw = pos.static_weapon or default_hmg
                 L.append(f'private _sw = ["{sw}", {p}] call IBC_fnc_spawnObject;')
                 L.append(f"(units {g} select 0) moveInGunner _sw;")
                 L.append(f'{g} setBehaviour "AWARE"; {g} setCombatMode "RED";')

@@ -3,25 +3,81 @@
   "mod": "rhs",
   "side": "East",
   "roles": {
-    "platoon_leader": {"unit_class": "rhs_vdv_officer"},
-    "squad_leader": {"unit_class": "rhs_vdv_sergeant"},
-    "team_leader": {"unit_class": "rhs_vdv_sergeant"},
-    "rifleman": {"unit_class": "rhs_vdv_rifleman"},
-    "autorifleman": {"unit_class": "rhs_vdv_arifleman"},
-    "grenadier": {"unit_class": "rhs_vdv_grenadier"},
-    "medic": {"unit_class": "rhs_vdv_medic"},
-    "marksman": {"unit_class": "rhs_vdv_marksman"},
-    "engineer": {"unit_class": "rhs_vdv_engineer"},
-    "at_gunner": {"unit_class": "rhs_vdv_at"},
-    "mg_gunner": {"unit_class": "rhs_vdv_arifleman"},
-    "mg_assistant": {"unit_class": "rhs_vdv_rifleman"},
-    "mg_ammo_bearer": {"unit_class": "rhs_vdv_rifleman"}
+    "platoon_leader": {
+      "unit_class": "rhs_vdv_officer"
+    },
+    "squad_leader": {
+      "unit_class": "rhs_vdv_sergeant"
+    },
+    "team_leader": {
+      "unit_class": "rhs_vdv_sergeant"
+    },
+    "rifleman": {
+      "unit_class": "rhs_vdv_rifleman"
+    },
+    "autorifleman": {
+      "unit_class": "rhs_vdv_arifleman"
+    },
+    "grenadier": {
+      "unit_class": "rhs_vdv_grenadier"
+    },
+    "medic": {
+      "unit_class": "rhs_vdv_medic"
+    },
+    "marksman": {
+      "unit_class": "rhs_vdv_marksman"
+    },
+    "engineer": {
+      "unit_class": "rhs_vdv_engineer"
+    },
+    "at_gunner": {
+      "unit_class": "rhs_vdv_at"
+    },
+    "mg_gunner": {
+      "unit_class": "rhs_vdv_arifleman"
+    },
+    "mg_assistant": {
+      "unit_class": "rhs_vdv_rifleman"
+    },
+    "mg_ammo_bearer": {
+      "unit_class": "rhs_vdv_rifleman"
+    },
+    "sniper": {
+      "unit_class": "rhs_vdv_marksman"
+    }
   },
   "compositions": {
     "infantry": {
-      "fireteam": ["rhs_vdv_sergeant", "rhs_vdv_rifleman", "rhs_vdv_arifleman", "rhs_vdv_grenadier"],
-      "squad": ["rhs_vdv_sergeant", "rhs_vdv_sergeant", "rhs_vdv_rifleman", "rhs_vdv_arifleman", "rhs_vdv_grenadier", "rhs_vdv_rifleman", "rhs_vdv_at", "rhs_vdv_medic"],
-      "section": ["rhs_vdv_sergeant", "rhs_vdv_sergeant", "rhs_vdv_rifleman", "rhs_vdv_rifleman", "rhs_vdv_arifleman", "rhs_vdv_grenadier", "rhs_vdv_sergeant", "rhs_vdv_rifleman", "rhs_vdv_rifleman", "rhs_vdv_arifleman", "rhs_vdv_marksman", "rhs_vdv_medic"]
+      "fireteam": [
+        "rhs_vdv_sergeant",
+        "rhs_vdv_rifleman",
+        "rhs_vdv_arifleman",
+        "rhs_vdv_grenadier"
+      ],
+      "squad": [
+        "rhs_vdv_sergeant",
+        "rhs_vdv_sergeant",
+        "rhs_vdv_rifleman",
+        "rhs_vdv_arifleman",
+        "rhs_vdv_grenadier",
+        "rhs_vdv_rifleman",
+        "rhs_vdv_at",
+        "rhs_vdv_medic"
+      ],
+      "section": [
+        "rhs_vdv_sergeant",
+        "rhs_vdv_sergeant",
+        "rhs_vdv_rifleman",
+        "rhs_vdv_rifleman",
+        "rhs_vdv_arifleman",
+        "rhs_vdv_grenadier",
+        "rhs_vdv_sergeant",
+        "rhs_vdv_rifleman",
+        "rhs_vdv_rifleman",
+        "rhs_vdv_arifleman",
+        "rhs_vdv_marksman",
+        "rhs_vdv_medic"
+      ]
     }
   },
   "vehicles": {

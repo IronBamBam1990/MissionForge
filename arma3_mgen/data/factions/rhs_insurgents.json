@@ -3,23 +3,78 @@
   "mod": "rhs",
   "side": "East",
   "roles": {
-    "squad_leader": {"unit_class": "rhsgref_ins_squadleader"},
-    "team_leader": {"unit_class": "rhsgref_ins_squadleader"},
-    "rifleman": {"unit_class": "rhsgref_ins_rifleman"},
-    "autorifleman": {"unit_class": "rhsgref_ins_machinegunner"},
-    "grenadier": {"unit_class": "rhsgref_ins_grenadier"},
-    "medic": {"unit_class": "rhsgref_ins_medic"},
-    "sniper": {"unit_class": "rhsgref_ins_sniper"},
-    "engineer": {"unit_class": "rhsgref_ins_saboteur"},
-    "mg_gunner": {"unit_class": "rhsgref_ins_machinegunner"},
-    "mg_assistant": {"unit_class": "rhsgref_ins_rifleman"},
-    "mg_ammo_bearer": {"unit_class": "rhsgref_ins_rifleman"}
+    "squad_leader": {
+      "unit_class": "rhsgref_ins_squadleader"
+    },
+    "team_leader": {
+      "unit_class": "rhsgref_ins_squadleader"
+    },
+    "rifleman": {
+      "unit_class": "rhsgref_ins_rifleman"
+    },
+    "autorifleman": {
+      "unit_class": "rhsgref_ins_machinegunner"
+    },
+    "grenadier": {
+      "unit_class": "rhsgref_ins_grenadier"
+    },
+    "medic": {
+      "unit_class": "rhsgref_ins_medic"
+    },
+    "sniper": {
+      "unit_class": "rhsgref_ins_sniper"
+    },
+    "engineer": {
+      "unit_class": "rhsgref_ins_saboteur"
+    },
+    "mg_gunner": {
+      "unit_class": "rhsgref_ins_machinegunner"
+    },
+    "mg_assistant": {
+      "unit_class": "rhsgref_ins_rifleman"
+    },
+    "mg_ammo_bearer": {
+      "unit_class": "rhsgref_ins_rifleman"
+    },
+    "marksman": {
+      "unit_class": "rhsgref_ins_sniper"
+    },
+    "at_gunner": {
+      "unit_class": "rhsgref_ins_grenadier"
+    }
   },
   "compositions": {
     "infantry": {
-      "fireteam": ["rhsgref_ins_squadleader", "rhsgref_ins_rifleman", "rhsgref_ins_machinegunner", "rhsgref_ins_grenadier"],
-      "squad": ["rhsgref_ins_squadleader", "rhsgref_ins_rifleman", "rhsgref_ins_rifleman", "rhsgref_ins_machinegunner", "rhsgref_ins_grenadier", "rhsgref_ins_rifleman", "rhsgref_ins_rifleman", "rhsgref_ins_medic"],
-      "section": ["rhsgref_ins_squadleader", "rhsgref_ins_squadleader", "rhsgref_ins_rifleman", "rhsgref_ins_rifleman", "rhsgref_ins_machinegunner", "rhsgref_ins_grenadier", "rhsgref_ins_rifleman", "rhsgref_ins_rifleman", "rhsgref_ins_rifleman", "rhsgref_ins_machinegunner", "rhsgref_ins_sniper", "rhsgref_ins_medic"]
+      "fireteam": [
+        "rhsgref_ins_squadleader",
+        "rhsgref_ins_rifleman",
+        "rhsgref_ins_machinegunner",
+        "rhsgref_ins_grenadier"
+      ],
+      "squad": [
+        "rhsgref_ins_squadleader",
+        "rhsgref_ins_rifleman",
+        "rhsgref_ins_rifleman",
+        "rhsgref_ins_machinegunner",
+        "rhsgref_ins_grenadier",
+        "rhsgref_ins_rifleman",
+        "rhsgref_ins_rifleman",
+        "rhsgref_ins_medic"
+      ],
+      "section": [
+        "rhsgref_ins_squadleader",
+        "rhsgref_ins_squadleader",
+        "rhsgref_ins_rifleman",
+        "rhsgref_ins_rifleman",
+        "rhsgref_ins_machinegunner",
+        "rhsgref_ins_grenadier",
+        "rhsgref_ins_rifleman",
+        "rhsgref_ins_rifleman",
+        "rhsgref_ins_rifleman",
+        "rhsgref_ins_machinegunner",
+        "rhsgref_ins_sniper",
+        "rhsgref_ins_medic"
+      ]
     }
   },
   "vehicles": {

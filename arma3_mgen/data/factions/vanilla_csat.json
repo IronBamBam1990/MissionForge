@@ -3,26 +3,96 @@
   "mod": "vanilla",
   "side": "East",
   "roles": {
-    "squad_leader": {"unit_class": "O_Soldier_SL_F"},
-    "team_leader": {"unit_class": "O_Soldier_TL_F"},
-    "autorifleman": {"unit_class": "O_Soldier_AR_F"},
-    "grenadier": {"unit_class": "O_Soldier_GL_F"},
-    "rifleman": {"unit_class": "O_Soldier_F"},
-    "medic": {"unit_class": "O_medic_F"},
-    "mg_gunner": {"unit_class": "O_soldier_M_F"},
-    "at_gunner": {"unit_class": "O_Soldier_LAT_F"},
-    "marksman": {"unit_class": "O_soldier_M_F"},
-    "engineer": {"unit_class": "O_engineer_F"}
+    "squad_leader": {
+      "unit_class": "O_Soldier_SL_F"
+    },
+    "team_leader": {
+      "unit_class": "O_Soldier_TL_F"
+    },
+    "autorifleman": {
+      "unit_class": "O_Soldier_AR_F"
+    },
+    "grenadier": {
+      "unit_class": "O_Soldier_GL_F"
+    },
+    "rifleman": {
+      "unit_class": "O_Soldier_F"
+    },
+    "medic": {
+      "unit_class": "O_medic_F"
+    },
+    "mg_gunner": {
+      "unit_class": "O_soldier_M_F"
+    },
+    "at_gunner": {
+      "unit_class": "O_Soldier_LAT_F"
+    },
+    "marksman": {
+      "unit_class": "O_soldier_M_F"
+    },
+    "engineer": {
+      "unit_class": "O_engineer_F"
+    },
+    "sniper": {
+      "unit_class": "O_sniper_F"
+    }
   },
   "compositions": {
     "infantry": {
-      "fireteam": ["O_Soldier_TL_F", "O_Soldier_F", "O_Soldier_AR_F", "O_Soldier_GL_F"],
-      "squad": ["O_Soldier_SL_F", "O_Soldier_TL_F", "O_Soldier_F", "O_Soldier_AR_F", "O_Soldier_GL_F", "O_Soldier_TL_F", "O_Soldier_F", "O_medic_F"],
-      "section": ["O_Soldier_SL_F", "O_Soldier_TL_F", "O_Soldier_F", "O_Soldier_F", "O_Soldier_AR_F", "O_Soldier_GL_F", "O_Soldier_TL_F", "O_Soldier_F", "O_Soldier_F", "O_Soldier_AR_F", "O_soldier_M_F", "O_medic_F"]
+      "fireteam": [
+        "O_Soldier_TL_F",
+        "O_Soldier_F",
+        "O_Soldier_AR_F",
+        "O_Soldier_GL_F"
+      ],
+      "squad": [
+        "O_Soldier_SL_F",
+        "O_Soldier_TL_F",
+        "O_Soldier_F",
+        "O_Soldier_AR_F",
+        "O_Soldier_GL_F",
+        "O_Soldier_TL_F",
+        "O_Soldier_F",
+        "O_medic_F"
+      ],
+      "section": [
+        "O_Soldier_SL_F",
+        "O_Soldier_TL_F",
+        "O_Soldier_F",
+        "O_Soldier_F",
+        "O_Soldier_AR_F",
+        "O_Soldier_GL_F",
+        "O_Soldier_TL_F",
+        "O_Soldier_F",
+        "O_Soldier_F",
+        "O_Soldier_AR_F",
+        "O_soldier_M_F",
+        "O_medic_F"
+      ]
     },
     "motorized": {
-      "fireteam": {"vehicle": "O_MRAP_02_F", "dismounts": ["O_Soldier_TL_F", "O_Soldier_F", "O_Soldier_AR_F", "O_Soldier_GL_F"]},
-      "squad": {"vehicle": "O_Truck_02_transport_F", "dismounts": ["O_Soldier_SL_F", "O_Soldier_TL_F", "O_Soldier_F", "O_Soldier_AR_F", "O_Soldier_GL_F", "O_Soldier_TL_F", "O_Soldier_F", "O_medic_F"]}
+      "fireteam": {
+        "vehicle": "O_MRAP_02_F",
+        "dismounts": [
+          "O_Soldier_TL_F",
+          "O_Soldier_F",
+          "O_Soldier_AR_F",
+          "O_Soldier_GL_F"
+        ]
+      },
+      "squad": {
+        "vehicle": "O_Truck_02_transport_F",
+        "dismounts": [
+          "O_Soldier_SL_F",
+          "O_Soldier_TL_F",
+          "O_Soldier_F",
+          "O_Soldier_AR_F",
+          "O_Soldier_GL_F",
+          "O_Soldier_TL_F",
+          "O_Soldier_F",
+          "O_medic_F"
+        ]
+      }
     }
   },
   "vehicles": {
