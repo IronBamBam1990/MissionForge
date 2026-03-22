@@ -35,7 +35,7 @@ def generate_description_ext(config: MissionConfig) -> str:
         lines.append("{")
         lines.append('\tclass Tickets')
         lines.append("\t{")
-        lines.append('\t\tonPlayerKilled = "scripts\\respawn\\onPlayerKilled.sqf";')
+        lines.append('\t\tonPlayerKilled = "onPlayerKilled.sqf";')
         lines.append("\t};")
         lines.append("};")
         lines.append("")
@@ -43,7 +43,7 @@ def generate_description_ext(config: MissionConfig) -> str:
     # Misc settings
     lines.append("// Settings")
     lines.append("enableDebugConsole = 1;")
-    lines.append("disabledAI = 1;")
+    lines.append("disabledAI = 0;  // 0 = AI fills empty player slots (bots replace absent players)")
     lines.append("aiKills = 0;")
     lines.append("")
 

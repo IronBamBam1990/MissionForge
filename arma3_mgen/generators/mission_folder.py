@@ -39,7 +39,6 @@ def generate_mission(config: MissionConfig, output_dir: str | Path) -> Path:
     # Create directory structure
     mission_path.mkdir(parents=True, exist_ok=True)
     (mission_path / "scripts" / "loadouts").mkdir(parents=True, exist_ok=True)
-    (mission_path / "scripts" / "respawn").mkdir(parents=True, exist_ok=True)
     (mission_path / "scripts" / "ai").mkdir(parents=True, exist_ok=True)
 
     # Generate and write files
@@ -54,8 +53,9 @@ def generate_mission(config: MissionConfig, output_dir: str | Path) -> Path:
 
     # Script files
     files["scripts/briefing.sqf"] = generate_briefing(config)
-    files["scripts/respawn/onPlayerKilled.sqf"] = generate_on_player_killed(config)
-    files["scripts/respawn/onPlayerRespawn.sqf"] = generate_on_player_respawn(config)
+    # Respawn scripts MUST be in mission root — ARMA auto-detects them there
+    files["onPlayerKilled.sqf"] = generate_on_player_killed(config)
+    files["onPlayerRespawn.sqf"] = generate_on_player_respawn(config)
 
     # Write all files
     for rel_path, content in files.items():

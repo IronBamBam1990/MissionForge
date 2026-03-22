@@ -19,32 +19,72 @@ def helpers() -> str:
 
 // ────────────────────────────────────────────
 // 0. WATER SAFETY — prevents spawning in water
+// Uses BIS_fnc_findSafePos (official BI function, waterMode=0)
+// + isFlatEmpty validation (overLandOrWater=0)
 // ────────────────────────────────────────────
 
 // Check if position is in water (deep OR shallow)
-// surfaceIsWater misses shallow water — terrain height below 0 catches it
+// Dual check: surfaceIsWater for ponds/sea + terrainHeight for ocean floor
 // Usage: [_pos] call IBC_fnc_isWater
 IBC_fnc_isWater = {
-	private _pos = _this select 0;
+	params ["_pos"];
 	if (surfaceIsWater _pos) exitWith { true };
-	private _h = getTerrainHeightASL [_pos select 0, _pos select 1];
-	(_h < 0)
+	(getTerrainHeightASL [_pos select 0, _pos select 1]) < 0
 };
 
-// Find safe land position — if given pos is in water, search outward for land
-// Returns original position if already on land
+// Find safe land position using official BIS functions
+// Strategy 1: BIS_fnc_findSafePos with waterMode=0 (no water)
+// Strategy 2: isFlatEmpty brute force with overLandOrWater=0
+// Strategy 3: Spiral search fallback
 // Usage: [_pos] call IBC_fnc_findSafePos
 IBC_fnc_findSafePos = {
-	private _pos = _this select 0;
-	if (typeName _pos != "ARRAY" || {count _pos < 2}) exitWith {
+	params ["_pos"];
+	if (isNil "_pos" || {typeName _pos != "ARRAY"} || {count _pos < 2}) exitWith {
 		diag_log format ["IBC: findSafePos got invalid pos: %1", _pos];
 		[0, 0, 0]
 	};
+
+	// Already on land? Return as-is
 	if !([_pos] call IBC_fnc_isWater) exitWith { _pos };
-	diag_log format ["IBC: Position %1 is in water (h=%2), searching for land...", _pos, getTerrainHeightASL [_pos select 0, _pos select 1]];
+
+	diag_log format ["IBC: Position %1 is in water (h=%2, sw=%3), searching for land...",
+		_pos, getTerrainHeightASL [_pos select 0, _pos select 1], surfaceIsWater _pos];
+
 	private _safePos = _pos;
 	private _found = false;
-	for "_r" from 25 to 1500 step 25 do {
+
+	// Strategy 1: BIS_fnc_findSafePos — official BI, waterMode=0 (land only)
+	// [center, minDist, maxDist, objDist, waterMode, maxGrad, shoreMode, blacklist, defaultPos]
+	private _bisResult = [_pos, 0, 500, 3, 0, 0.7, 0, [], [_pos, _pos]] call BIS_fnc_findSafePos;
+	if (!isNil "_bisResult" && {count _bisResult >= 2} && {!([_bisResult] call IBC_fnc_isWater)}) exitWith {
+		diag_log format ["IBC: BIS_fnc_findSafePos found land at %1 (%2m away)", _bisResult, round (_pos distance2D _bisResult)];
+		_bisResult
+	};
+
+	// Strategy 2: wider BIS_fnc_findSafePos radius
+	_bisResult = [_pos, 50, 1500, 3, 0, 0.8, 0, [], [_pos, _pos]] call BIS_fnc_findSafePos;
+	if (!isNil "_bisResult" && {count _bisResult >= 2} && {!([_bisResult] call IBC_fnc_isWater)}) exitWith {
+		diag_log format ["IBC: BIS_fnc_findSafePos (wide) found land at %1 (%2m away)", _bisResult, round (_pos distance2D _bisResult)];
+		_bisResult
+	};
+
+	// Strategy 3: isFlatEmpty brute force — overLandOrWater=0 (must be on land)
+	for "_i" from 0 to 200 do {
+		private _testPos = _pos getPos [25 + random 1000, random 360];
+		private _flat = _testPos isFlatEmpty [-1, -1, 0.5, 10, 0, false, objNull];
+		if (count _flat > 0) exitWith {
+			_safePos = _flat;
+			_found = true;
+		};
+	};
+
+	if (_found) exitWith {
+		diag_log format ["IBC: isFlatEmpty found land at %1 (%2m away)", _safePos, round (_pos distance2D _safePos)];
+		_safePos
+	};
+
+	// Strategy 4: Last resort spiral (fallback if BIS functions fail on exotic maps)
+	for "_r" from 25 to 2000 step 25 do {
 		if (_found) exitWith {};
 		for "_a" from 0 to 359 step 15 do {
 			private _testPos = [(_pos select 0) + _r * sin _a, (_pos select 1) + _r * cos _a, 0];
@@ -54,10 +94,11 @@ IBC_fnc_findSafePos = {
 			};
 		};
 	};
+
 	if (_found) then {
-		diag_log format ["IBC: Safe land found at %1 (%2m from original)", _safePos, round (_pos distance _safePos)];
+		diag_log format ["IBC: Spiral fallback found land at %1 (%2m away)", _safePos, round (_pos distance2D _safePos)];
 	} else {
-		diag_log format ["IBC: WARNING - no land found within 1500m of %1!", _pos];
+		diag_log format ["IBC: CRITICAL - no land found within 2000m of %1!", _pos];
 	};
 	_safePos
 };
